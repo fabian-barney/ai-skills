@@ -26,4 +26,4 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
       - uses: lycheeverse/lychee-action@7cd0af4c74a61395d455af97419279d86aafaede
         with:
-          args: --no-progress --verbose --exclude-mail "**/*.md"
+          args: --no-progress --verbose "**/*.md"
