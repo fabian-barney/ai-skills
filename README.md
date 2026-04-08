@@ -34,7 +34,7 @@ Use the Gradle wrapper:
 ```
 
 `./gradlew cognitive-java-check` runs the shared `media.barney.cognitive-java`
-`0.3.0` gate against the repository's production Java sources. `./gradlew
-check` now includes the cognitive gate. `qualityGate` remains the repo-local
+`0.3.0` gate against the repository's production Java sources. `./gradlew check`
+now includes the cognitive gate. `qualityGate` remains the repo-local
 convenience task that runs `check` plus the dedicated `crap-java-check` and
 `cognitive-java-check` tasks.
