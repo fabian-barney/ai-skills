@@ -3,7 +3,7 @@ name: gates-exit
 description: >-
   Evaluate the mandatory exit gates for a bounded implementation before it is
   considered done. Use when build, test, correctness, design, performance,
-  convention, and quality gates all need an explicit pass/fail result.
+  convention, and quality gates all need an explicit per-gate result.
 ---
 <!-- markdownlint-disable MD025 -->
 
