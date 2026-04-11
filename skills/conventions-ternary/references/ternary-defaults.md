@@ -10,6 +10,10 @@ early-return guidance.
   argument lists; extract them when needed.
 - Simplify boolean-literal ternaries when possible:
   `condition ? true : false` -> `condition`,
-  `condition ? false : true` -> `!condition`.
+  `condition ? false : true` -> `!condition`,
+  `condition ? true : expr` -> `condition || expr`,
+  `condition ? false : expr` -> `!condition && expr`,
+  `condition ? expr : true` -> `!condition || expr`,
+  `condition ? expr : false` -> `condition && expr`.
 - For guard-style mappings, keep the exceptional case first:
   `condition ? exceptional : happy`.
