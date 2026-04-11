@@ -20,8 +20,8 @@ stay aligned.
   Portal, a private artifactory, or another repository-specific release target
 - use when `release-github` is necessary but not sufficient on its own
 - use `../release-github/SKILL.md` for the full GitHub-release workflow,
-  including version selection, docs/changelog alignment, tag creation, and the
-  GitHub Release itself
+  including version selection, docs/changelog alignment, the release-prep
+  commit and push, tag creation, and the GitHub Release itself
 - use `references/release-preconditions.md` for the final verification and
   release input requirements
 - use `references/publication-targets.md` for target-registry decisions and
