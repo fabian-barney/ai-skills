@@ -15,7 +15,7 @@ validated, and what follow-up attention remains for non-implementer readers.
 - use when product owners, reviewers, or QA need a short implementation outcome
   comment
 - use when a PR landed and the issue needs a concise summary of scope,
-  validation, and open risk
+  validation, and open risks
 - use `references/issue-summary-template.md` for the canonical summary-comment
   shape
 - use `references/audience-focus.md` when deciding what matters to PO, reviewer,
@@ -28,7 +28,7 @@ validated, and what follow-up attention remains for non-implementer readers.
 # Inputs
 
 - what was delivered or changed
-- acceptance-criteria or scope status
+- acceptance criteria or scope status
 - validation status, executed tests, and manual checks
 - QA notes, test focus, and open risks or follow-ups
 - `references/issue-summary-template.md` and
