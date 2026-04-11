@@ -43,8 +43,10 @@ risks that are incompatible with commercial closed-source delivery.
    transitive impact.
 2. Verify the authoritative license information instead of trusting a single
    package-registry field.
-3. Classify the license risk as compatible, conditional-review, or blocked for
-   the current distribution model.
+3. Classify the license risk as compatible, conditional, or blocked for the
+   current distribution model. Treat conditional cases as requiring escalation
+   before approval because obligations, restrictions, or uncertainty still need
+   resolution.
 4. Check maturity, stewardship, maintenance signals, and overlap with existing
    dependencies.
 5. Identify notice, attribution, or third-party notices file obligations that
