@@ -19,9 +19,9 @@ Markdown records.
   publishing a backlog entry
 - use `templates/skill-backlog-entry.md` for the canonical Markdown rendering
   of the shared content model
-- use `templates/github-issue.md` when rendering the backlog entry as a GitHub
+- use `targets/github-issue.md` when rendering the backlog entry as a GitHub
   issue
-- use `templates/local-backlog-entry.md` when rendering the same model as a
+- use `targets/local-backlog-entry.md` when rendering the same model as a
   local Markdown record
 - use `examples/new-skill-example.md`, `examples/improve-skill-example.md`, and
   `examples/new-skill.md` as examples of the canonical field set and its
@@ -40,7 +40,7 @@ Markdown records.
 - `source-context-or-notes`
 - `status`
 - optional use of `templates/skill-backlog-entry.md`,
-  `templates/github-issue.md`, and `templates/local-backlog-entry.md` when a
+  `targets/github-issue.md`, and `targets/local-backlog-entry.md` when a
   concrete rendering is needed
 
 # Workflow
@@ -54,8 +54,8 @@ Markdown records.
 5. Stop after producing the canonical record shape and its renderable
    templates.
 6. Use `templates/skill-backlog-entry.md` as the canonical Markdown rendering,
-   `templates/github-issue.md` as the GitHub issue rendering, and
-   `templates/local-backlog-entry.md` as the local Markdown rendering of the
+   `targets/github-issue.md` as the GitHub issue rendering, and
+   `targets/local-backlog-entry.md` as the local Markdown rendering of the
    same model.
 7. Use `examples/new-skill-example.md`, `examples/improve-skill-example.md`,
    and `examples/new-skill.md` only as demonstrations of the shared content

@@ -4,6 +4,9 @@ change-type: PLACEHOLDER_NEW_OR_IMPROVE
 skill-id-or-name: PLACEHOLDER_WORKING_SKILL_ID_OR_NAME
 status: PLACEHOLDER_STATUS
 ---
+<!-- markdownlint-disable MD025 -->
+
+# PLACEHOLDER_SHORT_BACKLOG_TITLE
 
 ## Problem or Motivation
 
