@@ -24,6 +24,7 @@ final class UserService {
       throw new IllegalArgumentException("retryLimit must be >= 1");
     }
     // business logic
+    return new UserResponse(email);
   }
 }
 ```
