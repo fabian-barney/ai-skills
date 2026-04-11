@@ -24,4 +24,4 @@ implicit pass.
 
 This gate only proves that the latest push was reviewed cleanly enough to be
 considered for merge. Repository merge-method policy and final merge execution
-still belong to `../pr-merge/SKILL.md`.
+still belong to `../../pr-merge/SKILL.md`.
