@@ -1,6 +1,10 @@
 ---
 name: skill-new
-description: Capture a new reusable ai-skill idea as a canonical backlog entry. Use when daily work reveals a public or centrally reusable skill candidate that should be recorded as a GitHub issue or local Markdown backlog item without implementing the skill.
+description: >-
+  Capture a new reusable ai-skill idea as a canonical backlog entry. Use when
+  daily work reveals a public or centrally reusable skill candidate that
+  should be recorded as a GitHub issue or local Markdown backlog item without
+  implementing the skill.
 ---
 <!-- markdownlint-disable MD025 -->
 
@@ -23,9 +27,8 @@ important context.
   public and reusable enough for the central backlog
 - use `references/backlog-target-selection.md` to decide between GitHub and
   local Markdown storage
-- use `examples/public-skill-issue.md` and
-  `examples/local-skill-backlog-entry.md` when a concrete rendered example
-  helps
+- use `targets/github-issue.md` and `targets/local-backlog-entry.md` when a
+  concrete rendered target artifact helps
 - use `skill-template` to normalize the canonical field set before rendering
 - use `formatting-github-comment` when the GitHub issue body still needs final
   Markdown normalization
@@ -56,9 +59,12 @@ important context.
    publication is appropriate and access exists, otherwise local Markdown.
 5. Render the canonical backlog entry for the chosen target without changing
    the underlying semantics.
-6. Hand GitHub-bound Markdown to `formatting-github-comment` when the rendered
+6. Use `targets/github-issue.md` and `targets/local-backlog-entry.md` as
+   target-specific renderings of the canonical record when a concrete artifact
+   shape helps.
+7. Hand GitHub-bound Markdown to `formatting-github-comment` when the rendered
    issue body still needs final normalization.
-7. Stop after the canonical backlog entry is recorded or rendered.
+8. Stop after the canonical backlog entry is recorded or rendered.
 
 # Outputs
 
