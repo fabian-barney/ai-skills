@@ -1,6 +1,7 @@
 # Issue Create Boundary
 
-This skill owns publication of an issue artifact.
+This skill owns publication of an issue artifact, or rendering a ready-to-post
+issue title and body when direct publication is not permitted.
 
 It may compose:
 
