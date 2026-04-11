@@ -4,26 +4,26 @@
 - skill-id-or-name: {{skill-id-or-name}}
 - status: {{status}}
 
-## Problem Or Motivation
+## Problem or Motivation
 
 {{problem-or-motivation}}
 
-## Why Reusable
+## Reusability Rationale
 
 {{reusability-rationale}}
 
-## When To Use
+## When to Use
 
 {{when-to-use}}
 
-## Workflow Or Responsibilities
+## Workflow or Responsibilities
 
 {{workflow-or-responsibilities}}
 
-## Related Skills Or Dependencies
+## Related Skills or Dependencies
 
 {{related-skills-or-dependencies}}
 
-## Source Context Or Notes
+## Source Context or Notes
 
 {{source-context-or-notes}}
