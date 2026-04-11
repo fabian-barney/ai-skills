@@ -1,7 +1,7 @@
 # Validation Boundary Defaults
 
-Distilled from the issue contract plus the project's clean-code, Java, and
-Spring boundary guidance.
+Distilled from the issue contract and common Java/Spring boundary validation
+practices.
 
 - Fail as early as possible.
 - Validate request and payload boundaries with a standard validation API where

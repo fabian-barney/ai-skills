@@ -1,6 +1,6 @@
 # Programming Error vs Invalid Data
 
-Distilled from the issue contract and the project's Java and logging guidance.
+Distilled from the issue contract and general Java logging practices.
 
 - Programmer mistakes are contract or invariant violations inside the code and
   should fail fast with an appropriate runtime exception or error type.
