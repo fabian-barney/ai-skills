@@ -1,6 +1,6 @@
 # Decision-Complete Planning Notes
 
-Distilled from `ai-rules/PLAN/PLAN.md`.
+Distilled from the project's planning guidance.
 
 - Explore first and ask only high-impact clarifying questions.
 - Keep the plan dependency-aware and implementation-ready.

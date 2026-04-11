@@ -2,32 +2,39 @@
 name: plan
 description: Create a decision-complete implementation plan before work starts and update the plan when new answers materially change it.
 ---
+<!-- markdownlint-disable MD025 -->
 
-# plan
-
-## Purpose
+# Purpose
 
 Produce a decision-complete plan for implementation work so execution can
 proceed without leaving important design, scope, or verification choices
 implicit.
 
-## When to Use
+# When to Use
 
 - use before implementation for multi-step or high-risk work
 - use when the user explicitly asks for a plan
 - use when questions or discovered constraints can materially change the
   implementation path
-- use the bundled planning and workflow-order references when shaping the plan
+- use `references/decision-complete-plan.md` to make sure the plan is
+  decision-complete
+- use `references/decision-complete-planning.md` for planning behavior and
+  refresh rules
+- use `references/workflow-order.md` when the execution sequence matters
+- use `targets/codex.md` only when Codex-specific additive notes apply
 
-## Inputs
+# Inputs
 
 - the user request and success criteria
 - relevant repository context, constraints, and existing implementation shape
 - unresolved product or technical tradeoffs
 - any user answers that materially affect the plan
-- the bundled references and any applicable target-specific notes
+- `references/decision-complete-plan.md`,
+  `references/decision-complete-planning.md`, and
+  `references/workflow-order.md`
+- any applicable target-specific note such as `targets/codex.md`
 
-## Workflow
+# Workflow
 
 1. Explore the repository and surrounding context before asking questions that
    could be answered by inspection.
@@ -40,10 +47,14 @@ implicit.
 5. If a user answer has significant impact on the plan, present the altered
    plan before starting implementation instead of switching directly into
    coding.
-6. Apply any bundled target-specific notes only after the canonical plan is
-   stable.
+6. Use `references/decision-complete-plan.md` to confirm scope, decisions, and
+   verification are explicit.
+7. Use `references/decision-complete-planning.md` and
+   `references/workflow-order.md` to refine planning behavior and sequencing.
+8. Apply any target-specific note such as `targets/codex.md` only after the
+   canonical plan is stable.
 
-## Outputs
+# Outputs
 
 - a decision-complete implementation plan
 - explicit assumptions and chosen defaults
@@ -52,14 +63,14 @@ implicit.
   implementation path
 - optional target-specific planning note when a bundled target file applies
 
-## Guardrails
+# Guardrails
 
 - do not start implementation when important plan decisions are still open
 - do not ask questions that can be resolved by repository exploration
 - do not leave critical behavior, interfaces, or test strategy implicit
 - do not treat a materially changed plan as unchanged after new answers arrive
 
-## Exit Checks
+# Exit Checks
 
 - the plan is implementation-ready and leaves no critical decisions open
 - important assumptions are explicit
