@@ -1,7 +1,7 @@
 ---
 name: pr-review-loop
 description: >-
-  Run the post-push pull-request review loop until no valid findings remain and
+  Run the post-push pull request review loop until no valid findings remain and
   merge gates are satisfied. Use when one or more active PRs must be driven
   through automated review, fixes, thread handling, and final merge readiness.
 ---
@@ -26,7 +26,7 @@ after the latest push has been reviewed.
   classification handling
 - use `../pr-merge/SKILL.md` for final merge gating and merge execution
 - use `references/review-loop-state.md` for the required per-PR state model and
-  merge gate
+  review-readiness gate
 - use `references/review-loop-queue.md` for round-robin queue behavior
 - use `examples/review-loop-status.md` when reporting loop state or completion
 
@@ -63,9 +63,10 @@ after the latest push has been reviewed.
    threads that were actually handled.
 7. If fixes were pushed, restart the same post-push review cycle for that PR
    instead of treating earlier review results as sufficient.
-8. If no fixes were needed, evaluate the hard merge gate from
-   `references/review-loop-state.md`. When merge is allowed, hand the PR to
-   `../pr-merge/SKILL.md`; otherwise report the blocking gate conditions.
+8. If no fixes were needed, evaluate the review-readiness gate from
+   `references/review-loop-state.md`. When that gate passes, hand the PR to
+   `../pr-merge/SKILL.md` for the remaining merge-policy checks and merge
+   execution; otherwise report the blocking gate conditions.
 9. Use `examples/review-loop-status.md` when communicating queue state,
    remaining blockers, or clean completion.
 
@@ -74,7 +75,8 @@ after the latest push has been reviewed.
 - a per-PR status showing review state, remaining blockers, and merge
   readiness
 - handled review threads with explicit valid, invalid, or unresolved treatment
-- merged PRs only when the post-push merge gate is satisfied
+- merged PRs only when post-push review readiness is satisfied and
+  `../pr-merge/SKILL.md` allows merge execution
 
 # Guardrails
 

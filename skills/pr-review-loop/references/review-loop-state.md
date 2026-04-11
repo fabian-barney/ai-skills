@@ -1,4 +1,4 @@
-# Review Loop State And Hard Merge Gate
+# Review Loop State And Review-Readiness Gate
 
 Track each active PR with at least these fields:
 
@@ -8,9 +8,9 @@ Track each active PR with at least these fields:
 - `open-review-threads`
 - `new-valid-findings`
 - `required-checks-green`
-- `merge-gate-passed`
+- `review-readiness-gate-passed`
 
-The hard merge gate passes only when all of these are true in the same
+The review-readiness gate passes only when all of these are true in the same
 evaluation round:
 
 - a review was submitted after the latest push
@@ -21,3 +21,7 @@ evaluation round:
 
 Treat missing or ambiguous review/check state as gate failure, not as an
 implicit pass.
+
+This gate only proves that the latest push was reviewed cleanly enough to be
+considered for merge. Repository merge-method policy and final merge execution
+still belong to `../pr-merge/SKILL.md`.
