@@ -15,7 +15,7 @@ an explicit response, and an appropriate fix or rationale.
 # When to Use
 
 - use when a PR or MR review produced actionable findings or questions
-- use when every review thread needs an explicit valid or invalid
+- use when every review thread needs an explicit valid, invalid, or unresolved
   classification
 - use when valid findings should be fixed on the branch with focused tests when
   appropriate
@@ -44,23 +44,27 @@ an explicit response, and an appropriate fix or rationale.
    focused regression test or proof of behavior.
 3. For invalid findings, explain the concrete rationale instead of dismissing
    the concern vaguely.
-4. Reply to every thread with the classification and concise outcome.
-5. Resolve handled threads only when repository or session rules allow the
+4. For unresolved findings, explain what evidence, clarification, or follow-up
+   is still needed and keep the thread open until that gap is closed.
+5. Reply to every thread with the classification and concise outcome.
+6. Resolve handled threads only when repository or session rules allow the
    current actor to resolve them.
-6. Use `references/regression-test-expectations.md` to keep fixes and tests
+7. Use `references/regression-test-expectations.md` to keep fixes and tests
    proportional to the finding.
-7. Use the bundled examples when a valid or invalid response shape helps.
+8. Use the bundled examples when a valid or invalid response shape helps.
 
 # Outputs
 
 - a classification for each handled review finding
 - bounded fixes and regression evidence for valid findings when appropriate
 - concise replies on every addressed review thread
+- explicit missing-evidence or follow-up requests for unresolved findings
 
 # Guardrails
 
 - do not leave actionable review comments unanswered
 - do not classify a finding as invalid without concrete rationale
+- do not silently treat unresolved findings as valid or invalid
 - do not skip regression evidence when a valid finding changes behavior
 - do not broaden this skill into the full review loop or final merge decision
 
@@ -69,4 +73,5 @@ an explicit response, and an appropriate fix or rationale.
 - every handled thread has an explicit classification
 - valid findings have a fix, a justified deferral, or clear blocking reason
 - invalid findings have a factual rationale
+- unresolved findings state what is still needed before closure
 - replies are concise and suitable for PR review flow
