@@ -47,8 +47,8 @@ risks that are incompatible with commercial closed-source delivery.
    the current distribution model.
 4. Check maturity, stewardship, maintenance signals, and overlap with existing
    dependencies.
-5. Identify notice, attribution, or `THIRD_PARTY_NOTICES` obligations that the
-   change introduces.
+5. Identify notice, attribution, or third-party notices file obligations that
+   the change introduces.
 6. Escalate conditional or restricted licenses, unknown/custom licenses, and
    weak governance signals instead of silently accepting them.
 7. Use `examples/dependency-compliance-finding.md` when reporting the resulting
