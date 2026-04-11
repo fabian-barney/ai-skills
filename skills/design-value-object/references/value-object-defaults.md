@@ -1,6 +1,6 @@
 # Value Object Defaults
 
-Distilled from the project's conventions, clean-code, Effective Java, JPA, and
+Distilled from the project's conventions, Clean Code, Effective Java, JPA, and
 TypeScript guidance.
 
 - Prefer value objects or named domain types over raw `String`, `int`,
