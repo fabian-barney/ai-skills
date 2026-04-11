@@ -19,10 +19,11 @@ stay aligned.
 - use when artifact publication may target Maven Central, the Gradle Plugin
   Portal, a private artifactory, or another repository-specific release target
 - use when `release-github` is necessary but not sufficient on its own
-- use `../release-github/SKILL.md` for the GitHub tag-and-release part of the
-  flow
+- use `../release-github/SKILL.md` for the full GitHub-release workflow,
+  including version selection, docs/changelog alignment, tag creation, and the
+  GitHub Release itself
 - use `references/release-preconditions.md` for the final verification and
-  release-input requirements
+  release input requirements
 - use `references/publication-targets.md` for target-registry decisions and
   skip rules
 - use `examples/release-checklist.md` when reporting the full release run
@@ -45,20 +46,16 @@ stay aligned.
    repository is in releasable state.
 2. Run or confirm the final build and test pass for the release candidate; do
    not continue if the final verification is red or missing.
-3. Determine the delta since the latest release and derive the next semantic
-   version from that delta unless the target version is explicit.
-4. Update release-facing documentation, examples, and the changelog so they
-   all point at the selected version and describe the user-visible delta.
-5. Apply `../release-github/SKILL.md` to perform the GitHub release portion of
-   the workflow: tag selection, release notes alignment, tag creation, push,
-   and GitHub Release creation.
-6. Publish release artifacts to each applicable target registry listed in
+3. Apply `../release-github/SKILL.md` to perform the GitHub-release workflow,
+   including version selection, changelog/docs alignment, release-prep commit,
+   tag creation, push, and GitHub Release creation.
+4. Publish release artifacts to each applicable target registry listed in
    `references/publication-targets.md`, such as Maven Central, the Gradle
    Plugin Portal, or a private artifactory, and record any target that is
    intentionally not applicable.
-7. Verify the published artifacts and release metadata so version numbers,
+5. Verify the published artifacts and release metadata so version numbers,
    tags, changelog entries, and published packages all match.
-8. Use `examples/release-checklist.md` when communicating the completed release
+6. Use `examples/release-checklist.md` when communicating the completed release
    steps or any blocked publication target.
 
 # Outputs

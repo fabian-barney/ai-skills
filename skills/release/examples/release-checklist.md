@@ -3,7 +3,8 @@
 - final build: pass
 - final tests: pass
 - delta to previous release: reviewed
-- semantic version: `v1.8.0`
+- semantic version: `1.8.0`
+- release tag: `v1.8.0`
 - docs/examples updated: yes
 - changelog updated: yes
 - GitHub release: published
