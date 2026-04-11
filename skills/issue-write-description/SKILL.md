@@ -1,6 +1,9 @@
 ---
 name: issue-write-description
-description: Write structured GitHub issue descriptions for implementation, backlog, or follow-up work. Use when opening or updating issue bodies and when another workflow needs a concise issue template.
+description: >-
+  Write structured GitHub issue descriptions for implementation, backlog, or
+  follow-up work. Use when opening or updating issue bodies and when another
+  workflow needs a concise issue template.
 ---
 <!-- markdownlint-disable MD025 -->
 
