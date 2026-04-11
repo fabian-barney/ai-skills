@@ -1,6 +1,9 @@
 ---
 name: issue-write-summary-comment
-description: Write short GitHub issue summary comments for product owners, reviewers, and QA. Use when reporting delivered scope, validation status, QA notes, and follow-ups on an issue.
+description: >-
+  Write short GitHub issue summary comments for product owners, reviewers,
+  and QA. Use when reporting delivered scope, validation status, QA notes,
+  and follow-ups on an issue.
 ---
 <!-- markdownlint-disable MD025 -->
 
