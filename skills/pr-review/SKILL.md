@@ -11,7 +11,7 @@ handling review conversations, and deciding whether a thread may be resolved.
 
 # When to Use
 
-- use when a PR or MR review workflow is active
+- use when a PR or merge request (MR) review workflow is active
 - use when review comments or conversations need ownership or closure
   decisions
 - use as the family-root skill for later `pr-review-write`,
@@ -39,16 +39,19 @@ handling review conversations, and deciding whether a thread may be resolved.
 1. Read the review state, changed scope, and active conversations.
 2. Determine whether the current actor is responsible for handling or resolving
    each thread.
-3. Classify each finding as valid, invalid, or unresolved.
-4. Ensure each resolved thread has a final explanatory reply describing how it
+3. If conversation-resolution rules are missing or unclear, ask the
+   user or maintainer whether the current actor may resolve review
+   conversations and keep the thread open until that authority is clarified.
+4. Classify each finding as valid, invalid, or unresolved.
+5. Ensure each resolved thread has a final explanatory reply describing how it
    was handled or why it was not addressed.
-5. Delegate detailed finding-writing, response, loop, or merge behavior to the
+6. Delegate detailed finding-writing, response, loop, or merge behavior to the
    specialized child skills when those are available.
-6. Use `references/review-family-guardrails.md` and
+7. Use `references/review-family-guardrails.md` and
    `references/review-boundary.md` to keep the root skill scoped correctly.
-7. Use `references/pr-review-loop-source.md` only for closure semantics that
+8. Use `references/pr-review-loop-source.md` only for closure semantics that
    belong in the root skill.
-8. Reuse `examples/thread-resolution.md` and
+9. Reuse `examples/thread-resolution.md` and
    `examples/resolution-comment.md` when they fit the current thread shape.
 
 # Outputs
@@ -60,6 +63,7 @@ handling review conversations, and deciding whether a thread may be resolved.
 # Guardrails
 
 - do not resolve review conversations unless responsibility is clear
+- do not resolve review conversations when closure authority is unknown
 - do not close a thread without a final comment explaining the outcome
 - do not broaden this skill into full merge-loop orchestration
 - do not duplicate detailed finding-writing or fix-response behavior that
@@ -70,4 +74,5 @@ handling review conversations, and deciding whether a thread may be resolved.
 - every handled thread has a classification
 - every resolved thread has a final rationale comment
 - unclear ownership or unresolved responsibility is surfaced explicitly
+- missing closure authority is surfaced explicitly and leaves the thread open
 - no merge-loop or implementation behavior was silently inlined here
