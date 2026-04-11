@@ -1,6 +1,8 @@
 ---
 name: conventions-ternary
-description: Prefer simple ternary expressions over verbose if-else blocks when the choice is expression-shaped and side-effect free.
+description: >-
+  Prefer simple ternary expressions over verbose if-else blocks when the
+  choice is expression-shaped and side-effect-free.
 ---
 <!-- markdownlint-disable MD025 -->
 
