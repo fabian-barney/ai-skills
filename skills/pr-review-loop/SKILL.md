@@ -94,4 +94,5 @@ after the latest push has been reviewed.
 - no PR is marked merge-ready without a completed post-push review for its
   latest head commit
 - remaining blockers are concrete, not generic
-- merged PRs passed the hard gate in the same evaluation round
+- merged PRs passed the review-readiness gate in the same evaluation round,
+  and `../pr-merge/SKILL.md` then allowed merge execution
