@@ -29,6 +29,7 @@ Markdown records.
 
 # Inputs
 
+- `title`
 - `change-type` as `new` or `improve`
 - `skill-id-or-name`
 - `problem-or-motivation`
