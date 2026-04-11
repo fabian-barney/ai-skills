@@ -1,7 +1,7 @@
 # Markdown Comment Formatting Notes
 
-Distilled from `ai-rules/AI-RULES/FORMATTING.md` and recent GitHub review
-feedback patterns.
+Distilled from internal formatting guidance and recent GitHub review feedback
+patterns.
 
 - Keep lines wrapped so long comments stay readable in diffs and source view.
 - Keep Markdown structurally simple and avoid fragile formatting.
