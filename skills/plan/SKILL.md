@@ -21,6 +21,8 @@ implicit.
 - use `references/decision-complete-planning.md` for planning behavior and
   refresh rules
 - use `references/workflow-order.md` when the execution sequence matters
+- use `examples/implementation-plan.md` when a concrete plan shape with
+  verification details helps
 - use `targets/codex.md` only when Codex-specific additive notes apply
 
 # Inputs
@@ -32,6 +34,8 @@ implicit.
 - `references/decision-complete-plan.md`,
   `references/decision-complete-planning.md`, and
   `references/workflow-order.md`
+- `examples/implementation-plan.md` when the output needs a concrete example
+  shape
 - any applicable target-specific note such as `targets/codex.md`
 
 # Workflow
@@ -51,7 +55,9 @@ implicit.
    verification are explicit.
 7. Use `references/decision-complete-planning.md` and
    `references/workflow-order.md` to refine planning behavior and sequencing.
-8. Apply any target-specific note such as `targets/codex.md` only after the
+8. Use `examples/implementation-plan.md` when a concrete output shape or
+   verification section is helpful.
+9. Apply any target-specific note such as `targets/codex.md` only after the
    canonical plan is stable.
 
 # Outputs
@@ -61,6 +67,7 @@ implicit.
 - a concrete verification strategy and acceptance criteria
 - an updated plan when later user input materially changes the intended
   implementation path
+- optional reuse of `examples/implementation-plan.md` as a concrete shape
 - optional target-specific planning note when a bundled target file applies
 
 # Guardrails
