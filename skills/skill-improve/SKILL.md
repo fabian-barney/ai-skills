@@ -1,6 +1,10 @@
 ---
 name: skill-improve
-description: Capture an improvement proposal for an existing skill as a canonical backlog entry. Use when normal work reveals a reusable improvement to a public or centrally maintained skill and the improvement should be recorded without blocking the current task.
+description: >-
+  Capture an improvement proposal for an existing skill as a canonical
+  backlog entry. Use when normal work reveals a reusable improvement to a
+  public or centrally maintained skill and the improvement should be recorded
+  without blocking the current task.
 ---
 <!-- markdownlint-disable MD025 -->
 
