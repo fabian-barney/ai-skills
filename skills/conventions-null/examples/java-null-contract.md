@@ -1,8 +1,13 @@
 # Example Java Null Contract
 
 ```java
+import java.util.List;
+import java.util.Optional;
+
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public final class OrderSummaryService {
 
   public List<OrderSummary> summariesFor(CustomerId customerId) {
