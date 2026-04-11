@@ -73,6 +73,6 @@ handling review conversations, and deciding whether a thread may be resolved.
 
 - every handled thread has a classification
 - every resolved thread has a final rationale comment
-- unclear ownership or unresolved responsibility is surfaced explicitly
+- unclear ownership or unresolved responsibility are surfaced explicitly
 - missing closure authority is surfaced explicitly and leaves the thread open
 - no merge-loop or implementation behavior was silently inlined here

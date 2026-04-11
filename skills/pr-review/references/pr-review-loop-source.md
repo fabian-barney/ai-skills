@@ -1,11 +1,13 @@
 # PR Review Loop Source Notes
 
-Relevant ideas distilled from the repository review loop guidance:
+Relevant review-loop heuristics used by this skill:
 
-- every review item should be handled on its own branch and PR
-- review state must be re-evaluated after each push
-- missing ownership or unclear state should block conversation resolution
-- a clean merge gate requires green checks, no unresolved valid findings, and
+- handling each review item on its own branch and PR often works best
+- review state should generally be re-evaluated after each push
+- missing ownership or unclear state should usually block conversation
+  resolution
+- a clean merge gate typically includes green checks, no unresolved valid
+  findings, and
   no open review threads
 
 The root `pr-review` skill uses these ideas only for responsibility and closure
