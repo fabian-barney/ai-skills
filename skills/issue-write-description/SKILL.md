@@ -38,7 +38,7 @@ design document.
 1. State the problem in concrete terms instead of generic backlog language.
 2. Describe the intended outcome and the bounded scope of the issue.
 3. Add important constraints, assumptions, or non-goals only when they help a
-   later implementer avoid avoidable mistakes.
+   later implementer avoid common mistakes.
 4. Include concrete validation or acceptance notes when they materially shape
    implementation or review.
 5. Use `references/issue-description-structure.md` to keep the body concise and
