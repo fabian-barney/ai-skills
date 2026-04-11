@@ -2,37 +2,48 @@
 
 ## Purpose
 
-`ai-skills` is the canonical repository for tool-agnostic AI skills.
+`ai-skills` is the canonical repository for reusable, tool-agnostic AI
+behavior.
 
-A skill is a reusable instruction bundle for a focused task, workflow,
-convention, or review lens. Skills are lighter than full agents: they package
-portable instructions and optional supporting resources without prescribing a
-full runtime identity or orchestration model.
+A skill is a reusable instruction bundle for a focused capability, convention,
+check, workflow, or review lens. Skills are lighter than full agents: they
+package portable behavior and optional supporting resources without prescribing
+a full runtime identity.
 
 This repository exists to:
 
-- define a canonical, portable skill format
+- define the canonical source format for reusable AI behavior
+- centralize behavior that should not be duplicated in downstream repositories
 - keep skill authoring rules explicit and versioned
 - organize future skills under a stable taxonomy
 - make the same skill concept usable across Codex, Claude, and Copilot
 
-## Relationship to `ai-agents`
+## Relationship to Other Repositories
 
-`ai-agents` and `ai-skills` solve related but different problems.
+`ai-skills`, `ai-agents`, `ai-instructions`, and `ai-rules` solve related but
+different problems.
 
-- `ai-agents` is a catalog of tool-agnostic agents with canonical definitions
-  and renderer logic.
-- `ai-skills` is a catalog of tool-agnostic skill bundles with portable
-  instruction content and optional supporting assets.
+- `ai-agents` defines agent identities, worker boundaries, and orchestration
+- `ai-skills` defines reusable behavior that agents or assistants can apply
+- `ai-instructions` defines the tiny downstream installation and context layer
+- `ai-rules` is legacy baseline material retained temporarily for migration and
+  compatibility
 
-The main difference is the unit of reuse:
+The unit of reuse differs across these repositories:
 
-- an agent is a named worker persona with responsibility boundaries
-- a skill is a reusable capability or playbook that can be loaded, invoked, or
-  applied by an agent or assistant
+- an agent is a named worker with responsibility boundaries
+- a skill is a reusable behavior bundle
+- an instruction layer is a minimal downstream wiring layer
 
-This repository does not define runtime orchestration in v1. It defines the
-portable source format that future tooling can validate, package, and render.
+Example:
+
+- a downstream repository may install `ai-instructions` to point at a default
+  composite skill such as `quality-gate`
+- the `quality-gate` behavior itself belongs in `ai-skills`
+- the agent identity that invokes the skill belongs in `ai-agents`
+
+`ai-skills` does not replace `ai-instructions`. It centralizes reusable
+behavior so downstream repositories can remain small and mostly project-owned.
 
 ## Canonical Skill Unit
 
@@ -47,8 +58,80 @@ skills/<skill-id>/
 Example:
 
 ```text
-skills/quality-crap/
+skills/quality-gate/
 ```
+
+## Skill Taxonomy
+
+Every canonical skill belongs to exactly one of these behavioral forms:
+
+### Leaf Skills
+
+A leaf skill is a narrow reusable capability, convention, check, or review
+lens.
+
+Typical examples include:
+
+- `conventions-null`
+- `conventions-lombok`
+- `correctness-equals-hashcode`
+- `security-secrets`
+- `formatting-github-comment`
+
+Leaf skills may use supporting files, but they do not orchestrate other skills
+as part of their canonical contract.
+
+### Composite Skills
+
+A composite skill orchestrates one or more other skills.
+
+Composite skills may depend on:
+
+- one or more leaf skills
+- one or more other composite skills
+- any combination of leaf and composite skills
+
+Typical examples include:
+
+- `quality-gate`
+- `pr-review`
+- `release`
+
+Composite skills are explicitly multi-level. A composite skill may orchestrate
+other composite skills as long as the overall dependency graph remains acyclic.
+
+### Capture Skills
+
+A capture skill records canonical backlog entries for future skills or skill
+improvements without implementing those skills.
+
+Typical examples include:
+
+- `skill-new`
+- `skill-improve`
+- `skill-template`
+
+Capture skills exist so useful skill ideas can be recorded during normal work,
+even when immediate implementation is out of scope.
+
+## Composition Rules
+
+Skill composition is allowed and intended.
+
+The canonical rules are:
+
+- composite skills may be multi-level
+- composition must be acyclic
+- a composed skill must preserve the called skill's purpose, workflow
+  boundaries, guardrails, and exit checks
+- a composite skill may sequence, select, or aggregate child skills, but it
+  must not silently redefine the meaning of a child skill
+- target-specific notes remain additive and must not change canonical
+  composition semantics
+
+This specification does not define a runtime orchestration engine in v1. It
+defines the canonical meaning of composable skill bundles so future tooling can
+invoke or render them consistently.
 
 ## Skill Bundle Structure
 
@@ -67,7 +150,8 @@ skills/<skill-id>/
 `-- templates/
 ```
 
-Only `SKILL.md` is required in v1. All other files and directories are optional.
+Only `SKILL.md` is required in v1. All other files and directories are
+optional.
 
 Optional content has these intended roles:
 
@@ -79,6 +163,9 @@ Optional content has these intended roles:
 
 Supporting files are never implicit. If a skill uses them, `SKILL.md` must
 reference them explicitly and explain when they matter.
+
+The same bundle structure applies to leaf skills, composite skills, and capture
+skills. What changes is the meaning of the workflow and outputs.
 
 ## `SKILL.md` Contract
 
@@ -96,8 +183,8 @@ Example:
 
 ```md
 ---
-name: quality-crap
-description: Evaluate changed code for CRAP score violations and propose fixes.
+name: quality-gate
+description: Run a multi-step quality gate by orchestrating multiple reusable skills.
 ---
 ```
 
@@ -125,19 +212,107 @@ Each section defines a distinct part of the skill contract:
 - `Inputs` describes the context, files, arguments, or evidence required
 - `Workflow` lists the concrete steps the model should follow
 - `Outputs` defines the expected result shape
-- `Guardrails` defines forbidden shortcuts, quality constraints, and boundaries
+- `Guardrails` defines forbidden shortcuts, quality constraints, and
+  boundaries
 - `Exit Checks` defines the final self-verification before completion
+
+### Behavioral Expectations by Skill Type
+
+The canonical section semantics remain stable across all skill types:
+
+- a leaf skill uses `Workflow` to describe the direct capability or check
+- a composite skill uses `Workflow` to describe orchestration and aggregation
+- a capture skill uses `Workflow` to describe how backlog records are
+  normalized and rendered
+
+Capture skills must never claim to implement the proposed skill as part of
+their normal contract. Their outputs stop at canonical recording and optional
+rendering.
+
+## Capture Skill Contract
+
+Capture skills standardize how future skill work is recorded during normal use.
+
+The canonical capture behaviors are:
+
+- `skill-new` records a new canonical skill idea
+- `skill-improve` records an improvement proposal for an existing canonical
+  skill
+- `skill-template` defines the canonical backlog-entry shape used by those
+  capture flows
+
+Capture skills may render the same canonical backlog entry to different storage
+targets, but the underlying content model remains the same.
+
+Capture skills must stop after recording or rendering the backlog entry.
+Ad-hoc implementation for the current task remains part of normal agent
+workflow and is out of scope for capture skills.
+
+## Canonical Backlog Entry Contract
+
+The canonical backlog entry is the normalized content model used by capture
+skills.
+
+The canonical entry must contain:
+
+- `title`
+- `change-type`
+- `skill-id-or-name`
+- `problem-or-motivation`
+- `reusability-rationale`
+- `when-to-use`
+- `workflow-or-responsibilities`
+- `related-skills-or-dependencies`
+- `source-context-or-notes`
+- `status`
+
+The meaning of these fields is:
+
+- `title`: concise human title for the backlog item
+- `change-type`: either `new` or `improve`
+- `skill-id-or-name`: the proposed canonical skill id or a working name if the
+  final id is not yet stable
+- `problem-or-motivation`: what problem the skill should solve
+- `reusability-rationale`: why this belongs in the shared catalog rather than
+  only in the originating task or repository
+- `when-to-use`: rough trigger or activation conditions
+- `workflow-or-responsibilities`: rough expected behavior, checks, or
+  responsibilities of the future skill
+- `related-skills-or-dependencies`: neighboring skills, likely composition
+  points, or expected dependencies when known
+- `source-context-or-notes`: contextual notes from the originating task
+- `status`: backlog state such as `idea`, `draft`, `triaged`, or
+  `implemented`
+
+This contract defines the canonical semantics, not a single storage syntax.
+Renderers may adapt the format to the target platform while preserving the same
+meaning.
+
+### Rendering Targets for Backlog Entries
+
+The preferred rendering target is a GitHub issue in `ai-skills` when GitHub
+access is available.
+
+The fallback rendering target is a local Markdown record when GitHub access is
+not available.
+
+These are secondary representations of the same canonical backlog-entry model.
+The canonical idea does not depend on one storage target.
 
 ## Authoring Rules
 
 Skills in this repository must follow these rules:
 
-- one skill bundle per concern
-- prefer small composable skills over large end-to-end monoliths
 - keep canonical instructions portable and tool-agnostic
+- centralize reusable behavior here instead of duplicating it in downstream
+  repositories
+- prefer small composable skills over large end-to-end monoliths
+- define composition explicitly when a skill orchestrates other skills
+- keep capture skills focused on recording, not implementing
 - put target-specific behavior only in `targets/*.md`
 - do not rely on undeclared supporting files
-- do not encode repo-specific runtime assumptions into the canonical contract
+- do not encode downstream repo-specific runtime assumptions into the canonical
+  contract
 
 Target-specific notes may refine:
 
@@ -152,29 +327,28 @@ Target-specific notes may not change:
 - the meaning of inputs and outputs
 - the required workflow steps
 - the guardrails or exit checks
+- the canonical meaning of composition
 
 v1 deliberately does not add a separate metadata file such as `skill.yaml`.
 `SKILL.md` is the canonical source of truth.
 
 ## Initial Taxonomy
 
-The existing issue set shows the intended direction for this repository. The
-v1 taxonomy is therefore:
+The current repository direction includes at least these families:
 
-- workflow
-- PR and issue authoring
-- release
 - conventions
-- design
 - correctness
-- quality
-- performance
 - security
 - formatting
+- review
+- release
+- gates
+- design
+- performance
+- backlog capture and skill maintenance
 
-These categories are organizational guidance, not yet committed directory
-names. Future skill bundles may refine the taxonomy with ADRs when the catalog
-starts to grow.
+These are organizational guidance, not yet committed directory names. Future
+skills may refine the taxonomy with ADRs when the catalog starts to grow.
 
 ## Target Mapping
 
@@ -223,33 +397,35 @@ Mapping rules:
   skill
 - when a skill cannot map directly to Copilot agent skills, the target note may
   define a fallback packaging using Copilot custom instructions or prompt files
-- fallback packaging must preserve the canonical purpose, workflow, and exit
-  checks
+- fallback packaging must preserve the canonical purpose, workflow, guardrails,
+  and exit checks
 
 ## Repository Conventions
 
 The repository-level conventions are:
 
 - `skills/` is reserved for canonical skill bundles
-- v1 does not commit real skills yet
 - `spec.md` is the authoritative contract until ADRs supersede parts of it
-- `ai/PROJECT/DECISIONS/` is reserved for future ADRs
+- `ai/PROJECT/DECISIONS/` is reserved for repository ADRs when needed
+- downstream repositories should keep their local context in their own
+  project-owned files and use `ai-instructions` as the tiny installable layer
 
-This means the current round sets up the infrastructure and the format, but it
-does not implement the open `skill:` issues as concrete skill bundles yet.
+This means the repository is the source of reusable behavior, while
+downstream-specific ADRs, lessons learned, and local exceptions remain outside
+the canonical skill catalog.
 
-## Example Skill Bundle
+## Example Bundles
 
-The following example is illustrative only. It demonstrates structure and
-contract, but it is not a committed repository skill.
+The following examples are illustrative only. They demonstrate meaning and
+structure, but they are not committed repository skills.
+
+### Example Composite Skill
 
 ```text
-skills/example-review-skill/
+skills/quality-gate/
 |-- SKILL.md
-|-- examples/
-|   `-- review-comment.md
-|-- scripts/
-|   `-- collect-findings.sh
+|-- references/
+|   `-- gate-policy.md
 `-- targets/
     |-- claude.md
     |-- codex.md
@@ -260,60 +436,71 @@ Example `SKILL.md`:
 
 ```md
 ---
-name: example-review-skill
-description: Review a change set for correctness and summarize actionable findings.
+name: quality-gate
+description: Run a multi-step quality gate by orchestrating reusable checks and conventions.
 ---
 
 # Purpose
 
-Review a bounded change set for correctness issues and return only concrete,
-actionable findings.
+Apply a reusable quality gate to a bounded change set by orchestrating relevant
+leaf and composite skills.
 
 # When to Use
 
-- use when a user asks for a review of a PR, patch, or diff
-- use when correctness risk matters more than stylistic polish
+- use when implementation work must pass shared quality expectations
+- use when a downstream repository selects this skill as a default gate
 
 # Inputs
 
 - the changed files or diff
 - relevant tests, docs, and configuration
-- any known scope constraints from the user
+- any downstream repository context supplied through ai-instructions
 
 # Workflow
 
-1. Read the changed code and identify the affected behavior.
-2. Check for correctness regressions and contract violations.
-3. Ignore unrelated style issues unless they hide a real bug.
-4. Summarize only findings that are specific and defensible.
+1. Determine which child skills are relevant for the changed scope.
+2. Invoke the relevant checks in a stable order.
+3. Aggregate findings without broadening the task into unrelated cleanup.
+4. Return the final gate result and unresolved findings.
 
 # Outputs
 
-- a concise list of findings ordered by severity
-- file and line references when available
-- a short residual-risk note if no findings are confirmed
+- pass or fail outcome for the bounded scope
+- concrete findings or residual risks
+- child-skill evidence when relevant
 
 # Guardrails
 
-- do not invent behavior that is not supported by the diff
-- do not broaden the review into unrelated repository cleanup
-- do not report purely stylistic feedback as a defect
+- do not redefine the guardrails of child skills
+- do not create cyclic orchestration
+- do not broaden the implementation scope just to satisfy unrelated checks
 
 # Exit Checks
 
-- every finding names the impacted behavior
-- every finding is tied to evidence in the change set
-- no duplicate or speculative findings remain
+- every failing result names the violated behavior
+- every aggregated finding remains traceable to evidence
+- no called skill was silently skipped without explanation
 ```
+
+### Example Capture Skill
+
+Example backlog-entry renderings for `skill-new` may target:
+
+- a GitHub issue in `ai-skills`
+- a local Markdown file when GitHub access is unavailable
+
+In both cases, the entry still represents the same canonical backlog-entry
+contract defined above.
 
 ## Non-Goals for v1
 
 v1 does not include:
 
-- a skill loader
-- a skill renderer
+- a full runtime orchestration engine
+- a separate knowledge repository
 - a validation CLI
 - a generated target artifact pipeline
-- concrete implementations of the open `skill:` issues
+- a requirement that capture skills implement the proposed skills
 
-Those may follow once the canonical format has proven stable.
+Those may follow later once the canonical format and repository boundaries have
+proven stable.
