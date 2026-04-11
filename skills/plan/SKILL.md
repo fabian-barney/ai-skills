@@ -1,14 +1,17 @@
 ---
 name: plan
-description: Create a decision-complete implementation plan before work starts and update the plan when new answers materially change it.
+description: >-
+  Create a decision-complete implementation plan before work starts and
+  update the plan when new answers materially change it.
 ---
-<!-- markdownlint-disable MD025 -->
 
 # Purpose
 
 Produce a decision-complete plan for implementation work so execution can
 proceed without leaving important design, scope, or verification choices
 implicit.
+
+<!-- markdownlint-disable MD025 -->
 
 # When to Use
 
