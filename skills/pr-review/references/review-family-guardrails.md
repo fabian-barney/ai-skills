@@ -1,7 +1,6 @@
 # Review Family Guardrails
 
-Distilled from `ai-rules/REVIEW/REVIEW.md`, `REVIEW/CODE_REVIEW.md`, and
-`AI-RULES/PR-REVIEW-LOOP.md`.
+Distilled from the review, code review, and PR review loop guidance sources.
 
 - classify findings explicitly instead of treating all comments the same
 - keep evidence and rationale visible in the thread

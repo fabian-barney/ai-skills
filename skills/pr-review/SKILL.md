@@ -2,33 +2,39 @@
 name: pr-review
 description: Define the family-root responsibility boundaries for handling PR review findings and review conversations safely.
 ---
+<!-- markdownlint-disable MD025 -->
 
-# pr-review
-
-## Purpose
+# Purpose
 
 Define the canonical PR review responsibility boundary for classifying findings,
 handling review conversations, and deciding whether a thread may be resolved.
 
-## When to Use
+# When to Use
 
 - use when a PR or MR review workflow is active
 - use when review comments or conversations need ownership or closure
   decisions
 - use as the family-root skill for later `pr-review-write`,
   `pr-review-respond`, `pr-review-loop`, and `pr-merge` skills
-- use the bundled references and examples when shaping the root family
-  contract or thread-handling behavior
+- use `references/review-family-guardrails.md` for shared review-family
+  guardrails
+- use `references/review-boundary.md` for the root-versus-child boundary
+- use `references/pr-review-loop-source.md` for review-loop-derived closure
+  conditions
+- use `examples/thread-resolution.md` and `examples/resolution-comment.md`
+  when a thread-handling example is helpful
 
-## Inputs
+# Inputs
 
 - the PR or MR diff and current review state
 - active review comments and threads
 - repository or session rules about who may resolve conversations
 - relevant tests, checks, and changed files
-- the bundled references for boundary and loop-derived guardrails
+- `references/review-family-guardrails.md`,
+  `references/review-boundary.md`, and
+  `references/pr-review-loop-source.md`
 
-## Workflow
+# Workflow
 
 1. Read the review state, changed scope, and active conversations.
 2. Determine whether the current actor is responsible for handling or resolving
@@ -38,15 +44,20 @@ handling review conversations, and deciding whether a thread may be resolved.
    was handled or why it was not addressed.
 5. Delegate detailed finding-writing, response, loop, or merge behavior to the
    specialized child skills when those are available.
-6. Reuse the bundled example replies when they fit the current thread shape.
+6. Use `references/review-family-guardrails.md` and
+   `references/review-boundary.md` to keep the root skill scoped correctly.
+7. Use `references/pr-review-loop-source.md` only for closure semantics that
+   belong in the root skill.
+8. Reuse `examples/thread-resolution.md` and
+   `examples/resolution-comment.md` when they fit the current thread shape.
 
-## Outputs
+# Outputs
 
 - a classified review state for the active findings
 - concise thread responses or closure decisions
 - an explicit list of unresolved items when ownership or evidence is missing
 
-## Guardrails
+# Guardrails
 
 - do not resolve review conversations unless responsibility is clear
 - do not close a thread without a final comment explaining the outcome
@@ -54,7 +65,7 @@ handling review conversations, and deciding whether a thread may be resolved.
 - do not duplicate detailed finding-writing or fix-response behavior that
   belongs in child skills
 
-## Exit Checks
+# Exit Checks
 
 - every handled thread has a classification
 - every resolved thread has a final rationale comment
