@@ -1,6 +1,9 @@
 ---
 name: pr-write-description
-description: Write concise pull request descriptions for code reviewers. Use when opening or updating a GitHub PR description with implementation summary, review focus, validation, and residual risk.
+description: >-
+  Write concise pull request descriptions for code reviewers. Use when opening
+  or updating a GitHub PR description with implementation summary, review
+  focus, validation, and residual risk.
 ---
 <!-- markdownlint-disable MD025 -->
 
