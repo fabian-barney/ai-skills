@@ -38,8 +38,8 @@ The unit of reuse differs across these repositories:
 Example:
 
 - a downstream repository may install `ai-instructions` to point at a default
-  composite skill such as `quality-gate`
-- the `quality-gate` behavior itself belongs in `ai-skills`
+  composite skill such as `ai-skills-quality-gate`
+- the `ai-skills-quality-gate` behavior itself belongs in `ai-skills`
 - the agent identity that invokes the skill belongs in `ai-agents`
 
 `ai-skills` does not replace `ai-instructions`. It centralizes reusable
@@ -53,12 +53,13 @@ The canonical unit is one directory per skill:
 skills/<skill-id>/
 ```
 
-`<skill-id>` must be lowercase kebab-case and must match the directory name.
+`<skill-id>` must be lowercase kebab-case, start with `ai-skills-`, and match
+the directory name.
 
 Example:
 
 ```text
-skills/quality-gate/
+skills/ai-skills-quality-gate/
 ```
 
 ## Skill Taxonomy
@@ -72,11 +73,11 @@ lens.
 
 Typical examples include:
 
-- `conventions-null`
-- `conventions-lombok`
-- `correctness-equals-hashcode`
-- `security-secrets`
-- `formatting-github-comment`
+- `ai-skills-conventions-null`
+- `ai-skills-conventions-lombok`
+- `ai-skills-correctness-equals-hashcode`
+- `ai-skills-security-secrets`
+- `ai-skills-formatting-github-comment`
 
 Leaf skills may use supporting files, but they do not orchestrate other skills
 as part of their canonical contract.
@@ -93,9 +94,9 @@ Composite skills may depend on:
 
 Typical examples include:
 
-- `quality-gate`
-- `pr-review`
-- `release`
+- `ai-skills-quality-gate`
+- `ai-skills-pr-review`
+- `ai-skills-release`
 
 Composite skills are explicitly multi-level. A composite skill may orchestrate
 other composite skills as long as the overall dependency graph remains acyclic.
@@ -107,9 +108,9 @@ improvements without implementing those skills.
 
 Typical examples include:
 
-- `skill-new`
-- `skill-improve`
-- `skill-template`
+- `ai-skills-skill-new`
+- `ai-skills-skill-improve`
+- `ai-skills-skill-template`
 
 Capture skills exist so useful skill ideas can be recorded during normal work,
 even when immediate implementation is out of scope.
@@ -183,7 +184,7 @@ Example:
 
 ```md
 ---
-name: quality-gate
+name: ai-skills-quality-gate
 description: Run a multi-step quality gate by orchestrating multiple reusable skills.
 ---
 ```
@@ -235,10 +236,10 @@ Capture skills standardize how future skill work is recorded during normal use.
 
 The canonical capture behaviors are:
 
-- `skill-new` records a new canonical skill idea
-- `skill-improve` records an improvement proposal for an existing canonical
+- `ai-skills-skill-new` records a new canonical skill idea
+- `ai-skills-skill-improve` records an improvement proposal for an existing canonical
   skill
-- `skill-template` defines the canonical backlog-entry shape used by those
+- `ai-skills-skill-template` defines the canonical backlog-entry shape used by those
   capture flows
 
 Capture skills may render the same canonical backlog entry to different storage
@@ -577,7 +578,7 @@ structure, but they are not committed repository skills.
 ### Example Composite Skill
 
 ```text
-skills/quality-gate/
+skills/ai-skills-quality-gate/
 |-- SKILL.md
 |-- references/
 |   `-- gate-policy.md
@@ -591,7 +592,7 @@ Example `SKILL.md`:
 
 ```md
 ---
-name: quality-gate
+name: ai-skills-quality-gate
 description: Run a multi-step quality gate by orchestrating reusable checks and conventions.
 ---
 
@@ -639,7 +640,7 @@ leaf and composite skills.
 
 ### Example Capture Skill
 
-Example backlog-entry renderings for `skill-new` may target:
+Example backlog-entry renderings for `ai-skills-skill-new` may target:
 
 - a GitHub issue in `ai-skills`
 - a local Markdown file when GitHub access is unavailable
@@ -651,55 +652,55 @@ contract defined above.
 
 The following review-derived items are intentionally not implemented in 0.1.0.
 
-- Source issue #100, `correctness-comparable`: consider adding a brief
+- Source issue #100, `ai-skills-correctness-comparable`: consider adding a brief
   `SKILL.md` guardrail note that `TreeMap` and `TreeSet` containers can behave
   incorrectly when `compareTo` and `equals` diverge. This item needs future
   review and triage before implementation.
-- Source issue #101, `correctness-equals-hashcode`: consider requiring a
+- Source issue #101, `ai-skills-correctness-equals-hashcode`: consider requiring a
   regression-test step when equality or hash-code behavior changes. This item
   needs future review and triage before implementation.
-- Source issue #102, `correctness-jpa`: consider a sibling skill for broader
+- Source issue #102, `ai-skills-correctness-jpa`: consider a sibling skill for broader
   JPA lifecycle or fetch concerns, such as cascade rules, lazy loading,
   transaction scope, or entity leakage across API boundaries. This item needs
   future review and triage before implementation.
-- Source issue #103, `quality-crap`: consider documenting that CRAP is a
+- Source issue #103, `ai-skills-quality-crap`: consider documenting that CRAP is a
   catalog extension rather than an `ai-rules` mandate, and cross-linking the
   cognitive-complexity threshold context. This item needs future review and
   triage before implementation.
-- Source issue #104, `quality-sonar`: consider documenting how Sonar findings
+- Source issue #104, `ai-skills-quality-sonar`: consider documenting how Sonar findings
   should be prioritized when a bounded scope has many findings, using the
   `ai-rules` review priority order. This item needs future review and triage
   before implementation.
-- Source issue #105, `conventions-early-return`: consider adding an explicit
+- Source issue #105, `ai-skills-conventions-early-return`: consider adding an explicit
   `DESIGN/CLEAN_CODE.md` cross-reference in `When to Use`, matching the
   dependency documented by `EARLY_RETURN.md`. This item needs future review and
   triage before implementation.
-- Source issue #106, `conventions-lombok`: no optional follow-up is currently
+- Source issue #106, `ai-skills-conventions-lombok`: no optional follow-up is currently
   identified. Any future implementation item needs future review and triage
   before implementation.
-- Source issue #107, `conventions-null`: no optional follow-up is currently
+- Source issue #107, `ai-skills-conventions-null`: no optional follow-up is currently
   identified. Any future implementation item needs future review and triage
   before implementation.
-- Source issue #108, `conventions-ternary`: no optional follow-up is currently
+- Source issue #108, `ai-skills-conventions-ternary`: no optional follow-up is currently
   identified. Any future implementation item needs future review and triage
   before implementation.
-- Source issue #109, `design-validation`: consider explicit `SOLID.md`
+- Source issue #109, `ai-skills-design-validation`: consider explicit `SOLID.md`
   responsibility guidance for extracted validators, and clarify boundary versus
   domain validation placement. This item needs future review and triage before
   implementation.
-- Source issue #110, `design-value-object`: consider explicit domain versus
+- Source issue #110, `ai-skills-design-value-object`: consider explicit domain versus
   transport/DTO placement guidance for value objects, and a note that value
   objects are DDD-flavored rather than classic GoF. This item needs future
   review and triage before implementation.
-- Source issue #111, `performance-db`: consider explicit lazy-loading risk
+- Source issue #111, `ai-skills-performance-db`: consider explicit lazy-loading risk
   assessment, over-eager loading or Cartesian explosion guardrails, and a
   stronger mandatory pagination check for unbounded scans. This item needs
   future review and triage before implementation.
-- Source issue #112, `security-secrets`: consider stronger logging, telemetry,
+- Source issue #112, `ai-skills-security-secrets`: consider stronger logging, telemetry,
   and error exposure handling; a minimal version-controlled `.gitignore`
   requirement; and an explicit authorization-review out-of-scope guardrail.
   This item needs future review and triage before implementation.
-- Source issue #113, `compliance-dependency`: consider explicit
+- Source issue #113, `ai-skills-compliance-dependency`: consider explicit
   `THIRD_PARTY_NOTICES.md` maintenance, library maturity and stewardship
   cross-references, and build-tool compliance implications. This item needs
   future review and triage before implementation.
