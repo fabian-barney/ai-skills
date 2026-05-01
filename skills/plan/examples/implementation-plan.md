@@ -8,9 +8,11 @@
 
 ## Key Changes
 
+- first task reads the complete applicable rulesets before planning work
 - create `SKILL.md` with required frontmatter and sections
 - add a small reference note and one example file
 - update only files required for the issue
+- final task re-reads the applicable rulesets and verifies conformance
 
 ## Test Plan
 
