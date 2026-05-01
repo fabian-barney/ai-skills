@@ -76,8 +76,8 @@ are still kept in this bundle.
   `conventions-lombok`, `conventions-early-return`, or `conventions-ternary`
 - do not add Lombok when the user or project explicitly forbids it, or when
   the bounded Java change does not materially benefit from it
-- do not use `Optional` for Java fields, parameters, or serialization models
-  without an explicit bounded justification
+- do not use `Optional` for Java fields, method parameters, or serialization
+  models unless there is a strong documented reason
 - do not keep literal-template string concatenation with `+` when
   `String.format(...)` is the clearer Java default
 - do not replace hot-loop or append-heavy string construction with
@@ -92,6 +92,6 @@ are still kept in this bundle.
 - Java literal-template strings use `String.format(...)` unless a hot-loop or
   append-heavy exception justifies `StringBuilder`
 - `Optional` usage stays limited to meaningful Java return-value absence unless
-  an explicit bounded exception was required
+  a strong documented reason justifies a bounded exception
 - the final result preserves the child-skill guardrails rather than replacing
   them
