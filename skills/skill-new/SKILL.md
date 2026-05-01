@@ -41,7 +41,9 @@ important context.
 - when the skill would be triggered or used
 - rough workflow or responsibilities for the future skill
 - related skills, dependencies, or adjacent existing skills
-- source context or notes from the originating task
+- source context or notes from the originating task, limited to observations
+  rather than design decisions or implementation plans; include related lessons
+  learned here when known and relevant
 - `references/public-skill-triage.md` and
   `references/backlog-target-selection.md`
 
@@ -75,6 +77,8 @@ important context.
 # Guardrails
 
 - do not implement the proposed skill
+- do not use `source-context-or-notes` for design decisions, implementation
+  plans, or claims that the proposed skill was implemented
 - do not create a central backlog item for a purely local, repo-specific need
 - do not make GitHub the only supported storage target
 - do not silently change the canonical field set between renderings
@@ -83,6 +87,8 @@ important context.
 # Exit Checks
 
 - the candidate is captured with the full canonical backlog-entry field set
+- source context or notes are observational and do not contain implementation
+  claims
 - the chosen storage target matches access and publication constraints
 - the rendered record stays aligned with the canonical template
 - the workflow stops after capture rather than drifting into implementation
