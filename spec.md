@@ -683,6 +683,10 @@ The following review-derived items are intentionally not implemented in 0.1.0.
 - Source issue #108, `conventions-ternary`: no optional follow-up is currently
   identified. Any future implementation item needs future review and triage
   before implementation.
+- Source issue #109, `design-validation`: consider explicit `SOLID.md`
+  responsibility guidance for extracted validators, and clarify boundary versus
+  domain validation placement. This item needs future review and triage before
+  implementation.
 
 ## Non-Goals for v1
 
