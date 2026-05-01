@@ -655,6 +655,9 @@ The following review-derived items are intentionally not implemented in 0.1.0.
   `SKILL.md` guardrail note that `TreeMap` and `TreeSet` containers can behave
   incorrectly when `compareTo` and `equals` diverge. This item needs future
   review and triage before implementation.
+- Source issue #101, `correctness-equals-hashcode`: consider requiring a
+  regression-test step when equality or hash-code behavior changes. This item
+  needs future review and triage before implementation.
 
 ## Non-Goals for v1
 
