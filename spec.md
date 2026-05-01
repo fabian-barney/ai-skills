@@ -677,6 +677,9 @@ The following review-derived items are intentionally not implemented in 0.1.0.
 - Source issue #106, `conventions-lombok`: no optional follow-up is currently
   identified. Any future implementation item needs future review and triage
   before implementation.
+- Source issue #107, `conventions-null`: no optional follow-up is currently
+  identified. Any future implementation item needs future review and triage
+  before implementation.
 
 ## Non-Goals for v1
 
