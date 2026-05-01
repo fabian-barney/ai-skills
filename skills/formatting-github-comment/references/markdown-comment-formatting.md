@@ -12,8 +12,8 @@ patterns.
 - Keep inline code on one line so renderers do not split or mangle it.
 - Prefer a short paragraph or flat bullets over deeply nested structure.
 - Use exact identifiers and links when the comment needs traceability.
-- Wrap placeholder tokens in code spans, for example `<id>`, instead of raw
-  angle-bracket prose.
+- Wrap placeholder tokens in code spans, for example `<id>`, instead of
+  unformatted placeholders without backticks, such as &lt;id&gt;.
 - After bulk edits, check for multiple consecutive blank lines before posting
   or committing.
 - When posting with GitHub CLI, prefer a raw UTF-8 Markdown file and

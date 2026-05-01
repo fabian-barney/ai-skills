@@ -81,8 +81,9 @@ act on.
 - do not exceed 120 characters per Markdown source line; wrap long list items
 - do not omit the single trailing newline from Markdown files
 - do not save Markdown as UTF-8 with BOM
-- do not leave raw angle-bracket placeholders such as `<id>` in prose; wrap
-  placeholders in code spans like `<id>` or fenced code blocks
+- do not leave raw angle-bracket placeholders such as &lt;id&gt; in prose
+  without backticks; wrap placeholders in code spans like `<id>` or fenced code
+  blocks
 - do not leave multiple consecutive blank lines after bulk edits
 - do not emit literal `\n` escape sequences in Markdown meant for GitHub
 - do not publish GitHub CLI bodies with escaped inline strings when a raw
