@@ -666,6 +666,10 @@ The following review-derived items are intentionally not implemented in 0.1.0.
   catalog extension rather than an `ai-rules` mandate, and cross-linking the
   cognitive-complexity threshold context. This item needs future review and
   triage before implementation.
+- Source issue #104, `quality-sonar`: consider documenting how Sonar findings
+  should be prioritized when a bounded scope has many findings, using the
+  `ai-rules` review priority order. This item needs future review and triage
+  before implementation.
 
 ## Non-Goals for v1
 
