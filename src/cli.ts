@@ -221,12 +221,10 @@ async function resetTarget(
     await moveExistingPackageOwnedSkills(targetDir, backupDir, backedUpSkillIds);
     await moveStagedSkills(targetDir, stagingDir, skillIds, installedNewSkillIds);
 
-    await withTargetContext(targetDir, "remove backup directory", async () => {
-      await fs.rm(backupDir!, { force: true, recursive: true });
-    });
-    await withTargetContext(targetDir, "remove staging directory", async () => {
-      await fs.rm(stagingDir!, { force: true, recursive: true });
-    });
+    await bestEffortRemove(backupDir);
+    backupDir = undefined;
+    await bestEffortRemove(stagingDir);
+    stagingDir = undefined;
   } catch (error) {
     await rollbackTargetReset(
       targetDir,
@@ -300,7 +298,7 @@ async function rollbackTargetReset(
     await bestEffortRemove(path.join(targetDir, skillId));
   }
 
-  if (backupDir !== undefined) {
+  if (backupDir !== undefined && await pathExists(backupDir)) {
     for (const skillId of [...backedUpSkillIds].reverse()) {
       await bestEffortRename(path.join(backupDir, skillId), path.join(targetDir, skillId));
     }
@@ -350,6 +348,15 @@ async function bestEffortRename(source: string, destination: string): Promise<vo
     await fs.rename(source, destination);
   } catch {
     // Preserve the original install/update error.
+  }
+}
+
+async function pathExists(entryPath: string): Promise<boolean> {
+  try {
+    await fs.access(entryPath);
+    return true;
+  } catch {
+    return false;
   }
 }
 
