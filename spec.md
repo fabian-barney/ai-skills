@@ -674,6 +674,9 @@ The following review-derived items are intentionally not implemented in 0.1.0.
   `DESIGN/CLEAN_CODE.md` cross-reference in `When to Use`, matching the
   dependency documented by `EARLY_RETURN.md`. This item needs future review and
   triage before implementation.
+- Source issue #106, `conventions-lombok`: no optional follow-up is currently
+  identified. Any future implementation item needs future review and triage
+  before implementation.
 
 ## Non-Goals for v1
 
