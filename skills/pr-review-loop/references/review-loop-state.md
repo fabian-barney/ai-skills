@@ -8,6 +8,8 @@ Track each active PR with at least these fields:
 - `open-review-threads`
 - `new-valid-findings`
 - `required-checks-green`
+- `issue-link-present`
+- `pr-scope-focused`
 - `review-readiness-gate-passed`
 
 The review-readiness gate passes only when all of these are true in the same
@@ -18,6 +20,9 @@ evaluation round:
 - no open review threads remain
 - no new valid findings remain
 - required checks are green
+- the PR body links the main issue with an issue-closing link
+- the PR scope remains focused on the linked issue without unrelated bundled
+  repository changes
 
 Treat missing or ambiguous review/check state as gate failure, not as an
 implicit pass.
