@@ -9,3 +9,7 @@ Keep the implementation bounded to the issue:
   inventing hidden scope
 
 Completion requires conformant behavior, not just code changes.
+
+If mandatory preconditions are missing, such as a decision-complete plan with
+ruleset-read evidence or an issue branch/PR prerequisite, stop with
+`BLOCKED: <reason>` instead of silently continuing.
