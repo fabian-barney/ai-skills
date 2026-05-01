@@ -691,6 +691,10 @@ The following review-derived items are intentionally not implemented in 0.1.0.
   transport/DTO placement guidance for value objects, and a note that value
   objects are DDD-flavored rather than classic GoF. This item needs future
   review and triage before implementation.
+- Source issue #111, `performance-db`: consider explicit lazy-loading risk
+  assessment, over-eager loading or Cartesian explosion guardrails, and a
+  stronger mandatory pagination check for unbounded scans. This item needs
+  future review and triage before implementation.
 
 ## Non-Goals for v1
 
