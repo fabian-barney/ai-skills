@@ -670,6 +670,10 @@ The following review-derived items are intentionally not implemented in 0.1.0.
   should be prioritized when a bounded scope has many findings, using the
   `ai-rules` review priority order. This item needs future review and triage
   before implementation.
+- Source issue #105, `conventions-early-return`: consider adding an explicit
+  `DESIGN/CLEAN_CODE.md` cross-reference in `When to Use`, matching the
+  dependency documented by `EARLY_RETURN.md`. This item needs future review and
+  triage before implementation.
 
 ## Non-Goals for v1
 
