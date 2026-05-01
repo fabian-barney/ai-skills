@@ -29,16 +29,17 @@ Markdown records.
 
 # Inputs
 
-- `title`
-- `change-type` as `new` or `improve`
-- `skill-id-or-name`
-- `problem-or-motivation`
-- `reusability-rationale`
-- `when-to-use`
-- `workflow-or-responsibilities`
-- `related-skills-or-dependencies`
-- `source-context-or-notes`
-- `status`
+- canonical backlog-entry fields, mapped exactly to the contract:
+  - `title`: concise backlog title
+  - `change-type`: `new` or `improve`
+  - `skill-id-or-name`: proposed skill id or working name
+  - `problem-or-motivation`: problem the skill should solve
+  - `reusability-rationale`: why the shared catalog should own it
+  - `when-to-use`: rough trigger or activation conditions
+  - `workflow-or-responsibilities`: expected behavior, checks, or duties
+  - `related-skills-or-dependencies`: neighboring skills or dependencies
+  - `source-context-or-notes`: originating task context or constraints
+  - `status`: `idea`, `draft`, `triaged`, or `implemented`
 - optional use of `templates/skill-backlog-entry.md`,
   `targets/github-issue.md`, and `targets/local-backlog-entry.md` when a
   concrete rendering is needed
@@ -73,11 +74,13 @@ Markdown records.
 - do not implement the proposed skill
 - do not make GitHub the only supported storage target
 - do not change the canonical backlog-entry semantics between renderings
+- do not create hybrid entries that mix `new` and `improve` semantics in one
+  record
 - do not broaden into general AI-agent-private skill maintenance
 
 # Exit Checks
 
-- the template contains all canonical backlog-entry fields
+- all 10 canonical backlog-entry fields are present and populated
 - `new` and `improve` are clearly distinguished
 - GitHub and local Markdown are represented as renderings of the same model
 - no implementation behavior is embedded in the template
