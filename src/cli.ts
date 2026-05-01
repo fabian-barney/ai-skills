@@ -53,6 +53,8 @@ export const SUPPORTED_TARGETS: InstallTarget[] = [
 ];
 
 const PACKAGE_OWNED_PREFIX = "ai-skills-";
+const BACKUP_DIR_PREFIX = ".ai-skills-backup-";
+const STAGING_DIR_PREFIX = ".ai-skills-stage-";
 const defaultPackageRoot = resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 const HELP = `ai-skills ${VERSION}
@@ -187,25 +189,126 @@ async function resetInstallCatalog(packageRoot: string, targetDirs: string[]): P
   const skillIds = await listPackagedSkillIds(packagedSkillsDir);
 
   for (const targetDir of targetDirs) {
-    await withTargetContext(targetDir, "create target directory", async () => {
-      await fs.mkdir(targetDir, { recursive: true });
-    });
-    await withTargetContext(targetDir, "remove existing package-owned skills", async () => {
-      await removePackageOwnedSkills(targetDir);
-    });
-
-    for (const skillId of skillIds) {
-      await withTargetContext(targetDir, `copy ${skillId}`, async () => {
-        await fs.cp(
-          path.join(packagedSkillsDir, skillId),
-          path.join(targetDir, skillId),
-          { recursive: true }
-        );
-      });
-    }
+    await resetTarget(packagedSkillsDir, skillIds, targetDir);
   }
 
   return skillIds.length;
+}
+
+async function resetTarget(
+  packagedSkillsDir: string,
+  skillIds: string[],
+  targetDir: string
+): Promise<void> {
+  let backupDir: string | undefined;
+  let stagingDir: string | undefined;
+  const installedNewSkillIds: string[] = [];
+  const backedUpSkillIds: string[] = [];
+
+  try {
+    await withTargetContext(targetDir, "create target directory", async () => {
+      await fs.mkdir(targetDir, { recursive: true });
+    });
+
+    stagingDir = await withTargetContextResult(targetDir, "create staging directory", async () =>
+      fs.mkdtemp(path.join(targetDir, STAGING_DIR_PREFIX))
+    );
+    await stagePackagedSkills(packagedSkillsDir, skillIds, stagingDir, targetDir);
+
+    backupDir = await withTargetContextResult(targetDir, "create backup directory", async () =>
+      fs.mkdtemp(path.join(targetDir, BACKUP_DIR_PREFIX))
+    );
+    await moveExistingPackageOwnedSkills(targetDir, backupDir, backedUpSkillIds);
+    await moveStagedSkills(targetDir, stagingDir, skillIds, installedNewSkillIds);
+
+    await bestEffortRemove(backupDir);
+    backupDir = undefined;
+    await bestEffortRemove(stagingDir);
+    stagingDir = undefined;
+  } catch (error) {
+    await rollbackTargetReset(
+      targetDir,
+      backupDir,
+      stagingDir,
+      installedNewSkillIds,
+      backedUpSkillIds
+    );
+    throw error;
+  }
+}
+
+async function stagePackagedSkills(
+  packagedSkillsDir: string,
+  skillIds: string[],
+  stagingDir: string,
+  targetDir: string
+): Promise<void> {
+  for (const skillId of skillIds) {
+    await withTargetContext(targetDir, `stage ${skillId}`, async () => {
+      await fs.cp(
+        path.join(packagedSkillsDir, skillId),
+        path.join(stagingDir, skillId),
+        { recursive: true }
+      );
+    });
+  }
+}
+
+async function moveExistingPackageOwnedSkills(
+  targetDir: string,
+  backupDir: string,
+  backedUpSkillIds: string[]
+): Promise<void> {
+  const existingSkillIds = await withTargetContextResult(
+    targetDir,
+    "list existing package-owned skills",
+    async () => listPackageOwnedTargetSkillIds(targetDir)
+  );
+
+  for (const skillId of existingSkillIds) {
+    await withTargetContext(targetDir, `back up ${skillId}`, async () => {
+      await fs.rename(path.join(targetDir, skillId), path.join(backupDir, skillId));
+    });
+    backedUpSkillIds.push(skillId);
+  }
+}
+
+async function moveStagedSkills(
+  targetDir: string,
+  stagingDir: string,
+  skillIds: string[],
+  installedNewSkillIds: string[]
+): Promise<void> {
+  for (const skillId of skillIds) {
+    await withTargetContext(targetDir, `install staged ${skillId}`, async () => {
+      await fs.rename(path.join(stagingDir, skillId), path.join(targetDir, skillId));
+    });
+    installedNewSkillIds.push(skillId);
+  }
+}
+
+async function rollbackTargetReset(
+  targetDir: string,
+  backupDir: string | undefined,
+  stagingDir: string | undefined,
+  installedNewSkillIds: string[],
+  backedUpSkillIds: string[]
+): Promise<void> {
+  for (const skillId of [...installedNewSkillIds].reverse()) {
+    await bestEffortRemove(path.join(targetDir, skillId));
+  }
+
+  if (backupDir !== undefined && await pathExists(backupDir)) {
+    for (const skillId of [...backedUpSkillIds].reverse()) {
+      await bestEffortRename(path.join(backupDir, skillId), path.join(targetDir, skillId));
+    }
+
+    await bestEffortRemove(backupDir);
+  }
+
+  if (stagingDir !== undefined) {
+    await bestEffortRemove(stagingDir);
+  }
 }
 
 async function withTargetContext(
@@ -220,6 +323,43 @@ async function withTargetContext(
   }
 }
 
+async function withTargetContextResult<T>(
+  targetDir: string,
+  operation: string,
+  action: () => Promise<T>
+): Promise<T> {
+  try {
+    return await action();
+  } catch (error) {
+    throw new Error(`${operation} failed for ${targetDir}: ${errorMessage(error)}`);
+  }
+}
+
+async function bestEffortRemove(entryPath: string): Promise<void> {
+  try {
+    await fs.rm(entryPath, { force: true, recursive: true });
+  } catch {
+    // Preserve the original install/update error.
+  }
+}
+
+async function bestEffortRename(source: string, destination: string): Promise<void> {
+  try {
+    await fs.rename(source, destination);
+  } catch {
+    // Preserve the original install/update error.
+  }
+}
+
+async function pathExists(entryPath: string): Promise<boolean> {
+  try {
+    await fs.access(entryPath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function listPackagedSkillIds(packagedSkillsDir: string): Promise<string[]> {
   const entries = await fs.readdir(packagedSkillsDir, { withFileTypes: true });
 
@@ -229,14 +369,13 @@ async function listPackagedSkillIds(packagedSkillsDir: string): Promise<string[]
     .sort();
 }
 
-async function removePackageOwnedSkills(targetDir: string): Promise<void> {
+async function listPackageOwnedTargetSkillIds(targetDir: string): Promise<string[]> {
   const entries = await fs.readdir(targetDir, { withFileTypes: true });
 
-  for (const entry of entries) {
-    if (entry.isDirectory() && entry.name.startsWith(PACKAGE_OWNED_PREFIX)) {
-      await fs.rm(path.join(targetDir, entry.name), { force: true, recursive: true });
-    }
-  }
+  return entries
+    .filter((entry) => entry.isDirectory() && entry.name.startsWith(PACKAGE_OWNED_PREFIX))
+    .map((entry) => entry.name)
+    .sort();
 }
 
 const isEntrypoint = process.argv[1] !== undefined
