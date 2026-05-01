@@ -12,5 +12,6 @@ Rough workflow or responsibilities: inspect dependency deltas, identify policy
 or license concerns, and produce review findings or a clean pass result
 Related skills or dependencies: security-secrets, quality-sonar
 Source context or notes: captured during a repository review on a locked-down
-company laptop without GitHub issue permissions
+company laptop without GitHub issue permissions; related lessons learned: none
+known
 Status: idea

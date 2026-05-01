@@ -13,6 +13,6 @@
 
 ## Notes
 - Constraints / assumptions: the skill should remain tool-agnostic and usable
-  beyond one repository
+  beyond one repository; no related lessons learned are currently known
 - Validation / acceptance notes: publish as a GitHub issue in `ai-skills` when
   access exists; otherwise keep the same record as local Markdown
