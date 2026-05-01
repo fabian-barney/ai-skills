@@ -662,6 +662,10 @@ The following review-derived items are intentionally not implemented in 0.1.0.
   JPA lifecycle or fetch concerns, such as cascade rules, lazy loading,
   transaction scope, or entity leakage across API boundaries. This item needs
   future review and triage before implementation.
+- Source issue #103, `quality-crap`: consider documenting that CRAP is a
+  catalog extension rather than an `ai-rules` mandate, and cross-linking the
+  cognitive-complexity threshold context. This item needs future review and
+  triage before implementation.
 
 ## Non-Goals for v1
 
