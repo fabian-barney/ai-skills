@@ -10,3 +10,11 @@ following are true:
 
 Prefer local-only capture or no separate backlog item when the observation is
 purely private, one-off, or already covered by existing skill guidance.
+
+Use `change-type: improve` only when the target skill already exists and the
+proposal changes its behavior, guidance, examples, or references. If no target
+skill exists yet, capture the idea through `skill-new` instead.
+
+For central `ai-skills` improvements, note how the captured entry should feed a
+later catalog update lifecycle: issue triage, implementation PR, changelog or
+release-note entry, and release verification.

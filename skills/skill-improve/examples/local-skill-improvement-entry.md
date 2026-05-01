@@ -14,5 +14,6 @@ finding, drafts the response, and leaves merge or loop orchestration to later
 skills
 Related skills or dependencies: pr-review, pr-review-write, pr-review-loop
 Source context or notes: captured while handling review findings on a company
-laptop without permission to create a central GitHub issue
+laptop without permission to create a central GitHub issue; transfer upstream to
+`ai-skills` issue triage when central GitHub access is available
 Status: idea
