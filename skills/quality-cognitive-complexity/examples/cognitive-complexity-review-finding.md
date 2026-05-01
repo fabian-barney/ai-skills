@@ -1,11 +1,13 @@
-# Example Cognitive Complexity Finding
+# Example Cognitive Complexity Legacy Tolerance
 
-The bounded change still fails `quality-cognitive-complexity`.
+The bounded change relies on the altered-legacy tolerance in
+`quality-cognitive-complexity`.
 
 - `InvoiceSyncService#synchronizeBatch`: cognitive complexity `19`
-- threshold: `<= 15`
+- classification: altered legacy method
+- applicable threshold: temporary tolerance up to `20` with reduction plan
 - evidence source: CI `cognitive-java-check`
 
-Suggested next step: extract the variant-specific reconciliation branches into
-named helpers and flatten the nested authorization/error checks with guard
-clauses before re-running the metric.
+Reduction plan: extract the variant-specific reconciliation branches into named
+helpers and flatten the nested authorization/error checks with guard clauses
+before the next release-bound change to this service.
