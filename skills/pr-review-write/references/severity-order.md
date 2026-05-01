@@ -9,3 +9,10 @@ Prioritize findings in this order:
 5. performance and scalability
 6. observability and operational readiness
 7. maintainability, readability, and test adequacy
+
+Avoid these high-risk review pitfalls:
+
+- style-only feedback while missing correctness, security, or compliance
+  defects
+- vague findings without actionable remediation
+- failing to distinguish critical risk from low-impact nits
