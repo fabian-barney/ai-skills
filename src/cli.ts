@@ -154,7 +154,7 @@ function writeReplacementWarning(command: string, targetDirs: string[], io: CliI
   io.stderr.write(
     [
       `Warning: ai-skills ${command} will delete and replace every ${PACKAGE_OWNED_PREFIX}*`,
-      "directory in the supported target directories.",
+      "directory under the supported target directories.",
       "Non-prefixed user skills will be preserved.",
       "",
       "Targets:",
@@ -187,19 +187,37 @@ async function resetInstallCatalog(packageRoot: string, targetDirs: string[]): P
   const skillIds = await listPackagedSkillIds(packagedSkillsDir);
 
   for (const targetDir of targetDirs) {
-    await fs.mkdir(targetDir, { recursive: true });
-    await removePackageOwnedSkills(targetDir);
+    await withTargetContext(targetDir, "create target directory", async () => {
+      await fs.mkdir(targetDir, { recursive: true });
+    });
+    await withTargetContext(targetDir, "remove existing package-owned skills", async () => {
+      await removePackageOwnedSkills(targetDir);
+    });
 
     for (const skillId of skillIds) {
-      await fs.cp(
-        path.join(packagedSkillsDir, skillId),
-        path.join(targetDir, skillId),
-        { recursive: true }
-      );
+      await withTargetContext(targetDir, `copy ${skillId}`, async () => {
+        await fs.cp(
+          path.join(packagedSkillsDir, skillId),
+          path.join(targetDir, skillId),
+          { recursive: true }
+        );
+      });
     }
   }
 
   return skillIds.length;
+}
+
+async function withTargetContext(
+  targetDir: string,
+  operation: string,
+  action: () => Promise<void>
+): Promise<void> {
+  try {
+    await action();
+  } catch (error) {
+    throw new Error(`${operation} failed for ${targetDir}: ${errorMessage(error)}`);
+  }
 }
 
 async function listPackagedSkillIds(packagedSkillsDir: string): Promise<string[]> {
