@@ -658,6 +658,10 @@ The following review-derived items are intentionally not implemented in 0.1.0.
 - Source issue #101, `correctness-equals-hashcode`: consider requiring a
   regression-test step when equality or hash-code behavior changes. This item
   needs future review and triage before implementation.
+- Source issue #102, `correctness-jpa`: consider a sibling skill for broader
+  JPA lifecycle or fetch concerns, such as cascade rules, lazy loading,
+  transaction scope, or entity leakage across API boundaries. This item needs
+  future review and triage before implementation.
 
 ## Non-Goals for v1
 
