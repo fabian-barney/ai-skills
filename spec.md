@@ -695,6 +695,10 @@ The following review-derived items are intentionally not implemented in 0.1.0.
   assessment, over-eager loading or Cartesian explosion guardrails, and a
   stronger mandatory pagination check for unbounded scans. This item needs
   future review and triage before implementation.
+- Source issue #112, `security-secrets`: consider stronger logging, telemetry,
+  and error exposure handling; a minimal version-controlled `.gitignore`
+  requirement; and an explicit authorization-review out-of-scope guardrail.
+  This item needs future review and triage before implementation.
 
 ## Non-Goals for v1
 
