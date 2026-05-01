@@ -1,8 +1,22 @@
 #!/usr/bin/env node
 
+import { createRequire } from "node:module";
+import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
-export const VERSION = "0.1.0";
+const requirePackageJson = createRequire(import.meta.url);
+
+function readPackageVersion(): string {
+  const packageJson = requirePackageJson("../package.json") as { version?: unknown };
+
+  if (typeof packageJson.version !== "string" || packageJson.version.length === 0) {
+    throw new Error("package.json version is missing.");
+  }
+
+  return packageJson.version;
+}
+
+export const VERSION = readPackageVersion();
 
 export interface CliIo {
   stderr: NodeJS.WritableStream;
@@ -46,7 +60,7 @@ export function run(argv = process.argv.slice(2), io: CliIo = process): number {
 }
 
 const isEntrypoint = process.argv[1] !== undefined
-  && import.meta.url === pathToFileURL(process.argv[1]).href;
+  && import.meta.url === pathToFileURL(resolve(process.argv[1])).href;
 
 if (isEntrypoint) {
   process.exitCode = run();
