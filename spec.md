@@ -647,6 +647,15 @@ Example backlog-entry renderings for `skill-new` may target:
 In both cases, the entry still represents the same canonical backlog-entry
 contract defined above.
 
+## Optional Future Improvements
+
+The following review-derived items are intentionally not implemented in 0.1.0.
+
+- Source issue #100, `correctness-comparable`: consider adding a brief
+  `SKILL.md` guardrail note that `TreeMap` and `TreeSet` containers can behave
+  incorrectly when `compareTo` and `equals` diverge. This item needs future
+  review and triage before implementation.
+
 ## Non-Goals for v1
 
 v1 does not include:
