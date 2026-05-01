@@ -34,5 +34,8 @@ jobs:
       - name: Test
         run: corepack pnpm test
 
+      - name: Validate catalog
+        run: corepack pnpm validate
+
       - name: Package dry run
         run: corepack pnpm pack:dry-run

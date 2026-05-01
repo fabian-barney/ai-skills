@@ -17,9 +17,10 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "tsc -p tsconfig.json && node --test test/*.test.mjs",
+    "validate": "node tools/validate-catalog.mjs",
     "lint:md": "markdownlint-cli2 \"**/*.md\" \"!**/node_modules/**\" --config .markdownlint.json",
     "pack:dry-run": "npm pack --dry-run",
-    "prepack": "tsc -p tsconfig.json"
+    "prepack": "node tools/validate-catalog.mjs && tsc -p tsconfig.json"
   },
   "engines": {
     "node": ">=20.11"
