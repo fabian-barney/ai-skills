@@ -13,6 +13,7 @@
 
 ## Notes
 - Constraints / assumptions: the improvement should preserve the current
-  `pr-review` boundary and stay tool-agnostic
+  `pr-review` boundary, stay tool-agnostic, and feed central catalog triage,
+  follow-up implementation, and release notes
 - Validation / acceptance notes: publish as a GitHub issue in `ai-skills` when
   access exists; otherwise keep the same record as local Markdown
