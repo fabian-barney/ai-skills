@@ -3,6 +3,9 @@
 Distilled from the review, code review, and PR review loop guidance sources.
 
 - classify findings explicitly instead of treating all comments the same
+- satisfy the applicable review ruleset-read gate before classifying findings
+- inherit severity ranking from the active child review skill when severity is
+  present
 - keep evidence and rationale visible in the thread
 - resolve conversations only when ownership and closure conditions are met
 - keep unresolved or ambiguous findings visible

@@ -3,6 +3,8 @@
 The family-root `pr-review` skill establishes the shared review contract:
 
 - classify findings clearly
+- require the applicable review ruleset-read gate before classification
+- aggregate child-skill severity output without redefining the severity model
 - respect ownership rules before resolving conversations
 - leave a final explanatory comment before closing a thread
 - separate the root responsibility contract from specialized subflows such as
