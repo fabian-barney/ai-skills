@@ -8,6 +8,7 @@
 - docs/examples updated: yes
 - changelog updated: yes
 - GitHub release: published
+- artifact publication ordering: after tag and GitHub Release
 - Maven Central: published
 - Gradle Plugin Portal: not applicable
 - private artifactory: published

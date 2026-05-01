@@ -3,7 +3,9 @@ name: release
 description: >-
   Execute the full repository release workflow from final verification through
   GitHub release and artifact publication. Use when a repository needs the
-  complete release sequence, not only the GitHub tag-and-release step.
+  complete release sequence, not only the GitHub tag-and-release step. This is
+  portable release orchestration; repository-specific release policy must be
+  supplied as input rather than copied between projects.
 ---
 <!-- markdownlint-disable MD025 -->
 
@@ -12,6 +14,10 @@ description: >-
 Run the full release workflow so the final build/test pass, version selection,
 documentation updates, changelog, GitHub release, and registry publications
 stay aligned.
+
+This skill is intentionally portable across repositories. Treat any
+repository-specific release rules as local policy inputs for that repository,
+not as rules to copy into downstream projects.
 
 # When to Use
 
@@ -31,6 +37,7 @@ stay aligned.
 # Inputs
 
 - the repository default branch with release-bound changes already merged
+- repository-specific release policy, versioning rules, and publication rules
 - the strongest available final build and test commands or CI evidence
 - the latest release tag and the delta since that release
 - documentation, changelog, and versioned example locations that must be
@@ -46,16 +53,21 @@ stay aligned.
    repository is in releasable state.
 2. Run or confirm the final build and test pass for the release candidate; do
    not continue if the final verification is red or missing.
-3. Apply `../release-github/SKILL.md` to perform the GitHub-release workflow,
+3. Apply the repository-specific release policy as an input, without copying
+   policy text into downstream projects.
+4. Confirm versioned release examples and documentation references are known so
+   the release can update them to the new tag.
+5. Apply `../release-github/SKILL.md` to perform the GitHub-release workflow,
    including version selection, changelog/docs alignment, release-prep commit,
-   tag creation, push, and GitHub Release creation.
-4. Publish release artifacts to each applicable target registry listed in
+   versioned-example updates, tag creation, push, and GitHub Release creation.
+6. Publish release artifacts only after tag creation and GitHub Release
+   creation both succeed. Publish to each applicable target registry listed in
    `references/publication-targets.md`, such as Maven Central, the Gradle
    Plugin Portal, or a private artifactory, and record any target that is
    intentionally not applicable.
-5. Verify the published artifacts and release metadata so version numbers,
+7. Verify the published artifacts and release metadata so version numbers,
    tags, changelog entries, and published packages all match.
-6. Use `examples/release-checklist.md` when communicating the completed release
+8. Use `examples/release-checklist.md` when communicating the completed release
    steps or any blocked publication target.
 
 # Outputs
@@ -69,7 +81,11 @@ stay aligned.
 # Guardrails
 
 - do not skip the final build or test verification before release
+- do not copy repository-specific release rules into downstream projects; use
+  local release policy as input
+- do not skip versioned release example and documentation-reference updates
 - do not publish artifacts whose version, changelog, or tag is out of sync
+- do not publish registry artifacts before the tag and GitHub Release exist
 - do not assume every repository publishes to Maven Central, the Gradle Plugin
   Portal, and private artifactory; treat each target as conditional
 - do not declare the release complete while a required publication target is
@@ -80,6 +96,10 @@ stay aligned.
 - final build and test evidence are green and explicit
 - the selected version matches the documented delta from the previous release
 - `../release-github/SKILL.md` was applied for the GitHub release portion
+- versioned examples and documentation references were updated to the new tag or
+  explicitly ruled out
+- tag creation completed before GitHub Release creation, and GitHub Release
+  creation completed before artifact publication
 - each repository-relevant publication target is either published successfully
   or explicitly marked not applicable
 - the final release report is concrete enough for downstream consumers and
