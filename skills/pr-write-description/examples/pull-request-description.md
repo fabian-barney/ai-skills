@@ -1,5 +1,7 @@
 # Example Pull Request Description
 
+Closes #ISSUE_ID
+
 ## Implementation Summary
 - Scope: add the `pr-write-description` skill and its supporting references
 - Key changes: define the reviewer-facing PR body shape, review-focus guidance,

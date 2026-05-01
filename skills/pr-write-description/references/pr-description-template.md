@@ -4,6 +4,9 @@ Use this template when a PR description needs a predictable reviewer-facing
 shape.
 
 ```md
+<!-- Include only when the PR has a linked issue. -->
+Closes #ISSUE_ID
+
 ## Implementation Summary
 - Scope:
 - Key changes:
