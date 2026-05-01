@@ -55,8 +55,8 @@ design document.
 
 # Outputs
 
-- a GitHub-ready issue description with problem, outcome, scope, and relevant
-  constraints
+- a GitHub Markdown issue description with problem, outcome, scope, and
+  relevant constraints
 - optional acceptance or validation notes when they materially affect later
   work
 - a concise issue body that can be posted directly after formatting
@@ -67,6 +67,9 @@ design document.
 - do not leave the problem statement implicit
 - do not omit key scope boundaries or non-goals when they materially matter
 - do not emit literal `\n` escape sequences in Markdown meant for GitHub
+- do not exceed 120 characters per Markdown source line; wrap long list items
+  and paragraphs
+- do not omit the single trailing newline when producing a Markdown issue body
 - do not broaden this skill into issue creation, assignment, or implementation
   workflow
 
@@ -76,3 +79,5 @@ design document.
 - scope boundaries and key assumptions are explicit
 - the issue body is concise enough for GitHub discussion flow
 - the Markdown is safe to publish through `gh issue create` or `gh issue edit`
+- GitHub Markdown source lines stay at or below 120 characters
+- the issue body ends with exactly one trailing newline when written to a file
