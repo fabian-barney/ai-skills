@@ -31,8 +31,10 @@ test("accepts a valid catalog skill", async (t) => {
 test("reports representative invalid skill metadata and structure", async (t) => {
   const skillsDir = await createTempSkillsDir(t);
   const skillDir = path.join(skillsDir, "bad-skill");
+  const uppercaseSkillDir = path.join(skillsDir, "ai-skills-Bad");
 
   await fs.mkdir(skillDir, { recursive: true });
+  await fs.mkdir(uppercaseSkillDir, { recursive: true });
   await fs.writeFile(
     path.join(skillDir, "SKILL.md"),
     [
@@ -46,11 +48,18 @@ test("reports representative invalid skill metadata and structure", async (t) =>
       "# Workflow"
     ].join("\n")
   );
+  await fs.writeFile(
+    path.join(uppercaseSkillDir, "SKILL.md"),
+    validSkillMarkdown("ai-skills-Bad")
+  );
 
   const result = await validateCatalog({ skillsDir });
   const messages = result.errors.map((error) => error.message);
 
-  assert.ok(messages.includes("canonical skill id must start with ai-skills-"));
+  assert.equal(
+    messages.filter((message) => message.includes("lowercase kebab-case")).length,
+    2
+  );
   assert.ok(messages.includes("frontmatter description is required"));
   assert.ok(messages.includes("frontmatter name must match directory name bad-skill"));
   assert.ok(messages.includes("missing required section: When to Use"));

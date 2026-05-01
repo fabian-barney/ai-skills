@@ -26,6 +26,8 @@ const IGNORED_SKILLS_ENTRIES = new Set([
   ".gitkeep"
 ]);
 
+const CANONICAL_SKILL_ID_PATTERN = /^ai-skills-[a-z0-9]+(?:-[a-z0-9]+)*$/u;
+
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 export async function validateCatalog(options = {}) {
@@ -95,10 +97,10 @@ async function validateSkillDirectory(skillsDir, skillId, errors) {
   const skillMarkdown = path.join(skillDir, "SKILL.md");
   const skillLocation = path.join("skills", skillId);
 
-  if (!skillId.startsWith("ai-skills-")) {
+  if (!CANONICAL_SKILL_ID_PATTERN.test(skillId)) {
     errors.push({
       location: skillLocation,
-      message: "canonical skill id must start with ai-skills-"
+      message: "canonical skill id must be lowercase kebab-case and start with ai-skills-"
     });
   }
 
@@ -271,10 +273,20 @@ function validateSectionOrder(bodyLines, location, errors) {
 }
 
 async function validateLocalReferences(skillsDir, skillDir, errors) {
-  const markdownFiles = await findMarkdownFiles(skillDir);
+  const markdownFiles = await findMarkdownFiles(skillDir, errors);
 
   for (const markdownFile of markdownFiles) {
-    const markdown = await fs.readFile(markdownFile, "utf8");
+    let markdown;
+
+    try {
+      markdown = await fs.readFile(markdownFile, "utf8");
+    } catch (error) {
+      errors.push({
+        location: relativeToRepo(markdownFile),
+        message: `cannot read markdown file: ${error.message}`
+      });
+      continue;
+    }
 
     for (const reference of findLocalReferences(markdown)) {
       await validateLocalReference(skillsDir, markdownFile, reference, errors);
@@ -282,15 +294,25 @@ async function validateLocalReferences(skillsDir, skillDir, errors) {
   }
 }
 
-async function findMarkdownFiles(directory) {
-  const entries = await fs.readdir(directory, { withFileTypes: true });
+async function findMarkdownFiles(directory, errors) {
+  let entries;
   const files = [];
+
+  try {
+    entries = await fs.readdir(directory, { withFileTypes: true });
+  } catch (error) {
+    errors.push({
+      location: relativeToRepo(directory),
+      message: `cannot read directory: ${error.message}`
+    });
+    return files;
+  }
 
   for (const entry of entries) {
     const entryPath = path.join(directory, entry.name);
 
     if (entry.isDirectory()) {
-      files.push(...await findMarkdownFiles(entryPath));
+      files.push(...await findMarkdownFiles(entryPath, errors));
     } else if (entry.isFile() && entry.name.endsWith(".md")) {
       files.push(entryPath);
     }
