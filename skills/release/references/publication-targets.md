@@ -9,7 +9,7 @@ Evaluate publication targets explicitly:
 For each target:
 
 1. determine whether the repository actually publishes there
-2. publish only after the GitHub release inputs are aligned
+2. publish only after the tag exists and the GitHub Release was created
 3. verify the published artifact version and availability
 4. record `not applicable` when the repository does not use that target
 
