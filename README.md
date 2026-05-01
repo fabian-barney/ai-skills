@@ -33,9 +33,17 @@ npm install -g @barney-media/ai-skills
 ai-skills --help
 ```
 
-The `install` and `update` command behavior is defined in `spec.md`. The CLI
-binary is scaffolded in this release-surface migration; the reset-style
-installer implementation follows that permanent contract in later issues.
+The `install` and `update` commands both replace package-owned `ai-skills-*`
+directories in the supported target directories. Non-prefixed user skills are
+preserved.
+
+```bash
+ai-skills install
+ai-skills update --assume-yes
+```
+
+Without `--assume-yes`, the CLI asks for confirmation before deleting and
+replacing package-owned `ai-skills-*` directories.
 
 ## Build
 
