@@ -400,6 +400,161 @@ Mapping rules:
 - fallback packaging must preserve the canonical purpose, workflow, guardrails,
   and exit checks
 
+## Install and Update Contract
+
+The 0.1.0 release defines a stable install and update contract before the
+installer implementation exists. This contract is intentionally conservative:
+install and update are allowed to manage only the package-owned `ai-skills-*`
+namespace, and user-owned skill directories outside that namespace must remain
+untouched.
+
+### Package and Tooling
+
+The first supported delivery method is npmjs.com.
+
+The public package name is:
+
+```text
+@barney-media/ai-skills
+```
+
+The user-facing global installation command is:
+
+```bash
+npm install -g @barney-media/ai-skills
+```
+
+Repository development may use `pnpm` for dependency management, scripts, CI,
+and release verification. User-facing install documentation must still use npm
+unless a later release explicitly adds another public installation channel.
+
+The 0.1.0 public CLI surface is limited to:
+
+- `ai-skills install`
+- `ai-skills update`
+
+No public `ai-skills validate` command is part of 0.1.0. Catalog validation is
+still required as an internal build, package, and release verification step.
+
+### Managed Skill Namespace
+
+Every canonical skill id in this repository must start with `ai-skills-`.
+
+Examples:
+
+```text
+skills/ai-skills-pr-review/
+skills/ai-skills-release/
+```
+
+The skill directory name and the `name` field in `SKILL.md` frontmatter must
+match exactly.
+
+The `ai-skills-` prefix is reserved for this package in every supported target
+skill directory. Any existing directory whose name starts with `ai-skills-` is
+treated as package-owned and replaceable by `ai-skills install` or
+`ai-skills update`.
+
+User-created skills that do not start with `ai-skills-` are user-owned. The
+installer must never modify, move, or delete non-prefixed skill directories.
+
+Users should not create personal skills with the `ai-skills-` prefix unless
+they accept that this package may remove and replace those directories during
+install or update.
+
+### Supported Target Directories
+
+The 0.1.0 installer manages all supported targets. It does not support
+installing only one target.
+
+Target directories are resolved from the current user's home directory through
+the implementation runtime. The installer must not rely on shell expansion of a
+literal `~`, because that behavior is not portable across supported operating
+systems.
+
+The supported target directories are:
+
+```text
+<home>/.codex/skills
+<home>/.claude/skills
+<home>/.copilot/skills
+```
+
+The Codex target is always `<home>/.codex/skills` in 0.1.0. `$CODEX_HOME` is
+not supported by this contract.
+
+If a supported target directory does not exist, install and update may create
+it. Creating the target directory must not create or modify unrelated
+non-prefixed skill directories.
+
+### Install and Update Behavior
+
+`ai-skills install` and `ai-skills update` are semantically separate commands
+so future versions can give them different behavior. In 0.1.0 they must call
+the same reset-and-install flow and produce the same final filesystem state
+for the same package version.
+
+For each supported target directory, install and update must:
+
+1. Resolve the target path from the current user's home directory.
+2. Inspect only direct child directories whose names start with `ai-skills-`.
+3. Warn that all existing `ai-skills-*` skills in the supported target
+   directories will be deleted and replaced by the current packaged skill set.
+4. Warn that non-prefixed user skills will be preserved.
+5. Require interactive confirmation before making changes, unless
+   `--assume-yes` is passed.
+6. Remove all existing direct child directories matching `ai-skills-*`.
+7. Install the complete current packaged set of `ai-skills-*` skill
+   directories.
+
+The unattended confirmation flag is:
+
+```bash
+--assume-yes
+```
+
+If confirmation is not provided, install and update must exit without changing
+any supported target directory.
+
+The installer must not support per-skill selection in 0.1.0. Each successful
+install or update installs the complete packaged `ai-skills-*` catalog.
+
+### Reset Robustness
+
+The reset-and-install flow is the permanent namespace-management contract for
+0.1.0 and must be implemented carefully.
+
+The implementation should avoid leaving a target directory with a mixed old and
+new `ai-skills-*` set where practical. A future implementation is expected to
+use staging or another robust filesystem strategy before replacing the target
+set.
+
+If one supported target fails, the command must report which target failed and
+why. Successful targets do not need to be rolled back globally because 0.1.0
+manages each supported target independently.
+
+No persistent backups are required by this contract. Rollback or staging data
+used during an operation should be cleaned up after the operation succeeds or
+after best-effort failure handling completes.
+
+### Internal Validation
+
+Although there is no public validation command in 0.1.0, catalog validation is
+required before publishing a release artifact and should run during normal CI.
+
+Internal validation must verify at least:
+
+- every canonical skill directory starts with `ai-skills-`
+- every skill directory contains `SKILL.md`
+- every `SKILL.md` contains required frontmatter
+- the frontmatter `name` matches the directory name
+- required canonical sections exist in the required order
+- statically detectable local supporting-file references point to existing
+  files
+
+Invalid catalog state must fail build, package, or release verification before
+the npm package is published.
+
 ## Repository Conventions
 
 The repository-level conventions are:
@@ -498,8 +653,13 @@ v1 does not include:
 
 - a full runtime orchestration engine
 - a separate knowledge repository
-- a validation CLI
+- a public validation CLI
 - a generated target artifact pipeline
+- per-skill or per-target install selection
+- an uninstall command
+- local edit preservation inside `ai-skills-*` directories
+- persistent install backups
+- `$CODEX_HOME` support
 - a requirement that capture skills implement the proposed skills
 
 Those may follow later once the canonical format and repository boundaries have
