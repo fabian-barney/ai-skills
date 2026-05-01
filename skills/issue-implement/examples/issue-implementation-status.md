@@ -7,3 +7,11 @@
 - follow-up: none
 
 Overall result: issue implemented and ready for final summary/comment handling.
+
+Blocked shape:
+
+- implementation scope: not started
+- exit gates: blocked
+- validation: not run because the required plan/ruleset-read precondition is
+  missing
+- blocker: `BLOCKED: decision-complete plan is missing`
