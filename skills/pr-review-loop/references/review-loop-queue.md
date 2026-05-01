@@ -11,6 +11,14 @@ Use round-robin progression across active PRs:
 This keeps multiple PRs moving in parallel while preserving the rule that each
 push needs its own fresh review state before merge.
 
+Treat review generation latency as operational state, not a fixed timer. Do
+not merge because an arbitrary wait elapsed; merge only from explicit
+review/check/thread state.
+
+For strict GitHub Copilot review loops, re-trigger review through the platform
+API described in `copilot-review-trigger.md` after every fix push. Do not use
+PR comments or `@copilot` mentions as the trigger.
+
 If a PR cannot proceed because of missing permissions, missing branch updates,
 or missing review infrastructure, keep it in the queue with an explicit blocker
 instead of silently dropping it.
