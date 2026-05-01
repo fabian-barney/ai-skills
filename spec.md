@@ -687,6 +687,10 @@ The following review-derived items are intentionally not implemented in 0.1.0.
   responsibility guidance for extracted validators, and clarify boundary versus
   domain validation placement. This item needs future review and triage before
   implementation.
+- Source issue #110, `design-value-object`: consider explicit domain versus
+  transport/DTO placement guidance for value objects, and a note that value
+  objects are DDD-flavored rather than classic GoF. This item needs future
+  review and triage before implementation.
 
 ## Non-Goals for v1
 
