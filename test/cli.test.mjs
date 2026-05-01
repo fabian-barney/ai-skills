@@ -97,6 +97,7 @@ test("installs and updates all targets through the same reset flow", async (t) =
       assert.ok(entries.includes("ai-skills-one"));
       assert.ok(entries.includes("ai-skills-two"));
       assert.ok(!entries.includes("ai-skills-stale"));
+      assertNoTemporaryResetDirs(entries);
     }
   }
 
@@ -123,6 +124,38 @@ test("declined confirmation leaves targets unchanged", async (t) => {
     "keep"
   );
   await assert.rejects(fs.access(path.join(targetDir, "ai-skills-new")));
+});
+
+test("reports target failure and preserves non-prefixed skills", async (t) => {
+  const packageRoot = await createPackageRoot(t, ["ai-skills-one"]);
+  const homeDir = await createHomeDir(t);
+  const codexTargetDir = await seedTarget(homeDir, ".codex", [
+    ["custom-user-skill", "keep"]
+  ]);
+  const blockingPath = path.join(homeDir, ".claude");
+  const harness = createIo();
+
+  await fs.writeFile(blockingPath, "blocking file");
+
+  const exitCode = await run(
+    ["install", "--assume-yes"],
+    harness.io,
+    { homeDir, packageRoot }
+  );
+  const codexEntries = await fs.readdir(codexTargetDir);
+  const codexSkill = path.join(codexTargetDir, "ai-skills-one", "SKILL.md");
+  const failedTargetDir = path.join(homeDir, ".claude", "skills");
+
+  assert.equal(exitCode, 1);
+  assert.match(harness.output().stderr, /create target directory failed/);
+  assert.ok(harness.output().stderr.includes(failedTargetDir));
+  assert.equal(
+    await fs.readFile(path.join(codexTargetDir, "custom-user-skill", "SKILL.md"), "utf8"),
+    "keep"
+  );
+  assert.equal(await fs.readFile(blockingPath, "utf8"), "blocking file");
+  assert.equal(await fs.readFile(codexSkill, "utf8"), "---\nname: ai-skills-one\n---\n");
+  assertNoTemporaryResetDirs(codexEntries);
 });
 
 test("requires confirmation when assume yes is absent", async (t) => {
@@ -201,4 +234,9 @@ async function seedTarget(homeDir, targetName, skills) {
   }
 
   return targetDir;
+}
+
+function assertNoTemporaryResetDirs(entries) {
+  assert.ok(!entries.some((entry) => entry.startsWith(".ai-skills-stage-")));
+  assert.ok(!entries.some((entry) => entry.startsWith(".ai-skills-backup-")));
 }
