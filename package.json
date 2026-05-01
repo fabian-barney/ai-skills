@@ -1,0 +1,44 @@
+{
+  "name": "@barney-media/ai-skills",
+  "version": "0.1.0",
+  "description": "Canonical AI skill catalog and installer CLI package.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "ai-skills": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "skills",
+    "README.md",
+    "spec.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "tsc -p tsconfig.json && node --test test/*.test.mjs",
+    "lint:md": "markdownlint-cli2 \"**/*.md\" \"!**/node_modules/**\" --config .markdownlint.json",
+    "pack:dry-run": "npm pack --dry-run",
+    "prepack": "tsc -p tsconfig.json"
+  },
+  "engines": {
+    "node": ">=20.11"
+  },
+  "packageManager": "pnpm@10.33.2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabian-barney/ai-skills.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fabian-barney/ai-skills/issues"
+  },
+  "homepage": "https://github.com/fabian-barney/ai-skills#readme",
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "markdownlint-cli2": "^0.22.1",
+    "typescript": "^5.9.3"
+  }
+}
