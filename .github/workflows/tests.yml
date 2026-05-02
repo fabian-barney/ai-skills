@@ -39,7 +39,7 @@ jobs:
       - name: Build
         run: corepack pnpm build
 
-      - name: Test
+      - name: Test and quality gates
         run: corepack pnpm test
 
       - name: Validate catalog

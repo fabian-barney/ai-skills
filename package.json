@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "tsc -p tsconfig.json && node --test test/*.test.mjs",
+    "test": "tsc -p tsconfig.json && vitest run",
     "validate": "node tools/validate-catalog.mjs",
     "lint:md": "markdownlint-cli2 \"**/*.md\" \"!**/node_modules/**\" --config .markdownlint.json",
     "pack:dry-run": "npm pack --dry-run",
@@ -39,8 +39,12 @@
   },
   "homepage": "https://github.com/fabian-barney/ai-skills#readme",
   "devDependencies": {
+    "@barney-media/cognitive-typescript-vitest": "^0.1.1",
+    "@barney-media/crap-typescript-vitest": "^0.2.3",
     "@types/node": "^24.10.1",
+    "@vitest/coverage-v8": "^4.1.5",
     "markdownlint-cli2": "^0.22.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.5"
   }
 }

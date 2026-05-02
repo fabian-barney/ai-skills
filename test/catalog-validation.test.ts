@@ -3,16 +3,15 @@ import { spawnSync } from "node:child_process";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import test from "node:test";
 import { fileURLToPath } from "node:url";
 
-import { validateCatalog } from "../tools/validate-catalog.mjs";
+import { onTestFinished, test } from "vitest";
 
 const repoRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const validatorScript = path.join(repoRoot, "tools", "validate-catalog.mjs");
 
-test("accepts a valid catalog skill", async (t) => {
-  const skillsDir = await createTempSkillsDir(t);
+test("accepts a valid catalog skill", async () => {
+  const skillsDir = await createTempSkillsDir();
   const skillDir = path.join(skillsDir, "ai-skills-example");
 
   await fs.mkdir(path.join(skillDir, "references"), { recursive: true });
@@ -22,14 +21,15 @@ test("accepts a valid catalog skill", async (t) => {
     validSkillMarkdown("ai-skills-example", "- use `references/example.md` when needed\n")
   );
 
-  const result = await validateCatalog({ skillsDir });
+  const result = runValidator(skillsDir);
 
-  assert.equal(result.skillCount, 1);
-  assert.deepEqual(result.errors, []);
+  assert.equal(result.status, 0);
+  assert.match(result.stdout, /Catalog validation passed for 1 skill\(s\)\./);
+  assert.equal(result.stderr, "");
 });
 
-test("reports representative invalid skill metadata and structure", async (t) => {
-  const skillsDir = await createTempSkillsDir(t);
+test("reports representative invalid skill metadata and structure", async () => {
+  const skillsDir = await createTempSkillsDir();
   const skillDir = path.join(skillsDir, "bad-skill");
   const uppercaseSkillDir = path.join(skillsDir, "ai-skills-Bad");
 
@@ -53,20 +53,23 @@ test("reports representative invalid skill metadata and structure", async (t) =>
     validSkillMarkdown("ai-skills-Bad")
   );
 
-  const result = await validateCatalog({ skillsDir });
-  const messages = result.errors.map((error) => error.message);
+  const result = runValidator(skillsDir);
+  const messages = result.stderr.split("\n").filter((message) => message.length > 0);
 
+  assert.equal(result.status, 1);
   assert.equal(
     messages.filter((message) => message.includes("lowercase kebab-case")).length,
     2
   );
-  assert.ok(messages.includes("frontmatter description is required"));
-  assert.ok(messages.includes("frontmatter name must match directory name bad-skill"));
-  assert.ok(messages.includes("missing required section: When to Use"));
+  assert.ok(messages.some((message) => message.endsWith("frontmatter description is required")));
+  assert.ok(messages.some((message) =>
+    message.endsWith("frontmatter name must match directory name bad-skill")
+  ));
+  assert.ok(messages.some((message) => message.endsWith("missing required section: When to Use")));
 });
 
-test("reports missing SKILL.md and broken local references", async (t) => {
-  const skillsDir = await createTempSkillsDir(t);
+test("reports missing SKILL.md and broken local references", async () => {
+  const skillsDir = await createTempSkillsDir();
   const missingSkillDir = path.join(skillsDir, "ai-skills-missing-file");
   const brokenRefDir = path.join(skillsDir, "ai-skills-broken-reference");
 
@@ -77,15 +80,18 @@ test("reports missing SKILL.md and broken local references", async (t) => {
     validSkillMarkdown("ai-skills-broken-reference", "- use `references/missing.md`\n")
   );
 
-  const result = await validateCatalog({ skillsDir });
-  const messages = result.errors.map((error) => error.message);
+  const result = runValidator(skillsDir);
+  const messages = result.stderr.split("\n").filter((message) => message.length > 0);
 
-  assert.ok(messages.some((message) => message.startsWith("required file is missing")));
-  assert.ok(messages.includes("local catalog reference does not exist: references/missing.md"));
+  assert.equal(result.status, 1);
+  assert.ok(messages.some((message) => message.includes("required file is missing")));
+  assert.ok(messages.some((message) =>
+    message.endsWith("local catalog reference does not exist: references/missing.md")
+  ));
 });
 
-test("exits non-zero for invalid catalog state", async (t) => {
-  const skillsDir = await createTempSkillsDir(t);
+test("exits non-zero for invalid catalog state", async () => {
+  const skillsDir = await createTempSkillsDir();
 
   await fs.mkdir(path.join(skillsDir, "ai-skills-invalid"), { recursive: true });
 
@@ -102,11 +108,11 @@ test("exits non-zero for invalid catalog state", async (t) => {
   assert.match(result.stderr, /required file is missing/);
 });
 
-async function createTempSkillsDir(t) {
+async function createTempSkillsDir() {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "ai-skills-validation-"));
   const skillsDir = path.join(tempDir, "skills");
 
-  t.after(async () => {
+  onTestFinished(async () => {
     await fs.rm(tempDir, { force: true, recursive: true });
   });
 
@@ -116,7 +122,7 @@ async function createTempSkillsDir(t) {
   return skillsDir;
 }
 
-function validSkillMarkdown(skillId, whenToUseExtra = "") {
+function validSkillMarkdown(skillId: string, whenToUseExtra = "") {
   return [
     "---",
     `name: ${skillId}`,
@@ -154,4 +160,15 @@ function validSkillMarkdown(skillId, whenToUseExtra = "") {
     "- validation passes",
     ""
   ].join("\n");
+}
+
+function runValidator(skillsDir: string) {
+  return spawnSync(
+    process.execPath,
+    [validatorScript, "--skills-dir", skillsDir],
+    {
+      cwd: repoRoot,
+      encoding: "utf8"
+    }
+  );
 }
