@@ -39,7 +39,7 @@ jobs:
       - name: Build
         run: corepack pnpm build
 
-      - name: Test
+      - name: Test and quality gates
         run: corepack pnpm test
 
       - name: Validate catalog
@@ -47,3 +47,47 @@ jobs:
 
       - name: Package dry run
         run: corepack pnpm pack:dry-run
+
+  cognitive-typescript-gate:
+    name: cognitive-java Gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24"
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: corepack pnpm install --frozen-lockfile
+
+      - name: Cognitive Complexity Gate
+        run: corepack pnpm quality:cognitive
+
+  crap-typescript-gate:
+    name: crap-java Gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24"
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: corepack pnpm install --frozen-lockfile
+
+      - name: CRAP Gate
+        run: corepack pnpm quality:crap

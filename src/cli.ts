@@ -82,22 +82,34 @@ export async function run(
 ): Promise<number> {
   const [command, ...args] = argv;
 
-  if (command === undefined || command === "-h" || command === "--help") {
+  if (isHelpCommand(command)) {
     io.stdout.write(HELP);
     return 0;
   }
 
-  if (command === "-v" || command === "--version") {
+  if (isVersionCommand(command)) {
     io.stdout.write(`${VERSION}\n`);
     return 0;
   }
 
-  if (command === "install" || command === "update") {
+  if (isInstallOrUpdateCommand(command)) {
     return installOrUpdate(command, args, io, options);
   }
 
   io.stderr.write(`Unknown command: ${command}\n\n${HELP}`);
   return 1;
+}
+
+function isHelpCommand(command: string | undefined): command is undefined | "-h" | "--help" {
+  return command === undefined || command === "-h" || command === "--help";
+}
+
+function isVersionCommand(command: string): boolean {
+  return command === "-v" || command === "--version";
+}
+
+function isInstallOrUpdateCommand(command: string): command is "install" | "update" {
+  return command === "install" || command === "update";
 }
 
 async function installOrUpdate(
@@ -281,7 +293,13 @@ async function moveStagedSkills(
 ): Promise<void> {
   for (const skillId of skillIds) {
     await withTargetContext(targetDir, `install staged ${skillId}`, async () => {
-      await fs.rename(path.join(stagingDir, skillId), path.join(targetDir, skillId));
+      const destination = path.join(targetDir, skillId);
+
+      if (await pathExists(destination)) {
+        throw new Error(`target entry already exists: ${destination}`);
+      }
+
+      await fs.rename(path.join(stagingDir, skillId), destination);
     });
     installedNewSkillIds.push(skillId);
   }

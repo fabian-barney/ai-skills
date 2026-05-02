@@ -4,27 +4,28 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path, { dirname } from "node:path";
 import { Readable } from "node:stream";
-import test from "node:test";
 import { fileURLToPath } from "node:url";
 
-import { run, SUPPORTED_TARGETS, VERSION } from "../dist/cli.js";
+import { onTestFinished, test } from "vitest";
+
+import { run, SUPPORTED_TARGETS, VERSION } from "../src/cli.ts";
 
 const testDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = dirname(testDir);
 
-function createIo(stdinText) {
+function createIo(stdinText?: string) {
   let stderr = "";
   let stdout = "";
 
   return {
     io: {
       stderr: {
-        write(chunk) {
+        write(chunk: unknown) {
           stderr += String(chunk);
         }
       },
       stdout: {
-        write(chunk) {
+        write(chunk: unknown) {
           stdout += String(chunk);
         }
       },
@@ -59,10 +60,10 @@ test("prints version", async () => {
   assert.equal(harness.output().stderr, "");
 });
 
-test("installs and updates all targets through the same reset flow", async (t) => {
-  const packageRoot = await createPackageRoot(t, ["ai-skills-one", "ai-skills-two"]);
-  const installHome = await createHomeDir(t);
-  const updateHome = await createHomeDir(t);
+test("installs and updates all targets through the same reset flow", async () => {
+  const packageRoot = await createPackageRoot(["ai-skills-one", "ai-skills-two"]);
+  const installHome = await createHomeDir();
+  const updateHome = await createHomeDir();
 
   await seedTarget(updateHome, ".codex", [
     ["ai-skills-stale", "stale"],
@@ -105,9 +106,9 @@ test("installs and updates all targets through the same reset flow", async (t) =
   assert.equal(await fs.readFile(customSkill, "utf8"), "keep");
 });
 
-test("declined confirmation leaves targets unchanged", async (t) => {
-  const packageRoot = await createPackageRoot(t, ["ai-skills-new"]);
-  const homeDir = await createHomeDir(t);
+test("declined confirmation leaves targets unchanged", async () => {
+  const packageRoot = await createPackageRoot(["ai-skills-new"]);
+  const homeDir = await createHomeDir();
   const targetDir = await seedTarget(homeDir, ".codex", [
     ["ai-skills-old", "old"],
     ["custom-user-skill", "keep"]
@@ -126,9 +127,9 @@ test("declined confirmation leaves targets unchanged", async (t) => {
   await assert.rejects(fs.access(path.join(targetDir, "ai-skills-new")));
 });
 
-test("reports target failure and preserves non-prefixed skills", async (t) => {
-  const packageRoot = await createPackageRoot(t, ["ai-skills-one"]);
-  const homeDir = await createHomeDir(t);
+test("reports target failure and preserves non-prefixed skills", async () => {
+  const packageRoot = await createPackageRoot(["ai-skills-one"]);
+  const homeDir = await createHomeDir();
   const codexTargetDir = await seedTarget(homeDir, ".codex", [
     ["custom-user-skill", "keep"]
   ]);
@@ -158,9 +159,51 @@ test("reports target failure and preserves non-prefixed skills", async (t) => {
   assertNoTemporaryResetDirs(codexEntries);
 });
 
-test("requires confirmation when assume yes is absent", async (t) => {
-  const packageRoot = await createPackageRoot(t, ["ai-skills-new"]);
-  const homeDir = await createHomeDir(t);
+test("rolls back package-owned skills after a partial reset failure", async () => {
+  const packageRoot = await createPackageRoot(["ai-skills-one", "ai-skills-two"]);
+  const homeDir = await createHomeDir();
+  const targetDir = await seedTarget(homeDir, ".codex", [
+    ["ai-skills-old", "old"],
+    ["custom-user-skill", "keep"]
+  ]);
+  const blockingPath = path.join(targetDir, "ai-skills-two");
+  const harness = createIo();
+
+  await fs.writeFile(blockingPath, "blocking file");
+
+  const exitCode = await run(
+    ["install", "--assume-yes"],
+    harness.io,
+    { homeDir, packageRoot }
+  );
+  const entries = await fs.readdir(targetDir);
+
+  assert.equal(exitCode, 1);
+  assert.match(harness.output().stderr, /install staged ai-skills-two failed/);
+  assert.equal(await fs.readFile(path.join(targetDir, "ai-skills-old", "SKILL.md"), "utf8"), "old");
+  assert.equal(
+    await fs.readFile(path.join(targetDir, "custom-user-skill", "SKILL.md"), "utf8"),
+    "keep"
+  );
+  assert.equal(await fs.readFile(blockingPath, "utf8"), "blocking file");
+  await assert.rejects(fs.access(path.join(targetDir, "ai-skills-one")));
+  assertNoTemporaryResetDirs(entries);
+});
+
+test("rejects unknown install options", async () => {
+  const packageRoot = await createPackageRoot(["ai-skills-new"]);
+  const homeDir = await createHomeDir();
+  const harness = createIo();
+
+  const exitCode = await run(["install", "--dry-run"], harness.io, { homeDir, packageRoot });
+
+  assert.equal(exitCode, 1);
+  assert.match(harness.output().stderr, /Unknown option for install: --dry-run/);
+});
+
+test("requires confirmation when assume yes is absent", async () => {
+  const packageRoot = await createPackageRoot(["ai-skills-new"]);
+  const homeDir = await createHomeDir();
   const harness = createIo();
 
   const exitCode = await run(["update"], harness.io, { homeDir, packageRoot });
@@ -191,8 +234,8 @@ test("runs directly through a relative script path", () => {
   assert.equal(result.stderr, "");
 });
 
-async function createPackageRoot(t, skillIds) {
-  const packageRoot = await createTempDir(t);
+async function createPackageRoot(skillIds: string[]) {
+  const packageRoot = await createTempDir();
   const skillsDir = path.join(packageRoot, "skills");
 
   await fs.mkdir(skillsDir);
@@ -207,21 +250,21 @@ async function createPackageRoot(t, skillIds) {
   return packageRoot;
 }
 
-async function createHomeDir(t) {
-  return createTempDir(t);
+async function createHomeDir() {
+  return createTempDir();
 }
 
-async function createTempDir(t) {
+async function createTempDir() {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "ai-skills-cli-"));
 
-  t.after(async () => {
+  onTestFinished(async () => {
     await fs.rm(tempDir, { force: true, recursive: true });
   });
 
   return tempDir;
 }
 
-async function seedTarget(homeDir, targetName, skills) {
+async function seedTarget(homeDir: string, targetName: string, skills: Array<[string, string]>) {
   const targetDir = path.join(homeDir, targetName, "skills");
 
   await fs.mkdir(targetDir, { recursive: true });
@@ -236,7 +279,7 @@ async function seedTarget(homeDir, targetName, skills) {
   return targetDir;
 }
 
-function assertNoTemporaryResetDirs(entries) {
+function assertNoTemporaryResetDirs(entries: string[]) {
   assert.ok(!entries.some((entry) => entry.startsWith(".ai-skills-stage-")));
   assert.ok(!entries.some((entry) => entry.startsWith(".ai-skills-backup-")));
 }
