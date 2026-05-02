@@ -12,4 +12,4 @@ Distilled from the Java `Comparable` expectation plus the issue requirement.
   diverge, because duplicates or lookup behavior may become surprising.
 
 This skill only verifies the equality-consistency aspect. Broader ordering
-correctness belongs in `ai-skills-correctness-comparable`.
+correctness belongs in skill `ai-skills-correctness-comparable`.

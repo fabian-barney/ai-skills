@@ -16,5 +16,5 @@ Distilled from the Java `Comparable` contract and the issue requirement.
   `Comparable` behavior surprising or inconsistent during normal use.
 
 This skill is focused on ordering correctness. Use
-`ai-skills-correctness-equals-hashcode` when the bounded change also needs a full
+skill `ai-skills-correctness-equals-hashcode` when the bounded change also needs a full
 equality-contract review.

@@ -25,7 +25,7 @@ validated, and what follow-up attention remains for non-implementer readers.
   and QA audiences
 - use `examples/issue-summary-comment.md` when a concrete GitHub-ready example
   helps
-- use `ai-skills-formatting-github-comment` after the content is decided and needs final
+- use skill `ai-skills-formatting-github-comment` after the content is decided and needs final
   GitHub Markdown normalization
 
 # Inputs
@@ -55,7 +55,7 @@ validated, and what follow-up attention remains for non-implementer readers.
    the issue summary or in a more technical PR discussion.
 8. Use `examples/issue-summary-comment.md` when a concrete GitHub-ready shape
    helps.
-9. Hand the final draft to `ai-skills-formatting-github-comment` when Markdown
+9. Hand the final draft to skill `ai-skills-formatting-github-comment` when Markdown
    normalization is still needed before posting.
 
 # Outputs

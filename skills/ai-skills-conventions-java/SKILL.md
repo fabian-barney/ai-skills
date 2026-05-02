@@ -18,12 +18,12 @@ are still kept in this bundle.
   preferred over invoking multiple Java convention skills manually
 - use when the bounded Java change touches null contracts, control flow,
   boilerplate, or string construction
-- use `../ai-skills-conventions-null/SKILL.md` when null contracts and collection
+- use skill `ai-skills-conventions-null` when null contracts and collection
   semantics need focused enforcement
-- use `../ai-skills-conventions-lombok/SKILL.md` when Java boilerplate can be removed
+- use skill `ai-skills-conventions-lombok` when Java boilerplate can be removed
   safely with Lombok
-- use `../ai-skills-conventions-early-return/SKILL.md` and
-  `../ai-skills-conventions-ternary/SKILL.md` when Java control flow or expression-shaped
+- use skill `ai-skills-conventions-early-return` and
+  skill `ai-skills-conventions-ternary` when Java control flow or expression-shaped
   branching should be simplified
 - use `references/java-convention-defaults.md` for the remaining Java defaults
   that are not split into separate leaf skills
@@ -44,14 +44,14 @@ are still kept in this bundle.
 1. Confirm that the bounded change is primarily Java and identify which Java
    convention areas are relevant.
 2. When null contracts, collections, or Java nullness tooling are in scope,
-   apply `../ai-skills-conventions-null/SKILL.md`.
+   apply skill `ai-skills-conventions-null`.
 3. When the change contains Java boilerplate that Lombok would remove safely,
-   apply `../ai-skills-conventions-lombok/SKILL.md`; only add Lombok when it materially
+   apply skill `ai-skills-conventions-lombok`; only add Lombok when it materially
    improves the bounded change and there is no explicit instruction or project
    rule against it.
 4. When Java control flow is overly nested, apply
-   `../ai-skills-conventions-early-return/SKILL.md` and
-   `../ai-skills-conventions-ternary/SKILL.md` as appropriate.
+   skill `ai-skills-conventions-early-return` and
+   skill `ai-skills-conventions-ternary` as appropriate.
 5. Apply the remaining Java defaults from
    `references/java-convention-defaults.md`, especially:
    prefer `String.format(...)` over literal-template `+` concatenation, prefer
@@ -72,8 +72,8 @@ are still kept in this bundle.
 
 # Guardrails
 
-- do not weaken or override the guardrails of `ai-skills-conventions-null`,
-  `ai-skills-conventions-lombok`, `ai-skills-conventions-early-return`, or `ai-skills-conventions-ternary`
+- do not weaken or override the guardrails of skill `ai-skills-conventions-null`,
+  skill `ai-skills-conventions-lombok`, skill `ai-skills-conventions-early-return`, or skill `ai-skills-conventions-ternary`
 - do not add Lombok when the user or project explicitly forbids it, or when
   the bounded Java change does not materially benefit from it
 - do not use `Optional` for Java fields, method parameters, or serialization

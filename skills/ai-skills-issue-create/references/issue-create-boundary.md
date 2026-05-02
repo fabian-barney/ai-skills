@@ -8,8 +8,8 @@ Confluence pages, or other tracker artifacts are out of scope for this skill.
 
 It may compose:
 
-- `ai-skills-issue-write-description` for issue-body drafting
-- `ai-skills-formatting-github-comment` for final Markdown normalization
+- skill `ai-skills-issue-write-description` for issue-body drafting
+- skill `ai-skills-formatting-github-comment` for final Markdown normalization
 
 It does not own:
 

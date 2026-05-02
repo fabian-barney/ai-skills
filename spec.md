@@ -123,6 +123,10 @@ The canonical rules are:
 
 - composite skills may be multi-level
 - composition must be acyclic
+- cross-skill composition must reference the public skill id, written as
+  `skill <code-formatted-skill-id>`, for example skill `ai-skills-plan`
+- cross-skill composition must not reference another skill bundle's files by
+  path
 - a composed skill must preserve the called skill's purpose, workflow
   boundaries, guardrails, and exit checks
 - a composite skill may sequence, select, or aggregate child skills, but it
@@ -167,6 +171,31 @@ reference them explicitly and explain when they matter.
 
 The same bundle structure applies to leaf skills, composite skills, and capture
 skills. What changes is the meaning of the workflow and outputs.
+
+## Skill-Private Visibility
+
+Every file inside `skills/<skill-id>/` has `skill-private` visibility.
+
+This means:
+
+- the public composition interface of a skill is its skill id
+- all bundle files are private implementation details, including `SKILL.md`
+- a skill may reference its own supporting files by local path
+- a skill must not reference another skill bundle's files by path
+
+The following path forms are forbidden when they point at another skill bundle:
+
+- `../ai-skills-foo/SKILL.md`
+- `../ai-skills-foo/references/bar.md`
+- `skills/ai-skills-foo/...`
+
+The only allowed human-readable cross-skill reference form is the plain word
+`skill` followed by the referenced skill id in a Markdown code span, for
+example skill `ai-skills-code-refactoring`.
+
+Composition happens by skill id, not by file path. Another skill's
+`SKILL.md`, `references/`, `examples/`, `scripts/`, `targets/`, and
+`templates/` are all `skill-private`.
 
 ## `SKILL.md` Contract
 
@@ -309,11 +338,17 @@ Skills in this repository must follow these rules:
   repositories
 - prefer small composable skills over large end-to-end monoliths
 - define composition explicitly when a skill orchestrates other skills
+- reference other skills only as skill `ai-skills-...`
+- treat all files inside another skill bundle as `skill-private`
 - keep capture skills focused on recording, not implementing
 - put target-specific behavior only in `targets/*.md`
 - do not rely on undeclared supporting files
 - do not encode downstream repo-specific runtime assumptions into the canonical
   contract
+
+Raw skill ids remain allowed without the `skill` keyword only in
+identifier-valued fields whose payload is literally the id itself, such as the
+frontmatter `name` field and backlog-entry `skill-id-or-name`.
 
 Target-specific notes may refine:
 
@@ -552,6 +587,8 @@ Internal validation must verify at least:
 - required canonical sections exist in the required order
 - statically detectable local supporting-file references point to existing
   files
+- cross-skill references use the canonical skill `ai-skills-...` form
+- no cross-skill file reference reaches into another skill bundle
 
 Invalid catalog state must fail build, package, or release verification before
 the npm package is published.

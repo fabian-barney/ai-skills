@@ -50,21 +50,21 @@ This is a composite skill. It conditionally orchestrates the following children
 when they materially apply to the bounded scope:
 
 - Correctness-Gate:
-  `../ai-skills-correctness-equals-hashcode/SKILL.md`,
-  `../ai-skills-correctness-comparable/SKILL.md`, and
-  `../ai-skills-correctness-jpa/SKILL.md`
+  skill `ai-skills-correctness-equals-hashcode`,
+  skill `ai-skills-correctness-comparable`, and
+  skill `ai-skills-correctness-jpa`
 - Design-Gate:
-  `../ai-skills-design-validation/SKILL.md` and
-  `../ai-skills-design-value-object/SKILL.md`
+  skill `ai-skills-design-validation` and
+  skill `ai-skills-design-value-object`
 - Performance-Gate:
-  `../ai-skills-performance-db/SKILL.md`
+  skill `ai-skills-performance-db`
 - Convention-Gate:
-  `../ai-skills-conventions-java/SKILL.md`,
-  `../ai-skills-conventions-typescript/SKILL.md`, and relevant leaf convention skills
+  skill `ai-skills-conventions-java`,
+  skill `ai-skills-conventions-typescript`, and relevant leaf convention skills
 - Quality-Gate:
-  `../ai-skills-quality-crap/SKILL.md`,
-  `../ai-skills-quality-cognitive-complexity/SKILL.md`, and
-  `../ai-skills-quality-sonar/SKILL.md`
+  skill `ai-skills-quality-crap`,
+  skill `ai-skills-quality-cognitive-complexity`, and
+  skill `ai-skills-quality-sonar`
 
 ## Gate Evaluation
 
@@ -85,25 +85,25 @@ when they materially apply to the bounded scope:
    or blocked with the exact risk rationale instead of passing it.
 6. For Correctness-Gate, apply the relevant correctness skills from
    `references/gate-mapping.md`, such as
-   `../ai-skills-correctness-equals-hashcode/SKILL.md`,
-   `../ai-skills-correctness-comparable/SKILL.md`, and
-   `../ai-skills-correctness-jpa/SKILL.md`, based on the bounded scope.
+   skill `ai-skills-correctness-equals-hashcode`,
+   skill `ai-skills-correctness-comparable`, and
+   skill `ai-skills-correctness-jpa`, based on the bounded scope.
 7. For Design-Gate, apply the relevant design skills from
    `references/gate-mapping.md`, especially
-   `../ai-skills-design-validation/SKILL.md` and
-   `../ai-skills-design-value-object/SKILL.md`, when their boundaries are in scope.
-8. For Performance-Gate, apply `../ai-skills-performance-db/SKILL.md` when database
+   skill `ai-skills-design-validation` and
+   skill `ai-skills-design-value-object`, when their boundaries are in scope.
+8. For Performance-Gate, apply skill `ai-skills-performance-db` when database
    statements or data-access performance are in scope, and record why the gate
    is not applicable when the bounded change does not affect performance
    surfaces.
 9. For Convention-Gate, apply the relevant umbrella or leaf convention skills,
-   such as `../ai-skills-conventions-java/SKILL.md` or
-   `../ai-skills-conventions-typescript/SKILL.md`, based on the changed technology.
+   such as skill `ai-skills-conventions-java` or
+   skill `ai-skills-conventions-typescript`, based on the changed technology.
 10. For Quality-Gate, apply the relevant quality skills from
    `references/gate-mapping.md`, especially
-   `../ai-skills-quality-crap/SKILL.md`,
-   `../ai-skills-quality-cognitive-complexity/SKILL.md`, and
-   `../ai-skills-quality-sonar/SKILL.md`, using the strongest available evidence.
+   skill `ai-skills-quality-crap`,
+   skill `ai-skills-quality-cognitive-complexity`, and
+   skill `ai-skills-quality-sonar`, using the strongest available evidence.
 11. Aggregate failed or blocked findings by severity before reporting them:
     correctness/regression, security/privacy/compliance, data integrity/error
     handling, architecture/boundaries, performance/scalability, observability,

@@ -13,7 +13,7 @@ When multiple findings compete for attention, triage them in this priority
 order:
 
 Canonical severity guidance lives in
-`skills/ai-skills-pr-review-write/references/severity-order.md`. The ordering below is
+skill `ai-skills-pr-review-write`. The ordering below is
 the response-triage view of that guidance; if the two ever appear to differ,
 follow `severity-order.md` and interpret this list consistently with it.
 
@@ -27,5 +27,5 @@ follow `severity-order.md` and interpret this list consistently with it.
 8. maintainability
 
 For dependency-related findings, validate dependency need and security risk, and
-use `skills/ai-skills-compliance-dependency/SKILL.md` as the source of truth for assessing
+use skill `ai-skills-compliance-dependency` as the source of truth for assessing
 license compatibility and relevant transitive impact before choosing a state.

@@ -2,7 +2,7 @@
 
 ## Summary
 
-- add the new `ai-skills-quality-gate` bundle under `skills/`
+- add the new skill `ai-skills-quality-gate` bundle under `skills/`
 - document how it composes child skills
 - keep the issue limited to canonical skill content
 

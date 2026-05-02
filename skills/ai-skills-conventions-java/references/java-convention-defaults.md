@@ -3,8 +3,9 @@
 Distilled from issue `#13` plus the shared Java baseline in `ai-rules`.
 
 - Default to the focused Java leaf skills first:
-  `ai-skills-conventions-null`, `ai-skills-conventions-lombok`, `ai-skills-conventions-early-return`, and
-  `ai-skills-conventions-ternary`.
+  skill `ai-skills-conventions-null`, skill `ai-skills-conventions-lombok`,
+  skill `ai-skills-conventions-early-return`, and
+  skill `ai-skills-conventions-ternary`.
 - When building a string from a literal template plus variables in Java,
   prefer `String.format(...)` over `+` concatenation.
 - In tight loops or append-heavy Java paths, prefer `StringBuilder` over
@@ -13,7 +14,7 @@ Distilled from issue `#13` plus the shared Java baseline in `ai-rules`.
   do not use `Optional` for fields, method parameters, or serialization models
   unless there is a strong documented reason.
 - When Lombok would materially reduce bounded Java boilerplate and no explicit
-  project or user rule forbids it, prefer applying `ai-skills-conventions-lombok`
+  project or user rule forbids it, prefer applying skill `ai-skills-conventions-lombok`
   instead of keeping handwritten constructors, accessors, or loggers.
 
 These defaults are additive to the child skills. They should not be used to

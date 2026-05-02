@@ -19,7 +19,7 @@ an explicit response, and an appropriate fix or rationale.
   classification
 - use when valid findings should be fixed on the branch with focused tests when
   appropriate
-- use as the response-handling child skill under `ai-skills-pr-review`
+- use as the response-handling child skill under skill `ai-skills-pr-review`
 - use `references/finding-classification.md` for valid versus invalid
   classification rules
 - use `references/regression-test-expectations.md` for fix and regression-test
@@ -34,9 +34,9 @@ an explicit response, and an appropriate fix or rationale.
 - evidence that the applicable review ruleset-read gate has been satisfied
 - repository or session rules for resolving conversations
 - available tests or focused reproduction steps
-- `../ai-skills-plan/SKILL.md` for ruleset-read gate evidence when a parent workflow has
+- skill `ai-skills-plan` for ruleset-read gate evidence when a parent workflow has
   not already supplied it
-- `../ai-skills-compliance-dependency/SKILL.md` for dependency license and transitive
+- skill `ai-skills-compliance-dependency` for dependency license and transitive
   impact evidence
 - `references/finding-classification.md` and
   `references/regression-test-expectations.md`
@@ -45,16 +45,16 @@ an explicit response, and an appropriate fix or rationale.
 
 1. Verify that the applicable review ruleset-read gate has been satisfied
    before classifying findings or replying to threads, using parent workflow
-   evidence or `../ai-skills-plan/SKILL.md`. If evidence is missing, stop with an explicit
+   evidence or skill `ai-skills-plan`. If evidence is missing, stop with an explicit
    unresolved precondition.
 2. Classify each finding as valid, invalid, or unresolved based on the current
    code, rules, and evidence, using this priority order when triaging:
    correctness, security, compliance, data integrity, architecture,
    performance, observability, then maintainability. Interpret this consistently
-   with `../ai-skills-pr-review-write/references/severity-order.md`.
+   with skill `ai-skills-pr-review-write`.
 3. For dependency-related findings, verify the dependency need, security risk,
    license compatibility, and relevant transitive impact through
-   `../ai-skills-compliance-dependency/SKILL.md` before classifying.
+   skill `ai-skills-compliance-dependency` before classifying.
 4. For valid findings, apply a bounded fix when appropriate and prefer adding a
    focused regression test or proof of behavior.
 5. For invalid findings, explain the concrete rationale instead of dismissing

@@ -21,8 +21,8 @@ issues, Jira tickets, Confluence pages, or other tracker artifacts.
 
 - use when a workflow needs to open a GitHub issue for implementation, backlog,
   or follow-up work
-- use when the issue body still needs drafting through `ai-skills-issue-write-description`
-- always use `ai-skills-formatting-github-comment` for final GitHub Markdown
+- use when the issue body still needs drafting through skill `ai-skills-issue-write-description`
+- always use skill `ai-skills-formatting-github-comment` for final GitHub Markdown
   normalization before publishing or rendering the issue body
 - use when GitHub issue creation is available and the issue should be published
 - use `references/github-issue-creation.md` for CLI creation/update mechanics
@@ -45,9 +45,9 @@ issues, Jira tickets, Confluence pages, or other tracker artifacts.
 
 1. Confirm the target concern should exist as a GitHub issue rather than only
    as a local note, PR comment, GitLab issue, Jira ticket, or Confluence page.
-2. Draft the issue title and body with `ai-skills-issue-write-description` when the issue
+2. Draft the issue title and body with skill `ai-skills-issue-write-description` when the issue
    content is still raw or incomplete.
-3. Normalize the final Markdown with `ai-skills-formatting-github-comment` before every
+3. Normalize the final Markdown with skill `ai-skills-formatting-github-comment` before every
    publication or ready-to-post artifact, even when the draft already appears
    formatted.
 4. Create or update the GitHub issue with the strongest available mechanism,
@@ -82,7 +82,7 @@ issues, Jira tickets, Confluence pages, or other tracker artifacts.
 # Exit Checks
 
 - the issue title and body are clear and GitHub-ready
-- the final body passed through `ai-skills-formatting-github-comment` before publication
+- the final body passed through skill `ai-skills-formatting-github-comment` before publication
   or ready-to-post output
 - the published or rendered issue artifact matches the intended scope
 - the creation path respected available permissions and tooling constraints

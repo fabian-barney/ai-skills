@@ -17,7 +17,7 @@ merge authority is explicit.
 
 - use when deciding whether a PR is merge-ready
 - use when executing a merge in a GitHub-based review workflow
-- use as the merge child skill under `ai-skills-pr-review`
+- use as the merge child skill under skill `ai-skills-pr-review`
 - use `references/merge-gate.md` for the hard gate checklist
 - use `references/post-push-review.md` for the requirement that review must
   exist after the latest push

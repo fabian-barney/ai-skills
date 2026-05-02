@@ -1,6 +1,9 @@
 # Decisions
 
-This directory is reserved for future architecture decision records.
+This directory contains architecture decision records for repository policy
+that complements the root `spec.md`.
 
-No ADRs are required for v1 bootstrap. The current source of truth is the root
-`spec.md`.
+Current ADRs:
+
+- `0001-skill-private-bundle-visibility.md`: skill bundles expose only their
+  skill id publicly; all bundle files are `skill-private`

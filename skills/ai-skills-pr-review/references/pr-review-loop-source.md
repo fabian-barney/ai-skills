@@ -11,4 +11,4 @@ Relevant review-loop heuristics used by this skill:
   no open review threads
 
 The root `ai-skills-pr-review` skill uses these ideas only for responsibility and closure
-semantics. The detailed loop orchestration belongs in `ai-skills-pr-review-loop`.
+semantics. The detailed loop orchestration belongs in skill `ai-skills-pr-review-loop`.

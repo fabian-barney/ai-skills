@@ -15,7 +15,7 @@ Markdown records.
 - use when defining the canonical structure for a new reusable skill idea
 - use when defining the canonical structure for an improvement proposal to an
   existing skill
-- use when `ai-skills-skill-new` or `ai-skills-skill-improve` needs a normalized template before
+- use when skill `ai-skills-skill-new` or skill `ai-skills-skill-improve` needs a normalized template before
   publishing a backlog entry
 - use `templates/skill-backlog-entry.md` for the canonical Markdown rendering
   of the shared content model

@@ -9,22 +9,22 @@ to the bounded scope.
 - Test-Gate: repository test command, focused test selection, or strongest CI
   test evidence for the bounded scope
 - Correctness-Gate:
-  `../../ai-skills-correctness-equals-hashcode/SKILL.md`,
-  `../../ai-skills-correctness-comparable/SKILL.md`,
-  `../../ai-skills-correctness-jpa/SKILL.md`
+  skill `ai-skills-correctness-equals-hashcode`,
+  skill `ai-skills-correctness-comparable`,
+  skill `ai-skills-correctness-jpa`
 - Design-Gate:
-  `../../ai-skills-design-validation/SKILL.md`,
-  `../../ai-skills-design-value-object/SKILL.md`
+  skill `ai-skills-design-validation`,
+  skill `ai-skills-design-value-object`
 - Performance-Gate:
-  `../../ai-skills-performance-db/SKILL.md`
+  skill `ai-skills-performance-db`
 - Convention-Gate:
-  `../../ai-skills-conventions-java/SKILL.md`,
-  `../../ai-skills-conventions-typescript/SKILL.md`,
+  skill `ai-skills-conventions-java`,
+  skill `ai-skills-conventions-typescript`,
   and their relevant leaf convention skills
 - Quality-Gate:
-  `../../ai-skills-quality-crap/SKILL.md`,
-  `../../ai-skills-quality-cognitive-complexity/SKILL.md`,
-  `../../ai-skills-quality-sonar/SKILL.md`
+  skill `ai-skills-quality-crap`,
+  skill `ai-skills-quality-cognitive-complexity`,
+  skill `ai-skills-quality-sonar`
 
 Not every child skill applies to every change. The gate runner should select
 only the relevant skills for the bounded scope and explain when a gate is

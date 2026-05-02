@@ -10,7 +10,7 @@ multiple repositories
 When to use / trigger: when a change adds or updates third-party dependencies
 Rough workflow or responsibilities: inspect dependency deltas, identify policy
 or license concerns, and produce review findings or a clean pass result
-Related skills or dependencies: ai-skills-security-secrets, ai-skills-quality-sonar
+Related skills or dependencies: skill `ai-skills-security-secrets`, skill `ai-skills-quality-sonar`
 Source context or notes: captured during a repository review on a locked-down
 company laptop without GitHub issue permissions; related lessons learned: none
 known

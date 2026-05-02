@@ -18,14 +18,14 @@ validation, and residual risk easy to scan before review starts.
 - use when updating a PR description after scope or validation changes
 - use when another workflow needs a concise reviewer-facing implementation
   summary
-- use `../ai-skills-issue-write-summary-comment/SKILL.md` when the linked issue also
+- use skill `ai-skills-issue-write-summary-comment` when the linked issue also
   needs a product-owner, reviewer, and QA summary comment
 - use `references/pr-description-template.md` for the canonical reviewer-facing
   section layout
 - use `references/reviewer-focus.md` to decide what reviewers may skim versus
   where they should pay attention
 - use `examples/pull-request-description.md` when a concrete output shape helps
-- use `ai-skills-formatting-github-comment` after the content is decided and needs final
+- use skill `ai-skills-formatting-github-comment` after the content is decided and needs final
   GitHub Markdown normalization
 
 # Inputs
@@ -39,7 +39,7 @@ validation, and residual risk easy to scan before review starts.
 - tests executed, manual checks, and residual risks
 - whether a companion issue summary comment is required for product-owner,
   reviewer, or QA readers
-- `../ai-skills-issue-write-summary-comment/SKILL.md`
+- skill `ai-skills-issue-write-summary-comment`
 - `references/pr-description-template.md` and
   `references/reviewer-focus.md`
 
@@ -57,14 +57,14 @@ validation, and residual risk easy to scan before review starts.
 6. Record concrete validation evidence, including tests run, manual checks, and
    any remaining residual risk.
 7. If the linked issue needs a PO, reviewer, or QA audience summary, delegate
-   that issue comment to `../ai-skills-issue-write-summary-comment/SKILL.md` instead of
+   that issue comment to skill `ai-skills-issue-write-summary-comment` instead of
    adding the whole audience summary to the PR body.
 8. Use `references/pr-description-template.md` as the baseline shape and
    `references/reviewer-focus.md` when deciding what belongs in review focus
    versus the implementation summary.
 9. Use `examples/pull-request-description.md` when a concrete GitHub-ready
    example helps.
-10. Hand the final draft to `ai-skills-formatting-github-comment` when Markdown
+10. Hand the final draft to skill `ai-skills-formatting-github-comment` when Markdown
     normalization is still needed before posting, applying repository-specific
     formatting rules only when they apply to the target repository.
 
@@ -75,7 +75,7 @@ validation, and residual risk easy to scan before review starts.
 - an issue-closing link such as `Closes #ISSUE_ID` when the PR has a linked
   issue
 - explicit note of non-goals and residual risk
-- a handoff to `../ai-skills-issue-write-summary-comment/SKILL.md` when the linked issue
+- a handoff to skill `ai-skills-issue-write-summary-comment` when the linked issue
   needs a PO, reviewer, or QA audience update
 - a concise artifact that can be posted directly to GitHub after formatting
 
@@ -86,7 +86,7 @@ validation, and residual risk easy to scan before review starts.
 - do not omit the issue-closing link when a PR has a linked issue
 - do not omit residual risk just because checks are green
 - do not turn the PR description into the PO/QA issue summary; use
-  `../ai-skills-issue-write-summary-comment/SKILL.md` for that audience
+  skill `ai-skills-issue-write-summary-comment` for that audience
 - do not broaden this skill into PR review-thread handling or merge decisions
 - do not emit literal `\n` escape sequences in Markdown meant for GitHub
 
@@ -95,7 +95,7 @@ validation, and residual risk easy to scan before review starts.
 - the PR scope is clear and tied to one implementation concern
 - the PR body links the issue when a linked issue exists
 - any required PO, reviewer, or QA issue-summary follow-up is delegated to
-  `../ai-skills-issue-write-summary-comment/SKILL.md`
+  skill `ai-skills-issue-write-summary-comment`
 - reviewers can tell what to skim and what to inspect closely
 - tests, manual checks, and residual risks are explicit
 - the description is concise enough to work as a GitHub PR body
