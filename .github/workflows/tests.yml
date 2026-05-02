@@ -48,8 +48,8 @@ jobs:
       - name: Package dry run
         run: corepack pnpm pack:dry-run
 
-  cognitive-typescript-gate:
-    name: cognitive-java Gate
+  quality-cognitive:
+    name: quality-cognitive
     runs-on: ubuntu-latest
 
     steps:
@@ -70,8 +70,8 @@ jobs:
       - name: Cognitive Complexity Gate
         run: corepack pnpm quality:cognitive
 
-  crap-typescript-gate:
-    name: crap-java Gate
+  quality-crap:
+    name: quality-crap
     runs-on: ubuntu-latest
 
     steps:
