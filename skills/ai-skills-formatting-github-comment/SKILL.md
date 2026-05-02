@@ -36,7 +36,7 @@ act on.
 - any formatting constraints such as brevity, required headings, or code blocks
 - PR description fields already selected by the caller, especially from
   skill `ai-skills-pr-write-description` or
-  skill `ai-skills-pr-write-description` when the
+  equivalent PR-description context when the
   target artifact is a PR summary or description
 - optional use of `references/markdown-comment-formatting.md` and the example
   files when the target artifact already matches one of those shapes

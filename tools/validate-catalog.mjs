@@ -395,15 +395,17 @@ async function validateCatalogPathReference(skillsDir, skillDir, sourceFile, ref
     return;
   }
 
-  const targetSkillId = skillIdForPath(skillsDir, resolvedReference);
+  const targetCatalogDir = topLevelCatalogDirName(skillsDir, resolvedReference);
   const sourceSkillId = path.basename(skillDir);
 
-  if (targetSkillId !== undefined && targetSkillId !== sourceSkillId) {
+  if (targetCatalogDir !== undefined && targetCatalogDir !== sourceSkillId) {
+    const referenceHint = CANONICAL_SKILL_ID_PATTERN.test(targetCatalogDir)
+      ? `; reference skill \`${targetCatalogDir}\` instead`
+      : "";
+
     errors.push({
       location: relativeToRepo(sourceFile),
-      message:
-        `cross-skill file reference is not allowed: ${reference}; `
-        + `reference skill \`${targetSkillId}\` instead`
+      message: `cross-skill file reference is not allowed: ${reference}${referenceHint}`
     });
     return;
   }
@@ -453,7 +455,8 @@ function validateCrossSkillReferenceSyntax(skillId, markdownFile, markdown, erro
       continue;
     }
 
-    const withoutPathReferences = stripCatalogPathReferences(line);
+    const withoutLinkTargets = stripMarkdownLinkTargets(line);
+    const withoutPathReferences = stripCatalogPathReferences(withoutLinkTargets);
     const withoutCanonicalReferences = withoutPathReferences.replaceAll(
       CANONICAL_SKILL_REFERENCE_PATTERN,
       ""
@@ -485,7 +488,11 @@ function stripCatalogPathReferences(line) {
   ));
 }
 
-function skillIdForPath(skillsDir, filePath) {
+function stripMarkdownLinkTargets(line) {
+  return line.replace(/(!?\[[^\]]*\])\(([^)]+)\)/gu, "$1");
+}
+
+function topLevelCatalogDirName(skillsDir, filePath) {
   const relativePath = path.relative(skillsDir, filePath);
 
   if (
@@ -496,10 +503,8 @@ function skillIdForPath(skillsDir, filePath) {
     return undefined;
   }
 
-  const [skillId] = relativePath.split(path.sep);
-  return CANONICAL_SKILL_ID_PATTERN.test(skillId)
-    ? skillId
-    : undefined;
+  const [directoryName] = relativePath.split(path.sep);
+  return directoryName;
 }
 
 function isPathInside(parent, child) {

@@ -15,7 +15,8 @@ order:
 Canonical severity guidance lives in
 skill `ai-skills-pr-review-write`. The ordering below is
 the response-triage view of that guidance; if the two ever appear to differ,
-follow `severity-order.md` and interpret this list consistently with it.
+follow skill `ai-skills-pr-review-write` and interpret this list consistently
+with it.
 
 1. correctness
 2. security
