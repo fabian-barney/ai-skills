@@ -13,18 +13,41 @@ const validatorScript = path.join(repoRoot, "tools", "validate-catalog.mjs");
 test("accepts a valid catalog skill", async () => {
   const skillsDir = await createTempSkillsDir();
   const skillDir = path.join(skillsDir, "ai-skills-example");
+  const helperSkillDir = path.join(skillsDir, "ai-skills-helper");
 
   await fs.mkdir(path.join(skillDir, "references"), { recursive: true });
+  await fs.mkdir(path.join(skillDir, "examples"), { recursive: true });
+  await fs.mkdir(helperSkillDir, { recursive: true });
   await fs.writeFile(path.join(skillDir, "references", "example.md"), "# Example\n");
   await fs.writeFile(
+    path.join(skillDir, "examples", "entry.md"),
+    [
+      "# Example Entry",
+      "",
+      "Proposed skill id/name: ai-skills-helper",
+      "Related skills or dependencies: skill `ai-skills-helper`",
+      ""
+    ].join("\n")
+  );
+  await fs.writeFile(
     path.join(skillDir, "SKILL.md"),
-    validSkillMarkdown("ai-skills-example", "- use `references/example.md` when needed\n")
+    validSkillMarkdown(
+      "ai-skills-example",
+      [
+        "- use `references/example.md` when needed",
+        "- use skill `ai-skills-helper` when additional orchestration is required"
+      ].join("\n")
+    )
+  );
+  await fs.writeFile(
+    path.join(helperSkillDir, "SKILL.md"),
+    validSkillMarkdown("ai-skills-helper")
   );
 
   const result = runValidator(skillsDir);
 
   assert.equal(result.status, 0);
-  assert.match(result.stdout, /Catalog validation passed for 1 skill\(s\)\./);
+  assert.match(result.stdout, /Catalog validation passed for 2 skill\(s\)\./);
   assert.equal(result.stderr, "");
 });
 
@@ -87,6 +110,105 @@ test("reports missing SKILL.md and broken local references", async () => {
   assert.ok(messages.some((message) => message.includes("required file is missing")));
   assert.ok(messages.some((message) =>
     message.endsWith("local catalog reference does not exist: references/missing.md")
+  ));
+});
+
+test("rejects cross-skill file paths and non-canonical skill references", async () => {
+  const skillsDir = await createTempSkillsDir();
+  const parentSkillDir = path.join(skillsDir, "ai-skills-parent");
+  const helperSkillDir = path.join(skillsDir, "ai-skills-helper");
+  const nonCanonicalSkillDir = path.join(skillsDir, "bad-skill");
+
+  await fs.mkdir(path.join(parentSkillDir, "examples"), { recursive: true });
+  await fs.mkdir(path.join(helperSkillDir, "references"), { recursive: true });
+  await fs.mkdir(path.join(nonCanonicalSkillDir, "references"), { recursive: true });
+  await fs.writeFile(path.join(helperSkillDir, "references", "policy.md"), "# Policy\n");
+  await fs.writeFile(path.join(nonCanonicalSkillDir, "references", "policy.md"), "# Policy\n");
+  await fs.writeFile(
+    path.join(parentSkillDir, "SKILL.md"),
+    validSkillMarkdown(
+      "ai-skills-parent",
+      [
+        "- use `../ai-skills-helper/SKILL.md` for helper behavior",
+        "- use `../ai-skills-helper/references/policy.md` for supporting policy",
+        "- use `../bad-skill/references/policy.md` for legacy policy"
+      ].join("\n")
+    )
+  );
+  await fs.writeFile(
+    path.join(parentSkillDir, "examples", "bad.md"),
+    [
+      "# Bad Example",
+      "",
+      "Related skills or dependencies: ai-skills-helper",
+      ""
+    ].join("\n")
+  );
+  await fs.writeFile(
+    path.join(helperSkillDir, "SKILL.md"),
+    validSkillMarkdown("ai-skills-helper")
+  );
+  await fs.writeFile(
+    path.join(nonCanonicalSkillDir, "SKILL.md"),
+    validSkillMarkdown("bad-skill")
+  );
+
+  const result = runValidator(skillsDir);
+  const messages = result.stderr.split("\n").filter((message) => message.length > 0);
+
+  assert.equal(result.status, 1);
+  assert.ok(messages.some((message) =>
+    message.includes("cross-skill file reference is not allowed")
+      && message.includes("reference skill `ai-skills-helper` instead")
+  ));
+  assert.ok(messages.some((message) =>
+    message.includes("cross-skill references must use the form skill `<skill-id>`")
+      && message.includes("ai-skills-helper")
+  ));
+  assert.ok(messages.some((message) =>
+    message.includes("cross-skill file reference is not allowed")
+      && message.includes("../bad-skill/references/policy.md")
+  ));
+});
+
+test("does not report a raw-skill syntax error for ids that appear only in link targets", async () => {
+  const skillsDir = await createTempSkillsDir();
+  const parentSkillDir = path.join(skillsDir, "ai-skills-parent");
+  const helperSkillDir = path.join(skillsDir, "ai-skills-helper");
+
+  await fs.mkdir(path.join(parentSkillDir, "examples"), { recursive: true });
+  await fs.mkdir(helperSkillDir, { recursive: true });
+  await fs.writeFile(
+    path.join(parentSkillDir, "SKILL.md"),
+    validSkillMarkdown("ai-skills-parent")
+  );
+  await fs.writeFile(
+    path.join(parentSkillDir, "examples", "link.md"),
+    [
+      "# Link Example",
+      "",
+      "- see [helper docs](../../ai-skills-helper/SKILL.md)",
+      ""
+    ].join("\n")
+  );
+  await fs.writeFile(
+    path.join(helperSkillDir, "SKILL.md"),
+    validSkillMarkdown("ai-skills-helper")
+  );
+
+  const result = runValidator(skillsDir);
+  const messages = result.stderr.split("\n").filter((message) => message.length > 0);
+
+  assert.equal(result.status, 1);
+  assert.equal(
+    messages.filter((message) =>
+      message.includes("cross-skill references must use the form skill `<skill-id>`")
+    ).length,
+    0
+  );
+  assert.ok(messages.some((message) =>
+    message.includes("cross-skill file reference is not allowed")
+      && message.includes("../../ai-skills-helper/SKILL.md")
   ));
 });
 

@@ -12,7 +12,7 @@ reviewer-facing response rather than only a code change
 Rough workflow or responsibilities: add a child skill that classifies the
 finding, drafts the response, and leaves merge or loop orchestration to later
 skills
-Related skills or dependencies: ai-skills-pr-review, ai-skills-pr-review-write, ai-skills-pr-review-loop
+Related skills or dependencies: skill `ai-skills-pr-review`, skill `ai-skills-pr-review-write`, skill `ai-skills-pr-review-loop`
 Source context or notes: captured while handling review findings on a company
 laptop without permission to create a central GitHub issue; transfer upstream to
 `ai-skills` issue triage when central GitHub access is available

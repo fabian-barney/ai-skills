@@ -32,14 +32,14 @@ during unrelated daily work.
 - use `examples/public-skill-improvement-issue.md` and
   `examples/local-skill-improvement-entry.md` when a concrete rendered example
   helps
-- use `ai-skills-skill-template` to normalize the canonical field set before rendering
-- use `ai-skills-formatting-github-comment` when the GitHub issue body still needs final
+- use skill `ai-skills-skill-template` to normalize the canonical field set before rendering
+- use skill `ai-skills-formatting-github-comment` when the GitHub issue body still needs final
   Markdown normalization
 
 # Inputs
 
 - the existing skill id or name
-- evidence that the target skill already exists; otherwise use `ai-skills-skill-new` for
+- evidence that the target skill already exists; otherwise use skill `ai-skills-skill-new` for
   a new skill candidate
 - the observed gap, defect, or missing guidance
 - why the improvement is reusable beyond the current task
@@ -60,7 +60,7 @@ during unrelated daily work.
    examples, or references.
 3. Use `references/improvement-triage.md` to decide whether the proposal should
    be captured centrally or kept as a downstream-project/local extension.
-4. Normalize the improvement with `ai-skills-skill-template`, using
+4. Normalize the improvement with skill `ai-skills-skill-template`, using
    `change-type: improve` and recording the target skill, motivation,
    reusability rationale,
    trigger conditions, rough improvement shape, related skills, source
@@ -74,7 +74,7 @@ during unrelated daily work.
    changelog/release-note entry, or explicit deferral.
 7. Render the canonical improvement entry for the chosen target without
    changing the underlying semantics.
-8. Hand GitHub-bound Markdown to `ai-skills-formatting-github-comment` when the rendered
+8. Hand GitHub-bound Markdown to skill `ai-skills-formatting-github-comment` when the rendered
    issue body still needs final normalization.
 9. Stop after the improvement proposal is captured and return any current
    implementation work to the normal agent workflow outside this skill.
@@ -90,7 +90,7 @@ during unrelated daily work.
 - do not implement the skill improvement inside this capture workflow
 - do not create a central backlog item for a purely repo-local private skill
 - do not use `change-type: improve` when the target skill does not already
-  exist; use `ai-skills-skill-new` instead
+  exist; use skill `ai-skills-skill-new` instead
 - do not make GitHub the only supported storage target
 - do not let central backlog capture block the current task
 - do not silently change the canonical field set between renderings

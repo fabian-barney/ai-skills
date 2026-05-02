@@ -1,6 +1,6 @@
 # Example New Skill Backlog Entry
 
-- `title`: Add `ai-skills-quality-sonar`
+- `title`: Add skill `ai-skills-quality-sonar`
 - `change-type`: `new`
 - `skill-id-or-name`: `ai-skills-quality-sonar`
 - `problem-or-motivation`: capture Sonar-based quality checks as a reusable
@@ -10,8 +10,8 @@
 - `when-to-use`: when Sonar profiles or rules influence quality gates
 - `workflow-or-responsibilities`: inspect changed scope, map relevant Sonar
   rules, and summarize actionable findings
-- `related-skills-or-dependencies`: `ai-skills-quality-cognitive-complexity`,
-  `ai-skills-quality-crap`, `ai-skills-gates-exit`
+- `related-skills-or-dependencies`: skill `ai-skills-quality-cognitive-complexity`,
+  skill `ai-skills-quality-crap`, skill `ai-skills-gates-exit`
 - `source-context-or-notes`: derived from issue body and local quality-gate
   setup
 - `status`: `idea`

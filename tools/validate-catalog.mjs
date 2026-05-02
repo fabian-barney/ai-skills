@@ -27,6 +27,15 @@ const IGNORED_SKILLS_ENTRIES = new Set([
 ]);
 
 const CANONICAL_SKILL_ID_PATTERN = /^ai-skills-[a-z0-9]+(?:-[a-z0-9]+)*$/u;
+const SKILL_ID_REFERENCE_PATTERN = /\b(ai-skills-[a-z0-9]+(?:-[a-z0-9]+)*)\b/gu;
+const CANONICAL_SKILL_REFERENCE_PATTERN =
+  /\bskill\s+`(ai-skills-[a-z0-9]+(?:-[a-z0-9]+)*)`/gu;
+const RAW_SKILL_ID_ALLOWED_LINE_PATTERNS = [
+  /^\s*name:\s*ai-skills-[a-z0-9]+(?:-[a-z0-9]+)*\s*$/u,
+  /^\s*[-*]\s*`?skill-id-or-name`?:\s*`?ai-skills-[a-z0-9]+(?:-[a-z0-9]+)*`?\s*$/u,
+  /^\s*skill-id-or-name:\s*`?ai-skills-[a-z0-9]+(?:-[a-z0-9]+)*`?\s*$/u,
+  /^\s*Proposed skill id\/name:\s*ai-skills-[a-z0-9]+(?:-[a-z0-9]+)*\s*$/iu
+];
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -110,7 +119,7 @@ async function validateSkillDirectory(skillsDir, skillId, errors) {
     validateSkillMarkdown(skillId, skillMarkdown, markdown, errors);
   }
 
-  await validateLocalReferences(skillsDir, skillDir, errors);
+  await validateMarkdownConventions(skillsDir, skillDir, skillId, errors);
 }
 
 async function readRequiredFile(filePath, errors) {
@@ -272,7 +281,7 @@ function validateSectionOrder(bodyLines, location, errors) {
   }
 }
 
-async function validateLocalReferences(skillsDir, skillDir, errors) {
+async function validateMarkdownConventions(skillsDir, skillDir, skillId, errors) {
   const markdownFiles = await findMarkdownFiles(skillDir, errors);
 
   for (const markdownFile of markdownFiles) {
@@ -288,9 +297,11 @@ async function validateLocalReferences(skillsDir, skillDir, errors) {
       continue;
     }
 
-    for (const reference of findLocalReferences(markdown)) {
-      await validateLocalReference(skillsDir, markdownFile, reference, errors);
+    for (const reference of findCatalogPathReferences(markdown)) {
+      await validateCatalogPathReference(skillsDir, skillDir, markdownFile, reference, errors);
     }
+
+    validateCrossSkillReferenceSyntax(skillId, markdownFile, markdown, errors);
   }
 }
 
@@ -321,7 +332,7 @@ async function findMarkdownFiles(directory, errors) {
   return files.sort();
 }
 
-function findLocalReferences(markdown) {
+function findCatalogPathReferences(markdown) {
   const references = new Set();
   const patterns = [
     /!?\[[^\]]*\]\(([^)]+)\)/gu,
@@ -332,7 +343,7 @@ function findLocalReferences(markdown) {
     for (const match of markdown.matchAll(pattern)) {
       const candidate = normalizeReference(match[1]);
 
-      if (candidate !== undefined && targetsCatalogAsset(candidate)) {
+      if (candidate !== undefined && targetsCatalogPath(candidate)) {
         references.add(candidate);
       }
     }
@@ -357,13 +368,21 @@ function normalizeReference(candidate) {
   return normalized;
 }
 
-function targetsCatalogAsset(reference) {
+function targetsCatalogPath(reference) {
+  if (!reference.includes("/") && !reference.includes("\\")) {
+    return false;
+  }
+
   return reference
     .split(/[\\/]+/u)
-    .some((segment) => REFERENCE_SEGMENTS.has(segment));
+    .some((segment) =>
+      REFERENCE_SEGMENTS.has(segment)
+      || segment === "SKILL.md"
+      || CANONICAL_SKILL_ID_PATTERN.test(segment)
+    );
 }
 
-async function validateLocalReference(skillsDir, sourceFile, reference, errors) {
+async function validateCatalogPathReference(skillsDir, skillDir, sourceFile, reference, errors) {
   const resolvedReference = reference.startsWith("skills/")
     ? path.resolve(path.dirname(skillsDir), reference)
     : path.resolve(path.dirname(sourceFile), reference);
@@ -372,6 +391,21 @@ async function validateLocalReference(skillsDir, sourceFile, reference, errors) 
     errors.push({
       location: relativeToRepo(sourceFile),
       message: `local catalog reference leaves skills directory: ${reference}`
+    });
+    return;
+  }
+
+  const targetCatalogDir = topLevelCatalogDirName(skillsDir, resolvedReference);
+  const sourceSkillId = path.basename(skillDir);
+
+  if (targetCatalogDir !== undefined && targetCatalogDir !== sourceSkillId) {
+    const referenceHint = CANONICAL_SKILL_ID_PATTERN.test(targetCatalogDir)
+      ? `; reference skill \`${targetCatalogDir}\` instead`
+      : "";
+
+    errors.push({
+      location: relativeToRepo(sourceFile),
+      message: `cross-skill file reference is not allowed: ${reference}${referenceHint}`
     });
     return;
   }
@@ -391,6 +425,86 @@ async function validateLocalReference(skillsDir, sourceFile, reference, errors) 
       message: `local catalog reference does not exist: ${reference}`
     });
   }
+}
+
+function validateCrossSkillReferenceSyntax(skillId, markdownFile, markdown, errors) {
+  const lines = markdown.replaceAll("\r\n", "\n").split("\n");
+  let inFrontmatter = false;
+  let frontmatterClosed = false;
+  let inCodeFence = false;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    if (!frontmatterClosed && trimmed === "---") {
+      inFrontmatter = !inFrontmatter;
+      frontmatterClosed = frontmatterClosed || !inFrontmatter;
+      continue;
+    }
+
+    if (trimmed.startsWith("```")) {
+      inCodeFence = !inCodeFence;
+      continue;
+    }
+
+    if (inFrontmatter || inCodeFence || !line.includes("ai-skills-")) {
+      continue;
+    }
+
+    if (allowsRawSkillIdLine(line)) {
+      continue;
+    }
+
+    const withoutLinkTargets = stripMarkdownLinkTargets(line);
+    const withoutPathReferences = stripCatalogPathReferences(withoutLinkTargets);
+    const withoutCanonicalReferences = withoutPathReferences.replaceAll(
+      CANONICAL_SKILL_REFERENCE_PATTERN,
+      ""
+    );
+    const otherSkillIds = [...withoutCanonicalReferences.matchAll(SKILL_ID_REFERENCE_PATTERN)]
+      .map((match) => match[1])
+      .filter((candidateSkillId) => candidateSkillId !== skillId);
+
+    if (otherSkillIds.length > 0) {
+      errors.push({
+        location: relativeToRepo(markdownFile),
+        message:
+          "cross-skill references must use the form skill "
+          + `\`<skill-id>\`: ${[...new Set(otherSkillIds)].join(", ")}`
+      });
+    }
+  }
+}
+
+function allowsRawSkillIdLine(line) {
+  return RAW_SKILL_ID_ALLOWED_LINE_PATTERNS.some((pattern) => pattern.test(line.trim()));
+}
+
+function stripCatalogPathReferences(line) {
+  return line.replace(/`([^`\n]+)`/gu, (match, candidate) => (
+    targetsCatalogPath(normalizeReference(candidate) ?? "")
+      ? ""
+      : match
+  ));
+}
+
+function stripMarkdownLinkTargets(line) {
+  return line.replace(/(!?\[[^\]]*\])\(([^)]+)\)/gu, "$1");
+}
+
+function topLevelCatalogDirName(skillsDir, filePath) {
+  const relativePath = path.relative(skillsDir, filePath);
+
+  if (
+    relativePath.length === 0
+    || relativePath.startsWith("..")
+    || path.isAbsolute(relativePath)
+  ) {
+    return undefined;
+  }
+
+  const [directoryName] = relativePath.split(path.sep);
+  return directoryName;
 }
 
 function isPathInside(parent, child) {

@@ -24,7 +24,7 @@ design document.
 - use `references/github-issue-publishing.md` when the description will be
   posted with `gh issue create` or `gh issue edit`
 - use `examples/implementation-issue.md` when a concrete issue-body shape helps
-- use `ai-skills-formatting-github-comment` after the content is decided and needs final
+- use skill `ai-skills-formatting-github-comment` after the content is decided and needs final
   GitHub Markdown normalization
 
 # Inputs
@@ -50,7 +50,7 @@ design document.
    issue through GitHub tooling.
 7. Use `examples/implementation-issue.md` when a concrete GitHub-ready shape
    helps.
-8. Hand the final draft to `ai-skills-formatting-github-comment` when Markdown
+8. Hand the final draft to skill `ai-skills-formatting-github-comment` when Markdown
    normalization is still needed before posting.
 
 # Outputs

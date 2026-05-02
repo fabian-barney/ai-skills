@@ -23,9 +23,9 @@ bounded implementation without changing externally observable behavior.
   acceptable justification when `100%` coverage is impossible
 - use `examples/refactoring-status.md` when reporting scope, evidence, and
   residual risks
-- coordinate with `../ai-skills-quality-cognitive-complexity/references/cognitive-complexity-threshold.md`
+- coordinate with skill `ai-skills-quality-cognitive-complexity`
   when measuring or reducing cognitive complexity
-- coordinate with `../ai-skills-quality-crap/references/crap-threshold.md` when
+- coordinate with skill `ai-skills-quality-crap` when
   CRAP evidence exists
 
 # Inputs
@@ -53,10 +53,10 @@ bounded implementation without changing externally observable behavior.
 5. Remove or reduce duplication in the scoped implementation without extracting
    helpers that obscure domain intent.
 6. Reduce cognitive complexity for each scoped function to `<= 15`, using
-   `../ai-skills-quality-cognitive-complexity/references/cognitive-complexity-threshold.md`
+   skill `ai-skills-quality-cognitive-complexity`
    for evidence order and reduction tactics.
 7. Reduce CRAP score for each scoped function to `<= 8` when CRAP evidence is
-   available, using `../ai-skills-quality-crap/references/crap-threshold.md`.
+   available, using skill `ai-skills-quality-crap`.
 8. Apply the repository's code conventions, formatter, linter, and local helper
    patterns after the structural refactor is complete.
 9. Re-run the relevant tests and quality gates, then compare behavior evidence

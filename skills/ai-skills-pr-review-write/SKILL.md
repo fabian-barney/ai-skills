@@ -16,11 +16,11 @@ an implementer to act on.
 
 - use when leaving new findings on a PR or MR review
 - use when a review workflow needs precise line-level or file-level comments
-- use as the finding-writing child skill under `ai-skills-pr-review`
+- use as the finding-writing child skill under skill `ai-skills-pr-review`
 - use `references/finding-shape.md` for the canonical review-finding contract
 - use `references/severity-order.md` for severity-first prioritization
 - use `examples/review-finding.md` when a concrete finding example helps
-- use `ai-skills-formatting-github-comment` when the finding text still needs final
+- use skill `ai-skills-formatting-github-comment` when the finding text still needs final
   GitHub Markdown normalization
 
 # Inputs
@@ -51,7 +51,7 @@ an implementer to act on.
    why it matters, and actionable remediation.
 7. Keep the wording factual and decision-useful instead of vague or rhetorical.
 8. Use `examples/review-finding.md` when a concrete review comment shape helps.
-9. Hand the final wording to `ai-skills-formatting-github-comment` when GitHub Markdown
+9. Hand the final wording to skill `ai-skills-formatting-github-comment` when GitHub Markdown
    normalization is still needed.
 
 # Outputs

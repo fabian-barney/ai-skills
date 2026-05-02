@@ -41,7 +41,7 @@ returns stay concise, while rejecting nested or side-effect-heavy ternary usage.
 4. Simplify boolean-literal ternaries into direct boolean expressions when at
    least one branch is a literal boolean outcome.
 5. Keep guard-style ternaries readable and aligned with
-   `ai-skills-conventions-early-return`, including exceptional-case-first ordering when
+   skill `ai-skills-conventions-early-return`, including exceptional-case-first ordering when
    the ternary represents guard mapping.
 6. Use `examples/ternary-simplification.md` when communicating the expected
    transformation.

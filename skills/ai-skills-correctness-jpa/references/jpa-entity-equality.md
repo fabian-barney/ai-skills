@@ -11,5 +11,5 @@ Distilled from issue `#22` plus the shared JPA identity baseline.
 - Review the hash-code strategy together with the equality strategy so JPA
   lifecycle transitions do not create surprising behavior in sets or maps.
 
-Use `ai-skills-correctness-equals-hashcode` for the general contract and this reference
+Use skill `ai-skills-correctness-equals-hashcode` for the general contract and this reference
 for the JPA-specific identity rules.

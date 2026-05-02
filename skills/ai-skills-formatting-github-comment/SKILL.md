@@ -35,8 +35,8 @@ act on.
 - whether the Markdown will be published through GitHub CLI or another API
 - any formatting constraints such as brevity, required headings, or code blocks
 - PR description fields already selected by the caller, especially from
-  `../ai-skills-pr-write-description/SKILL.md` or
-  `../ai-skills-pr-write-description/references/pr-description-template.md` when the
+  skill `ai-skills-pr-write-description` or
+  equivalent PR-description context when the
   target artifact is a PR summary or description
 - optional use of `references/markdown-comment-formatting.md` and the example
   files when the target artifact already matches one of those shapes
@@ -58,8 +58,8 @@ act on.
    body for literal `\n` markers before publishing.
 7. For PR descriptions and summaries, preserve and clearly format any PR fields
    or sections already provided by the input, draft, or
-   `../ai-skills-pr-write-description/references/pr-description-template.md`; defer
-   required-field selection to `../ai-skills-pr-write-description/SKILL.md`.
+   skill `ai-skills-pr-write-description`; defer
+   required-field selection to skill `ai-skills-pr-write-description`.
 8. Reuse `references/markdown-comment-formatting.md` for general formatting,
    `examples/github-comment.md` for full comments, and
    `examples/review-thread-reply.md` for short thread replies when they fit the
@@ -100,6 +100,6 @@ act on.
 - placeholder tokens are code-formatted instead of raw angle-bracket prose
 - no literal `\n` markers or accidental multi-blank-line runs remain
 - PR descriptions preserve applicable fields from the provided draft or
-  `../ai-skills-pr-write-description/references/pr-description-template.md`
+  skill `ai-skills-pr-write-description`
 - the result is concise enough for GitHub discussion flow
 - the output shape matches the intended GitHub artifact

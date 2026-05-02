@@ -1,7 +1,7 @@
 # Example Issue Create Flow
 
-1. Draft the issue body with `ai-skills-issue-write-description`.
-2. Normalize the Markdown with `ai-skills-formatting-github-comment` before publishing.
+1. Draft the issue body with skill `ai-skills-issue-write-description`.
+2. Normalize the Markdown with skill `ai-skills-formatting-github-comment` before publishing.
 3. Create the issue with `gh issue create --body-file <path>`.
 4. If GitHub access is missing, keep the title and body as the fallback output.
 

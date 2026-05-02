@@ -26,8 +26,8 @@ problem.
 
 ## Related Skills or Dependencies
 
-- ai-skills-quality-crap
-- ai-skills-quality-cognitive-complexity
+- skill `ai-skills-quality-crap`
+- skill `ai-skills-quality-cognitive-complexity`
 
 ## Source Context or Notes
 

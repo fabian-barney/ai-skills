@@ -24,8 +24,8 @@ not as rules to copy into downstream projects.
 - use when a repository needs its full release process executed end to end
 - use when artifact publication may target Maven Central, the Gradle Plugin
   Portal, a private artifactory, or another repository-specific release target
-- use when `ai-skills-release-github` is necessary but not sufficient on its own
-- use `../ai-skills-release-github/SKILL.md` for the full GitHub-release workflow,
+- use when skill `ai-skills-release-github` is necessary but not sufficient on its own
+- use skill `ai-skills-release-github` for the full GitHub-release workflow,
   including version selection, docs/changelog alignment, the release-prep
   commit and push, tag creation, and the GitHub Release itself
 - use `references/release-preconditions.md` for the final verification and
@@ -43,7 +43,7 @@ not as rules to copy into downstream projects.
 - documentation, changelog, and versioned example locations that must be
   updated
 - the artifact publication targets actually used by the repository
-- `../ai-skills-release-github/SKILL.md`
+- skill `ai-skills-release-github`
 - `references/release-preconditions.md`
 - `references/publication-targets.md`
 
@@ -57,7 +57,7 @@ not as rules to copy into downstream projects.
    policy text into downstream projects.
 4. Confirm versioned release examples and documentation references are known so
    the release can update them to the new tag.
-5. Apply `../ai-skills-release-github/SKILL.md` to perform the GitHub-release workflow,
+5. Apply skill `ai-skills-release-github` to perform the GitHub-release workflow,
    including version selection, changelog/docs alignment, release-prep commit,
    versioned-example updates, tag creation, push, and GitHub Release creation.
 6. Publish release artifacts only after tag creation and GitHub Release
@@ -95,7 +95,7 @@ not as rules to copy into downstream projects.
 
 - final build and test evidence are green and explicit
 - the selected version matches the documented delta from the previous release
-- `../ai-skills-release-github/SKILL.md` was applied for the GitHub release portion
+- skill `ai-skills-release-github` was applied for the GitHub release portion
 - versioned examples and documentation references were updated to the new tag or
   explicitly ruled out
 - tag creation completed before GitHub Release creation, and GitHub Release

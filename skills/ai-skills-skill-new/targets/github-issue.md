@@ -3,7 +3,7 @@
 ## Summary
 - Problem: repeated work keeps revealing a missing reusable skill for drafting
   dependency-compliance findings
-- Outcome: add a canonical backlog entry for a future `ai-skills-compliance-dependency`
+- Outcome: add a canonical backlog entry for a future skill `ai-skills-compliance-dependency`
   skill
 
 ## Scope

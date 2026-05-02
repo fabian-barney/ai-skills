@@ -29,8 +29,8 @@ important context.
   local Markdown storage
 - use `targets/github-issue.md` and `targets/local-backlog-entry.md` when a
   concrete rendered target artifact helps
-- use `ai-skills-skill-template` to normalize the canonical field set before rendering
-- use `ai-skills-formatting-github-comment` when the GitHub issue body still needs final
+- use skill `ai-skills-skill-template` to normalize the canonical field set before rendering
+- use skill `ai-skills-formatting-github-comment` when the GitHub issue body still needs final
   Markdown normalization
 
 # Inputs
@@ -53,7 +53,7 @@ important context.
    convention or implementation detail.
 2. Decide whether the candidate belongs in the public `ai-skills` backlog by
    using `references/public-skill-triage.md`.
-3. Normalize the idea with `ai-skills-skill-template`, including title, change type,
+3. Normalize the idea with skill `ai-skills-skill-template`, including title, change type,
    proposed skill id or name, motivation, reusability rationale, when to use,
    rough workflow, related skills, source context, and status.
 4. Choose the storage target with
@@ -64,7 +64,7 @@ important context.
 6. Use `targets/github-issue.md` and `targets/local-backlog-entry.md` as
    target-specific renderings of the canonical record when a concrete artifact
    shape helps.
-7. Hand GitHub-bound Markdown to `ai-skills-formatting-github-comment` when the rendered
+7. Hand GitHub-bound Markdown to skill `ai-skills-formatting-github-comment` when the rendered
    issue body still needs final normalization.
 8. Stop after the canonical backlog entry is recorded or rendered.
 

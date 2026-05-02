@@ -20,11 +20,11 @@ after the latest push has been reviewed.
 - use when the repository relies on an automated PR reviewer, such as GitHub
   Copilot review, after each push
 - use when multiple PRs can be progressed round-robin without idle waiting
-- use `../ai-skills-pr-review/SKILL.md` for family-root classification and closure
+- use skill `ai-skills-pr-review` for family-root classification and closure
   boundaries
-- use `../ai-skills-pr-review-respond/SKILL.md` for thread replies and finding
+- use skill `ai-skills-pr-review-respond` for thread replies and finding
   classification handling
-- use `../ai-skills-pr-merge/SKILL.md` for final merge gating and merge execution
+- use skill `ai-skills-pr-merge` for final merge gating and merge execution
 - use `references/review-loop-state.md` for the required per-PR state model and
   review-readiness gate
 - use `references/review-loop-queue.md` for round-robin queue behavior
@@ -45,9 +45,9 @@ after the latest push has been reviewed.
   issue-closing link
 - the intended bounded scope for each PR, used to detect unrelated bundled
   changes
-- `../ai-skills-pr-review/SKILL.md`
-- `../ai-skills-pr-review-respond/SKILL.md`
-- `../ai-skills-pr-merge/SKILL.md`
+- skill `ai-skills-pr-review`
+- skill `ai-skills-pr-review-respond`
+- skill `ai-skills-pr-merge`
 - `references/review-loop-state.md`
 - `references/review-loop-queue.md`
 - `references/copilot-review-trigger.md`
@@ -73,7 +73,7 @@ after the latest push has been reviewed.
 7. If checks are still running or a review is still in progress for the latest
    push, keep the PR active and continue with the next item.
 8. When the latest push has completed review results, apply
-   `../ai-skills-pr-review/SKILL.md` and `../ai-skills-pr-review-respond/SKILL.md` to classify
+   skill `ai-skills-pr-review` and skill `ai-skills-pr-review-respond` to classify
    findings, reply to each thread, fix valid issues, and resolve only the
    threads that were actually handled.
 9. If fixes were pushed, restart the same post-push review cycle for that PR
@@ -83,7 +83,7 @@ after the latest push has been reviewed.
    and the PR body contains the issue-closing link, then evaluate the
    review-readiness gate from `references/review-loop-state.md`.
 11. When the review-readiness gate passes and
-   `MERGE_AFTER_CLEAN_LOOP=true`, hand the PR to `../ai-skills-pr-merge/SKILL.md` for
+   `MERGE_AFTER_CLEAN_LOOP=true`, hand the PR to skill `ai-skills-pr-merge` for
    the remaining merge-policy checks and merge execution; otherwise report the
    blocking gate conditions or clean-but-unmerged status.
 12. Use `examples/review-loop-status.md` when communicating queue state,
@@ -97,7 +97,7 @@ after the latest push has been reviewed.
 - handled review threads with explicit valid, invalid, or unresolved treatment
 - issue-link and focused-scope status for each PR
 - merged PRs only when post-push review readiness is satisfied and
-  `../ai-skills-pr-merge/SKILL.md` allows merge execution
+  skill `ai-skills-pr-merge` allows merge execution
 
 # Guardrails
 
@@ -128,4 +128,4 @@ after the latest push has been reviewed.
   link in the PR body
 - remaining blockers are concrete, not generic
 - merged PRs passed the review-readiness gate in the same evaluation round,
-  and `../ai-skills-pr-merge/SKILL.md` then allowed merge execution
+  and skill `ai-skills-pr-merge` then allowed merge execution

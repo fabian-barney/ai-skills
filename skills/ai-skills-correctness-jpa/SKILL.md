@@ -18,7 +18,7 @@ unsaved entities.
   added, changed, or regenerated
 - use when a JPA entity's primary-key handling or persistence lifecycle affects
   equality semantics
-- use `../ai-skills-correctness-equals-hashcode/SKILL.md` for the general equality
+- use skill `ai-skills-correctness-equals-hashcode` for the general equality
   contract checks
 - use `references/jpa-entity-equality.md` for the JPA-specific unsaved-entity
   and primary-key rules
@@ -33,13 +33,13 @@ unsaved entities.
 - whether entity equality is handwritten, Lombok-generated, or IDE-generated
 - any bounded uses in sets, maps, or persistence-facing comparisons
 - `references/jpa-entity-equality.md`
-- `../ai-skills-correctness-equals-hashcode/SKILL.md`
+- skill `ai-skills-correctness-equals-hashcode`
 
 # Workflow
 
 1. Identify whether the bounded change touched JPA entity equality, hash-code
    generation, or the primary-key field set.
-2. Apply `../ai-skills-correctness-equals-hashcode/SKILL.md` to verify the general
+2. Apply skill `ai-skills-correctness-equals-hashcode` to verify the general
    equals/hashCode contract.
 3. Apply `references/jpa-entity-equality.md` to verify the JPA-specific
    identity rules:

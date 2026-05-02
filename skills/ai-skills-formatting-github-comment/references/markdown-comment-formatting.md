@@ -21,4 +21,4 @@ patterns.
   `\n` markers.
 - For PR summaries and descriptions, preserve and clearly format the fields
   already selected by the input, draft, or
-  `../../ai-skills-pr-write-description/references/pr-description-template.md`.
+  skill `ai-skills-pr-write-description`.

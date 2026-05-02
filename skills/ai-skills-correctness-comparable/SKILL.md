@@ -59,7 +59,7 @@ and does not violate the "consistent with equals" expectation.
   can return `0`
 - do not keep ordering based on unstable or semantically irrelevant fields
   without an explicit bounded rationale
-- do not use this skill as a substitute for `ai-skills-correctness-equals-hashcode` when
+- do not use this skill as a substitute for skill `ai-skills-correctness-equals-hashcode` when
   the bounded change also requires a full equality-contract review
 
 # Exit Checks

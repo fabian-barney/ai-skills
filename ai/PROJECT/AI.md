@@ -1,7 +1,8 @@
 # AI Project Notes
 
-Project-level AI guidance and ADRs will live under this directory as the
-repository evolves.
+Project-level AI guidance and ADRs live under this directory.
 
-Until then, the authoritative v1 skill format is defined in the repository root
-`spec.md`.
+The authoritative v1 skill format remains the repository root `spec.md`.
+
+The governing repository ADR for skill composition visibility is
+`ai/PROJECT/DECISIONS/0001-skill-private-bundle-visibility.md`.

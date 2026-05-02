@@ -16,8 +16,8 @@ handling review conversations, and deciding whether a thread may be resolved.
 - use when a PR or merge request (MR) review workflow is active
 - use when review comments or conversations need ownership or closure
   decisions
-- use as the family-root skill for later `ai-skills-pr-review-write`,
-  `ai-skills-pr-review-respond`, `ai-skills-pr-review-loop`, and `ai-skills-pr-merge` skills
+- use as the family-root skill for later skill `ai-skills-pr-review-write`,
+  skill `ai-skills-pr-review-respond`, skill `ai-skills-pr-review-loop`, and skill `ai-skills-pr-merge` skills
 - use `references/review-family-guardrails.md` for shared review-family
   guardrails
 - use `references/review-boundary.md` for the root-versus-child boundary

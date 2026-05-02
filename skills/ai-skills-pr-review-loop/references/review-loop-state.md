@@ -29,4 +29,4 @@ implicit pass.
 
 This gate only proves that the latest push was reviewed cleanly enough to be
 considered for merge. Repository merge-method policy and final merge execution
-still belong to `../../ai-skills-pr-merge/SKILL.md`.
+still belong to skill `ai-skills-pr-merge`.
