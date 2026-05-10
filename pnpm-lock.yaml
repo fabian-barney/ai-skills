@@ -12,8 +12,8 @@ importers:
         specifier: ^0.1.1
         version: 0.1.1(vitest@4.1.5)
       '@barney-media/crap-typescript-vitest':
-        specifier: ^0.2.3
-        version: 0.2.3(vitest@4.1.5)
+        specifier: ^0.3.0
+        version: 0.3.0(vitest@4.1.5)
       '@types/node':
         specifier: ^24.12.3
         version: 24.12.3
@@ -59,12 +59,12 @@ packages:
     peerDependencies:
       vitest: ^4.0.0
 
-  '@barney-media/crap-typescript-core@0.2.3':
-    resolution: {integrity: sha512-DMeQXoH9vLSUSfh3RDfvx9r/J7j/9Y/2IhdeAH6l7NtopxWnXngnUBj6WQ9zg5KnamHoTQnRfazR2CIoT/hOng==}
+  '@barney-media/crap-typescript-core@0.3.0':
+    resolution: {integrity: sha512-YhyMZYHm0MCHYLJG0lvaXDfqDCcHE6HknDr1fZiEjV0CRmeVCKtuV/L6QEgYjXvYpso7a/yDRuvxYfza66V+vA==}
     engines: {node: '>=18'}
 
-  '@barney-media/crap-typescript-vitest@0.2.3':
-    resolution: {integrity: sha512-fpAew37v8tVIesayuSe8PKIRQSfUz4EZMtdbT5lv10fsoufQKEk1ZkZg9ZUHkuvCKZLXwosLhas2EgFV1zs+ZA==}
+  '@barney-media/crap-typescript-vitest@0.3.0':
+    resolution: {integrity: sha512-FCVVWA4eoPWv5cmlRg7lWvk4my24/GtCRWgNeTvuS6oamTiNosIjmup4bUPIAGnJyYYIDTzJG3bgK9YqpY67Ew==}
     engines: {node: '>=18'}
     peerDependencies:
       vitest: ^4.0.0
@@ -97,6 +97,9 @@ packages:
     peerDependencies:
       '@emnapi/core': ^1.7.1
       '@emnapi/runtime': ^1.7.1
+
+  '@nodable/entities@2.1.0':
+    resolution: {integrity: sha512-nyT7T3nbMyBI/lvr6L5TyWbFJAI9FTgVRakNoBqCD+PmID8DzFrrNdLLtHMwMszOtqZa8PAOV24ZqDnQrhQINA==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -217,6 +220,9 @@ packages:
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
+
+  '@toon-format/toon@2.2.0':
+    resolution: {integrity: sha512-FMYqrlZnMN72YIT9KVt7Kxc41gat+RgMIzDmvRRPHw0J7pqW/FeBGDY/4BIWjT71Y+EdI9fCJip90uXuGuYhjw==}
 
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
@@ -361,6 +367,13 @@ packages:
   fast-glob@3.3.3:
     resolution: {integrity: sha512-7MptL8U0cqcFdzIzwOTHoilX9x5BrNqye7Z/LuC7kCMRio1EMSyqRK3BEAUD7sXRq4iT4AzTVuZdhgQ2TCvYLg==}
     engines: {node: '>=8.6.0'}
+
+  fast-xml-builder@1.2.0:
+    resolution: {integrity: sha512-00aAWieqff+ZJhsXA4g1g7M8k+7AYoMUUHF+/zFb5U6Uv/P0Vl4QZo84/IcufzYalLuEj9928bXN9PbbFzMF0Q==}
+
+  fast-xml-parser@5.7.3:
+    resolution: {integrity: sha512-C0AaNuC+mscy6vrAQKAc/rMq+zAPHodfHGZu4sGVehvAQt/JLG1O5zEcYcXSY5zSqr4YVgxsB+pHXTq0i7eDlg==}
+    hasBin: true
 
   fastq@1.20.1:
     resolution: {integrity: sha512-GGToxJ/w1x32s/D2EKND7kTil4n8OVk/9mycTc4VDza13lOvpUZTGX3mFSCtV9ksdGBVzvsyAVLM6mHFThxXxw==}
@@ -669,6 +682,10 @@ packages:
   parse-entities@4.0.2:
     resolution: {integrity: sha512-GG2AQYWoLgL877gQIKeRPGO1xF9+eG1ujIb5soS5gPvLQ1y2o8FL90w2QWNdf9I361Mpp7726c+lj3U0qK1uGw==}
 
+  path-expression-matcher@1.5.0:
+    resolution: {integrity: sha512-cbrerZV+6rvdQrrD+iGMcZFEiiSrbv9Tfdkvnusy6y0x0GKBXREFg/Y65GhIfm0tnLntThhzCnfKwp1WRjeCyQ==}
+    engines: {node: '>=14.0.0'}
+
   pathe@2.0.3:
     resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
 
@@ -739,6 +756,9 @@ packages:
   strip-ansi@7.2.0:
     resolution: {integrity: sha512-yDPMNjp4WyfYBkHnjIRLfca1i6KMyGCtsVgoKe/z1+6vukgaENdgGBZt+ZmKPc4gavvEZ5OgHfHdrazhgNyG7w==}
     engines: {node: '>=12'}
+
+  strnum@2.3.0:
+    resolution: {integrity: sha512-ums3KNd42PGyx5xaoVTO1mjU1bH3NpY4vsrVlnv9PNGqQj8wd7rJ6nEypLrJ7z5vxK5RP0yMLo6J/Gsm62DI5Q==}
 
   supports-color@7.2.0:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
@@ -870,6 +890,10 @@ packages:
     engines: {node: '>=8'}
     hasBin: true
 
+  xml-naming@0.1.0:
+    resolution: {integrity: sha512-k8KO9hrMyNk6tUWqUfkTEZbezRRpONVOzUTnc97VnCvyj6Tf9lyUR9EDAIeiVLv56jsMcoXEwjW8Kv5yPY52lw==}
+    engines: {node: '>=16.0.0'}
+
 snapshots:
 
   '@babel/helper-string-parser@7.27.1': {}
@@ -894,13 +918,15 @@ snapshots:
       '@barney-media/cognitive-typescript-core': 0.1.1
       vitest: 4.1.5(@types/node@24.12.3)(@vitest/coverage-v8@4.1.5)(vite@8.0.10(@types/node@24.12.3))
 
-  '@barney-media/crap-typescript-core@0.2.3':
+  '@barney-media/crap-typescript-core@0.3.0':
     dependencies:
+      '@toon-format/toon': 2.2.0
+      fast-xml-parser: 5.7.3
       typescript: 6.0.3
 
-  '@barney-media/crap-typescript-vitest@0.2.3(vitest@4.1.5)':
+  '@barney-media/crap-typescript-vitest@0.3.0(vitest@4.1.5)':
     dependencies:
-      '@barney-media/crap-typescript-core': 0.2.3
+      '@barney-media/crap-typescript-core': 0.3.0
       vitest: 4.1.5(@types/node@24.12.3)(@vitest/coverage-v8@4.1.5)(vite@8.0.10(@types/node@24.12.3))
 
   '@bcoe/v8-coverage@1.0.2': {}
@@ -936,6 +962,8 @@ snapshots:
       '@emnapi/runtime': 1.10.0
       '@tybys/wasm-util': 0.10.1
     optional: true
+
+  '@nodable/entities@2.1.0': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -1005,6 +1033,8 @@ snapshots:
   '@sindresorhus/merge-streams@4.0.0': {}
 
   '@standard-schema/spec@1.1.0': {}
+
+  '@toon-format/toon@2.2.0': {}
 
   '@tybys/wasm-util@0.10.1':
     dependencies:
@@ -1150,6 +1180,18 @@ snapshots:
       glob-parent: 5.1.2
       merge2: 1.4.1
       micromatch: 4.0.8
+
+  fast-xml-builder@1.2.0:
+    dependencies:
+      path-expression-matcher: 1.5.0
+      xml-naming: 0.1.0
+
+  fast-xml-parser@5.7.3:
+    dependencies:
+      '@nodable/entities': 2.1.0
+      fast-xml-builder: 1.2.0
+      path-expression-matcher: 1.5.0
+      strnum: 2.3.0
 
   fastq@1.20.1:
     dependencies:
@@ -1540,6 +1582,8 @@ snapshots:
       is-decimal: 2.0.1
       is-hexadecimal: 2.0.1
 
+  path-expression-matcher@1.5.0: {}
+
   pathe@2.0.3: {}
 
   picocolors@1.1.1: {}
@@ -1607,6 +1651,8 @@ snapshots:
   strip-ansi@7.2.0:
     dependencies:
       ansi-regex: 6.2.2
+
+  strnum@2.3.0: {}
 
   supports-color@7.2.0:
     dependencies:
@@ -1681,3 +1727,5 @@ snapshots:
     dependencies:
       siginfo: 2.0.0
       stackback: 0.0.2
+
+  xml-naming@0.1.0: {}
