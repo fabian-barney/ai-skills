@@ -5,6 +5,9 @@ import baseConfig from "./vitest.base.config";
 
 export default withCognitiveTypescriptVitest(
   withCrapTypescriptVitest(baseConfig, {
+    failuresOnly: true,
+    format: "text",
+    junit: false,
     packageManager: "pnpm",
     paths: ["src"],
     projectRoot: process.cwd()
