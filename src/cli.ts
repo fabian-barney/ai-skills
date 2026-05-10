@@ -222,20 +222,26 @@ async function resetTarget(
       await fs.mkdir(targetDir, { recursive: true });
     });
 
-    stagingDir = await withTargetContextResult(targetDir, "create staging directory", async () =>
-      fs.mkdtemp(path.join(targetDir, STAGING_DIR_PREFIX))
+    const createdStagingDir = await withTargetContextResult(
+      targetDir,
+      "create staging directory",
+      async () => fs.mkdtemp(path.join(targetDir, STAGING_DIR_PREFIX))
     );
-    await stagePackagedSkills(packagedSkillsDir, skillIds, stagingDir, targetDir);
+    stagingDir = createdStagingDir;
+    await stagePackagedSkills(packagedSkillsDir, skillIds, createdStagingDir, targetDir);
 
-    backupDir = await withTargetContextResult(targetDir, "create backup directory", async () =>
-      fs.mkdtemp(path.join(targetDir, BACKUP_DIR_PREFIX))
+    const createdBackupDir = await withTargetContextResult(
+      targetDir,
+      "create backup directory",
+      async () => fs.mkdtemp(path.join(targetDir, BACKUP_DIR_PREFIX))
     );
-    await moveExistingPackageOwnedSkills(targetDir, backupDir, backedUpSkillIds);
-    await moveStagedSkills(targetDir, stagingDir, skillIds, installedNewSkillIds);
+    backupDir = createdBackupDir;
+    await moveExistingPackageOwnedSkills(targetDir, createdBackupDir, backedUpSkillIds);
+    await moveStagedSkills(targetDir, createdStagingDir, skillIds, installedNewSkillIds);
 
-    await bestEffortRemove(backupDir);
+    await bestEffortRemove(createdBackupDir);
     backupDir = undefined;
-    await bestEffortRemove(stagingDir);
+    await bestEffortRemove(createdStagingDir);
     stagingDir = undefined;
   } catch (error) {
     await rollbackTargetReset(
@@ -396,8 +402,9 @@ async function listPackageOwnedTargetSkillIds(targetDir: string): Promise<string
     .sort();
 }
 
-const isEntrypoint = process.argv[1] !== undefined
-  && import.meta.url === pathToFileURL(resolve(process.argv[1])).href;
+const entrypointArg = process.argv[1];
+const isEntrypoint = entrypointArg !== undefined
+  && import.meta.url === pathToFileURL(resolve(entrypointArg)).href;
 
 if (isEntrypoint) {
   process.exitCode = await run();
