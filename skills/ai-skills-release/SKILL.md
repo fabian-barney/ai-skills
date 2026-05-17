@@ -25,6 +25,8 @@ not as rules to copy into downstream projects.
 - use when artifact publication may target Maven Central, the Gradle Plugin
   Portal, a private artifactory, or another repository-specific release target
 - use when skill `ai-skills-release-github` is necessary but not sufficient on its own
+- use skill `ai-skills-version-support-policy` when the release changes the
+  officially supported runtime or platform policy
 - use skill `ai-skills-release-github` for the full GitHub-release workflow,
   including version selection, docs/changelog alignment, the release-prep
   commit and push, tag creation, and the GitHub Release itself
@@ -40,6 +42,8 @@ not as rules to copy into downstream projects.
 - repository-specific release policy, versioning rules, and publication rules
 - the strongest available final build and test commands or CI evidence
 - the latest release tag and the delta since that release
+- any support-policy changes in the release scope that affect the published
+  artifact or compatibility claims
 - documentation, changelog, and versioned example locations that must be
   updated
 - the artifact publication targets actually used by the repository
@@ -55,19 +59,22 @@ not as rules to copy into downstream projects.
    not continue if the final verification is red or missing.
 3. Apply the repository-specific release policy as an input, without copying
    policy text into downstream projects.
-4. Confirm versioned release examples and documentation references are known so
+4. If support-policy decisions in the release scope are still open, apply
+   skill `ai-skills-version-support-policy` before finalizing the release
+   candidate.
+5. Confirm versioned release examples and documentation references are known so
    the release can update them to the new tag.
-5. Apply skill `ai-skills-release-github` to perform the GitHub-release workflow,
+6. Apply skill `ai-skills-release-github` to perform the GitHub-release workflow,
    including version selection, changelog/docs alignment, release-prep commit,
    versioned-example updates, tag creation, push, and GitHub Release creation.
-6. Publish release artifacts only after tag creation and GitHub Release
+7. Publish release artifacts only after tag creation and GitHub Release
    creation both succeed. Publish to each applicable target registry listed in
    `references/publication-targets.md`, such as Maven Central, the Gradle
    Plugin Portal, or a private artifactory, and record any target that is
    intentionally not applicable.
-7. Verify the published artifacts and release metadata so version numbers,
+8. Verify the published artifacts and release metadata so version numbers,
    tags, changelog entries, and published packages all match.
-8. Use `examples/release-checklist.md` when communicating the completed release
+9. Use `examples/release-checklist.md` when communicating the completed release
    steps or any blocked publication target.
 
 # Outputs
