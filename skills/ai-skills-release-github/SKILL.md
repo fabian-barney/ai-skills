@@ -19,6 +19,9 @@ annotated tags, and GitHub release notes aligned.
   user-visible changes since the latest tag
 - use when changelog content, tags, and GitHub release notes must describe the
   same release
+- use skill `ai-skills-version-dependency-selection` when framework,
+  build-tool, or dependency choices in the release scope still need explicit
+  version selection
 - use skill `ai-skills-version-support-policy` when the release also changes
   the officially supported runtime or platform matrix
 - use `references/version-selection.md` for semantic version bump selection
@@ -32,8 +35,8 @@ annotated tags, and GitHub release notes aligned.
 - confirmation that no open release-bound PRs remain
 - the latest reachable release tag and the merged changes since that tag
 - any explicit target version provided by the user or repository policy
-- any support-policy changes in the release scope that affect compatibility
-  claims
+- any framework, build-tool, dependency, or support-policy changes in the
+  release scope that affect compatibility claims
 - the changelog or strongest release-notes source for the repository
 - GitHub access capable of pushing tags and creating releases
 - `references/version-selection.md`
@@ -43,29 +46,32 @@ annotated tags, and GitHub release notes aligned.
 
 1. Ensure the default branch is current, all release-bound PRs are merged, and
    no open release-bound PRs remain; do not release from a feature branch.
-2. If the release changes officially supported runtimes or platforms and the
+2. If the release scope includes framework, build-tool, or dependency choices
+   that are not fixed yet, apply skill `ai-skills-version-dependency-selection`
+   before finalizing release timing or compatibility notes.
+3. If the release changes officially supported runtimes or platforms and the
    support policy is not explicit yet, apply skill `ai-skills-version-support-policy`
    before finalizing compatibility claims.
-3. Determine the target version: use an explicit version when provided;
+4. Determine the target version: use an explicit version when provided;
    otherwise classify the changes since the latest tag and select the smallest
    valid semantic-version bump that fits the strongest user-visible change.
-4. Stop if there are no meaningful release changes instead of creating an empty
+5. Stop if there are no meaningful release changes instead of creating an empty
    tag.
-5. Update the changelog or release-notes source with the selected version, the
+6. Update the changelog or release-notes source with the selected version, the
    release date, and a concise summary of user-visible changes.
-6. Run `git grep -F "<previous-tag>"` before creating the release commit,
+7. Run `git grep -F "<previous-tag>"` before creating the release commit,
    replacing `<previous-tag>` with the actual latest released version tag, for
    example `v1.2.3`. Update every versioned release example or documentation
    reference found so it points at the new tag.
-7. Stage the changelog or release-notes source and all versioned-example
+8. Stage the changelog or release-notes source and all versioned-example
    updates together.
-8. Commit the release-preparation changes on the default branch, create an
+9. Commit the release-preparation changes on the default branch, create an
    annotated tag for the release commit, and push both branch and tag.
-9. Create the GitHub Release from the pushed tag using notes that stay aligned
+10. Create the GitHub Release from the pushed tag using notes that stay aligned
    with the changelog or release-notes source. If both exist, treat the
    changelog as authoritative unless repository policy explicitly says
    otherwise.
-10. Verify that the tag and release page exist and point at the intended commit.
+11. Verify that the tag and release page exist and point at the intended commit.
 
 # Outputs
 
