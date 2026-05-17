@@ -30,8 +30,8 @@ and passed.
 # Inputs
 
 - the bounded diff, changed files, and implementation goal
-- confirmation that the complete applicable ai-rules and downstream rulesets
-  have been read before implementation/gate evaluation
+- confirmation that the complete applicable repository rulesets and downstream
+  extensions have been read before implementation/gate evaluation
 - the repository build and test commands or the strongest equivalent CI/local
   evidence
 - the behavior changes in the bounded scope and the tests added or updated for
@@ -68,9 +68,9 @@ when they materially apply to the bounded scope:
 
 ## Gate Evaluation
 
-1. Verify that the complete applicable ai-rules and downstream rulesets were
-   read before implementation and exit-gate evaluation. If not, read them before
-   continuing or mark the gate evaluation blocked.
+1. Verify that the complete applicable repository rulesets and downstream
+   extensions were read before implementation and exit-gate evaluation. If not,
+   read them before continuing or mark the gate evaluation blocked.
 2. Identify the bounded scope and determine which languages, frameworks,
    persistence paths, and quality signals are relevant.
 3. Evaluate the mandatory gates in the order from
