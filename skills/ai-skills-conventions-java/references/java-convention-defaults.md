@@ -1,6 +1,7 @@
 # Java Convention Defaults
 
-Distilled from issue `#13` plus the shared Java baseline in `ai-rules`.
+Distilled from issue `#13` plus the shared Java baseline in the governing
+rulesets.
 
 - Default to the focused Java leaf skills first:
   skill `ai-skills-conventions-null`, skill `ai-skills-conventions-lombok`,

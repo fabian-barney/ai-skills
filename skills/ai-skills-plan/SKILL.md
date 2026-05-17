@@ -34,8 +34,8 @@ implicit.
 
 - the user request and success criteria
 - relevant repository context, constraints, and existing implementation shape
-- applicable repository rulesets, including complete ai-rules and downstream
-  extension entrypoints when present
+- applicable repository rulesets and downstream extension entrypoints when
+  present
 - unresolved product or technical tradeoffs
 - any user answers that materially affect the plan
 - `references/decision-complete-plan.md`,
@@ -48,8 +48,8 @@ implicit.
 # Workflow
 
 1. Read the complete applicable rulesets before any other planning task,
-   including ai-rules and downstream extension rulesets when they govern the
-   target repository.
+   including downstream extension rulesets when they govern the target
+   repository.
 2. Explore the repository, issue history, semantic parent and sibling docs,
    architecture constraints, external dependencies, and blockers before asking
    questions that could be answered by inspection.
