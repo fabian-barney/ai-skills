@@ -40,8 +40,9 @@ forward as safely possible.
    surfaces they constrain.
 2. Gather the hard compatibility constraints from runtimes, frameworks,
    toolchains, peer dependencies, and repository policy.
-3. If the supported runtime or platform matrix is still undecided, apply skill `ai-skills-version-support-policy`
-   before locking incompatible choices.
+3. If the supported runtime or platform matrix is still undecided, apply
+   skill `ai-skills-version-support-policy` before locking incompatible
+   choices.
 4. Prefer explicit project policy when it already constrains a version.
 5. Otherwise prefer the newest stable compatible version, favoring maintained
    LTS lines when they materially improve runtime or toolchain stability.
