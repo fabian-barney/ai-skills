@@ -19,9 +19,8 @@ documentation, CI, and compatibility promises all align.
   support statement
 - use when adding or removing supported versions for a library, service, CLI,
   or application
-- use skill `ai-skills-version-dependency-selection` after support policy
-  decisions when supported versions constrain which frameworks, tools, or
-  dependencies remain viable
+- use before skill `ai-skills-version-dependency-selection` when supported
+  versions constrain which frameworks, tools, or dependencies remain viable
 
 # Inputs
 
