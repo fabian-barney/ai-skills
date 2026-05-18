@@ -36,8 +36,9 @@ repository can build, test, and evolve on an explicit stack.
    runtime, or toolchain choices.
 2. If framework, build-tool, or dependency versions are not fixed yet, apply
    skill `ai-skills-version-dependency-selection` before finalizing the stack.
-3. If official runtime or platform support is still unclear, apply skill `ai-skills-version-support-policy`
-   before finalizing supported versions.
+3. If official runtime or platform support is still unclear, apply
+   skill `ai-skills-version-support-policy` before finalizing supported
+   versions.
 4. Choose the minimal working scaffold, template, or manual setup approach
    that fits the project rather than adopting generator defaults blindly.
 5. Establish the baseline project structure and the commands needed for local
