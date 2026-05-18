@@ -61,22 +61,25 @@ not as rules to copy into downstream projects.
    not continue if the final verification is red or missing.
 3. Apply the repository-specific release policy as an input, without copying
    policy text into downstream projects.
-4. If dependency, framework, build-tool, or support-policy decisions in the
-   release scope are still open, apply the relevant version-family skills
-   before finalizing the release candidate.
-5. Confirm versioned release examples and documentation references are known so
+4. If dependency, framework, or build-tool choices in the release scope are
+   still open, apply skill `ai-skills-version-dependency-selection` before
+   finalizing the release candidate.
+5. If support-policy decisions in the release scope are still open, apply
+   skill `ai-skills-version-support-policy` before finalizing the release
+   candidate.
+6. Confirm versioned release examples and documentation references are known so
    the release can update them to the new tag.
-6. Apply skill `ai-skills-release-github` to perform the GitHub-release workflow,
+7. Apply skill `ai-skills-release-github` to perform the GitHub-release workflow,
    including version selection, changelog/docs alignment, release-prep commit,
    versioned-example updates, tag creation, push, and GitHub Release creation.
-7. Publish release artifacts only after tag creation and GitHub Release
+8. Publish release artifacts only after tag creation and GitHub Release
    creation both succeed. Publish to each applicable target registry listed in
    `references/publication-targets.md`, such as Maven Central, the Gradle
    Plugin Portal, or a private artifactory, and record any target that is
    intentionally not applicable.
-8. Verify the published artifacts and release metadata so version numbers,
+9. Verify the published artifacts and release metadata so version numbers,
    tags, changelog entries, and published packages all match.
-9. Use `examples/release-checklist.md` when communicating the completed release
+10. Use `examples/release-checklist.md` when communicating the completed release
    steps or any blocked publication target.
 
 # Outputs

@@ -16,7 +16,7 @@ forward as safely possible.
 # When to Use
 
 - use when bootstrapping or upgrading a project requires explicit version
-  choices for frameworks, runtimes, build tools, or dependencies
+  choices for frameworks, build tools, or dependencies
 - use when compatibility constraints, peer dependencies, or runtime support
   limits make version choice non-trivial
 - use skill `ai-skills-version-support-policy` when the supported runtime or
@@ -45,8 +45,10 @@ forward as safely possible.
 4. Prefer explicit project policy when it already constrains a version.
 5. Otherwise prefer the newest stable compatible version, favoring maintained
    LTS lines when they materially improve runtime or toolchain stability.
-6. Sequence framework, platform, and build-tool choices before ordinary
-   dependency upgrades because they constrain the rest of the stack.
+6. Sequence framework and build-tool choices before ordinary dependency
+   upgrades because they constrain the rest of the stack; treat runtime or
+   platform versions as input constraints from support policy or repository
+   policy rather than outputs owned by this skill.
 7. Apply skill `ai-skills-compliance-dependency` when governance, license, or
    stewardship risk matters to the decision.
 8. Record the selected versions, rejected candidates, and the concrete reason
@@ -64,7 +66,8 @@ forward as safely possible.
   stack constraints
 - do not skip peer, runtime, framework, or build-tool compatibility checks
 - do not treat prerelease, unstable, or EOL versions as default choices
-- do not broaden this skill into semantic release-version bump selection
+- do not broaden this skill into semantic release-version bump selection or
+  runtime or platform support-policy ownership
 
 # Exit Checks
 
@@ -72,5 +75,6 @@ forward as safely possible.
 - the newest stable viable option was preferred unless project policy says
   otherwise
 - framework and build-tool constraints were resolved before ordinary
-  dependency choices
+  dependency choices, and runtime or platform policy constraints were
+  respected
 - compliance or stewardship concerns were surfaced when they mattered
