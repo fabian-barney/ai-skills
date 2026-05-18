@@ -70,5 +70,5 @@ repository can build, test, and evolve on an explicit stack.
 - the framework, runtime, and toolchain choices are explicit
 - unresolved version-selection questions are settled or surfaced clearly
 - the baseline includes real development, build, and test entrypoints
-- accepted and overridden scaffold defaults are documented clearly enough for
-  follow-up work
+- accepted, overridden, and deferred scaffold defaults are documented clearly
+  enough for follow-up work
