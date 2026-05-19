@@ -26,6 +26,9 @@ Markdown records.
 - use `examples/new-skill-example.md`, `examples/improve-skill-example.md`, and
   `examples/new-skill.md` as examples of the canonical field set and its
   rendered output
+- use skill `ai-skills-conventions-prompt-caching` when the captured backlog
+  entry will lead to an implementation whose bundle is expected to be reused
+  across many invocations and the cached prefix matters
 
 # Inputs
 
