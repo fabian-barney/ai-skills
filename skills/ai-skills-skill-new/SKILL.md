@@ -30,6 +30,9 @@ important context.
 - use `targets/github-issue.md` and `targets/local-backlog-entry.md` when a
   concrete rendered target artifact helps
 - use skill `ai-skills-skill-template` to normalize the canonical field set before rendering
+- use skill `ai-skills-conventions-prompt-caching` when the new skill is meant
+  to be reused across many invocations and the bundle should be authored for
+  prompt-prefix cache hits
 - use skill `ai-skills-formatting-github-comment` when the GitHub issue body still needs final
   Markdown normalization
 

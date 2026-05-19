@@ -33,6 +33,9 @@ during unrelated daily work.
   `examples/local-skill-improvement-entry.md` when a concrete rendered example
   helps
 - use skill `ai-skills-skill-template` to normalize the canonical field set before rendering
+- use skill `ai-skills-conventions-prompt-caching` when the proposed improvement
+  changes bundle structure, section ordering, or reference content in ways that
+  affect prompt-prefix cache hits
 - use skill `ai-skills-formatting-github-comment` when the GitHub issue body still needs final
   Markdown normalization
 
