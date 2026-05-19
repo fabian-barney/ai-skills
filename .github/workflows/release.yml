@@ -40,8 +40,14 @@ jobs:
       - name: Build
         run: corepack pnpm build
 
-      - name: Test and quality gates
+      - name: Tests
         run: corepack pnpm test
+
+      - name: Cognitive complexity gate
+        run: corepack pnpm quality:cognitive
+
+      - name: CRAP gate
+        run: corepack pnpm quality:crap
 
       - name: Validate catalog
         run: corepack pnpm validate
@@ -49,7 +55,20 @@ jobs:
       - name: Package dry run
         run: corepack pnpm pack:dry-run
 
+      - name: Check if version is already published
+        id: published
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          if npm view "@barney-media/ai-skills@${version}" version >/dev/null 2>&1; then
+            echo "already_published=true" >> "${GITHUB_OUTPUT}"
+            echo "Version ${version} is already on npm; skipping publish."
+          else
+            echo "already_published=false" >> "${GITHUB_OUTPUT}"
+          fi
+
       - name: Publish to npm
+        if: steps.published.outputs.already_published == 'false'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish --access public
