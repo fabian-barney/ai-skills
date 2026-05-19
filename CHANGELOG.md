@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 - 2026-05-01
+## 0.1.0 - 2026-05-19
 
 Initial public release of `@barney-media/ai-skills`.
 
@@ -13,6 +13,8 @@ Initial public release of `@barney-media/ai-skills`.
   directories.
 - Added cross-platform package verification for Windows, macOS, and Linux.
 - Added internal catalog validation for build, package, and release verification.
+- Added the `ai-skills-conventions-prompt-caching` skill capturing Anthropic prompt-prefix caching conventions for
+  authoring stable, cacheable skill bundles.
 
 ### Install and Update Behavior
 

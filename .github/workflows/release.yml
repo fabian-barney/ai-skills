@@ -1,0 +1,85 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Publish Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
+        with:
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: corepack pnpm install --frozen-lockfile
+
+      - name: Verify release version
+        run: node ./scripts/verify-release-version.mjs "${GITHUB_REF_NAME}"
+
+      - name: Render release notes
+        run: node ./scripts/render-release-notes.mjs "${GITHUB_REF_NAME}" > release-notes.md
+
+      - name: Build
+        run: corepack pnpm build
+
+      - name: Tests
+        run: corepack pnpm test
+
+      - name: Cognitive complexity gate
+        run: corepack pnpm quality:cognitive
+
+      - name: CRAP gate
+        run: corepack pnpm quality:crap
+
+      - name: Validate catalog
+        run: corepack pnpm validate
+
+      - name: Package dry run
+        run: corepack pnpm pack:dry-run
+
+      - name: Check if version is already published
+        id: published
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          if npm view "@barney-media/ai-skills@${version}" version >/dev/null 2>&1; then
+            echo "already_published=true" >> "${GITHUB_OUTPUT}"
+            echo "Version ${version} is already on npm; skipping publish."
+          else
+            echo "already_published=false" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Publish to npm
+        if: steps.published.outputs.already_published == 'false'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public
+
+      - name: Create or update GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            gh release edit "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-file release-notes.md
+          else
+            gh release create "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-file release-notes.md
+          fi
