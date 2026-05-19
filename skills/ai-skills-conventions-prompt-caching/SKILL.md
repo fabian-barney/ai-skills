@@ -18,8 +18,8 @@ on repeated invocations.
 # When to Use
 
 - use when authoring or revising a skill bundle whose `SKILL.md` and any
-  references, examples, or templates files are intended to be reused
-  across many invocations
+  reference, example, or template files are intended to be reused across
+  many invocations
 - use when structuring a prompt that will be replayed with only minor
   per-request variations (different user input, different target file,
   different chosen example)
@@ -41,9 +41,10 @@ on repeated invocations.
 - the cache-hit and cache-creation token counts from recent runs when
   available, used to detect the antipattern of a breakpoint on changing
   content
-- the target Claude model and its minimum cacheable-prefix size
-  (Opus and Haiku require 4,096 tokens; Sonnet and older Opus require
-  1,024 tokens)
+- the target Claude model and its minimum cacheable-prefix size, as
+  published in Anthropic's current prompt-caching documentation; the
+  cache will not be used when the prefix is below the published
+  threshold even with a correct breakpoint
 - `references/cache-breakpoint-placement.md`
 - `references/skill-structure-for-caching.md`
 
@@ -74,9 +75,10 @@ on repeated invocations.
    `cache_read_input_tokens` should grow as cached prefixes are reused;
    persistently high `cache_creation_input_tokens` on every call means a
    breakpoint sits on changing content and must be moved earlier.
-8. Confirm the cacheable prefix meets the model's minimum size before
-   relying on caching. Below the threshold the cache will not be used
-   even with a correct breakpoint.
+8. Confirm the cacheable prefix meets the target model's minimum size as
+   published in the current Anthropic prompt-caching documentation
+   before relying on caching. Below the published threshold the cache
+   will not be used even with a correct breakpoint.
 9. For skill bundles, keep the SKILL.md section order from the catalog
    spec (Purpose → When to Use → Inputs → Workflow → Outputs →
    Guardrails → Exit Checks) and treat the bundle reference files as
@@ -104,7 +106,8 @@ on repeated invocations.
   references; keep variable content trailing
 - do not exceed four cache breakpoints in a single prompt
 - do not assume caching is active when the cacheable prefix is below the
-  model's minimum size threshold; verify by reading the usage block
+  target model's published minimum size threshold; verify by reading the
+  response usage block
 - do not edit reference, example, or template files inside a skill bundle
   as part of normal per-request work; treat them as immutable between
   releases so the cached prefix stays valid
@@ -118,7 +121,8 @@ on repeated invocations.
 - the last `cache_control` breakpoint sits on a byte-stable block, not on
   changing content
 - the total number of breakpoints is at most four
-- the cacheable prefix meets the target model's minimum token threshold
+- the cacheable prefix meets the target model's published minimum token
+  threshold
 - a representative invocation shows `cache_read_input_tokens` growing on
   reuse and `cache_creation_input_tokens` falling toward zero after the
   first warm-up call

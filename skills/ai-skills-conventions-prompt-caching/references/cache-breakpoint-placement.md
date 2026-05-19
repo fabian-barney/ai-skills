@@ -21,9 +21,10 @@ authoring.
 - For multi-turn conversations the automatic breakpoint advances per
   request; do not hand-place additional breakpoints per turn unless a
   cadence band needs its own breakpoint.
-- Confirm the cacheable prefix meets the model minimum: Claude Opus and
-  Haiku require 4,096 tokens, Sonnet and older Opus require 1,024 tokens.
-  Below the threshold the cache will not be used even with a correct
+- Confirm the cacheable prefix meets the target model's published
+  minimum cacheable-prefix size. Anthropic's current prompt-caching
+  documentation is the source of truth for per-model thresholds; below
+  the published threshold the cache will not be used even with a correct
   breakpoint.
 - Use the response `usage` block to verify placement:
   `cache_read_input_tokens` should grow as cached prefixes are reused;
