@@ -18,6 +18,8 @@ merge authority is explicit.
 - use when deciding whether a PR is merge-ready
 - use when executing a merge in a GitHub-based review workflow
 - use as the merge child skill under skill `ai-skills-pr-review`
+- use skill `ai-skills-pr-review-loop` when strict post-push automated-review
+  trigger discipline must be verified before merge
 - use `references/merge-gate.md` for the hard gate checklist
 - use `references/post-push-review.md` for the requirement that review must
   exist after the latest push
@@ -28,6 +30,9 @@ merge authority is explicit.
 
 - the current PR head commit and latest push timestamp
 - the latest review submission state after that push
+- when strict post-push automated review is required, evidence that the latest
+  head review came from the approved platform or API trigger flow rather than
+  ad-hoc PR comments
 - unresolved review threads or conversations
 - required status checks for the current head commit
 - repository merge permissions and policies
@@ -54,13 +59,18 @@ merge authority is explicit.
    `Closes #<id>`.
 6. Verify that a completed review exists after the latest push, not only before
    it.
-7. Verify that all required checks are green for the current head commit.
-8. Verify that no required review conversations remain unresolved.
-9. Verify that the merge method respects repository policy and never requires a
+7. If the repository requires strict post-push automated review discipline,
+   reject PR comments, `@copilot` mentions, or similar ad-hoc trigger evidence
+   as merge-readiness proof. Require evidence from skill `ai-skills-pr-review-loop`
+   or equivalent platform state showing that the latest head review came from
+   the approved trigger flow.
+8. Verify that all required checks are green for the current head commit.
+9. Verify that no required review conversations remain unresolved.
+10. Verify that the merge method respects repository policy and never requires a
    force, admin-bypass, or skipped required gate.
-10. Merge only when every gate in `references/merge-gate.md` is satisfied in the
+11. Merge only when every gate in `references/merge-gate.md` is satisfied in the
    same evaluation round.
-11. Use `examples/merge-decision.md` when a concrete decision summary helps.
+12. Use `examples/merge-decision.md` when a concrete decision summary helps.
 
 # Outputs
 
@@ -72,6 +82,9 @@ merge authority is explicit.
 # Guardrails
 
 - do not merge without a review pass after the latest push
+- do not treat PR comments, `@copilot` mentions, or other ad-hoc trigger
+  artifacts as sufficient merge evidence when the repository expects a proper
+  automated review trigger flow
 - do not merge without explicit user merge instruction
 - do not merge a PR you created or substantially authored unless the user gives
   the specific merge instruction and explicitly confirms repository owner
@@ -89,6 +102,9 @@ merge authority is explicit.
   confirmation
 - the PR body links the main issue
 - the latest push is covered by a completed review pass
+- when strict post-push automated review discipline is required, the latest
+  head review evidence comes from the approved trigger flow rather than a PR
+  comment convention
 - required checks are green on the current head
 - review threads are resolved according to repository policy
 - the merge decision is explicit and auditable
