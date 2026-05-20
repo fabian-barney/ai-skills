@@ -121,9 +121,9 @@ after the latest push has been reviewed.
   remain unresolved
 - do not trigger automated review through ad-hoc PR comments when the platform
   provides a proper API or workflow trigger
-- do not replace the approved `gh pr view` plus `gh api graphql
-  requestReviewsByLogin` flow with a weaker GitHub comment convention when
-  strict GitHub Copilot review is required
+- do not replace the approved `gh pr view` plus
+  `gh api graphql requestReviewsByLogin` flow with a weaker GitHub comment
+  convention when strict GitHub Copilot review is required
 - do not mention `@copilot` in PR comments
 - do not delete review comments to make threads disappear; resolve handled
   threads and preserve the history
