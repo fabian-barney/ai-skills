@@ -72,7 +72,7 @@ after the latest push has been reviewed.
    one through the platform API or configured review mechanism, then move on to
    the next item without blocking. For strict GitHub Copilot review loops,
    first capture the PR node id with `gh pr view --json id --jq .id`, then call
-   `gh api graphql` with `requestReviewsByLogin` for
+   `gh api graphql` using the `requestReviewsByLogin` mutation for
    `copilot-pull-request-reviewer`, and treat
    `references/copilot-review-trigger.md` as the copy-safe source for the exact
    mutation and verification steps.
