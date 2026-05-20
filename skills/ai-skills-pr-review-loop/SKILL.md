@@ -71,8 +71,9 @@ after the latest push has been reviewed.
 6. If the latest push does not yet have a submitted automated review, request
    one through the platform API or configured review mechanism, then move on to
    the next item without blocking. For strict GitHub Copilot review loops,
-   first capture the PR node id with `gh pr view --json id --jq .id`, then call
-   `gh api graphql` using the `requestReviewsByLogin` mutation for
+   first capture the PR node id with
+   `gh pr view <PR_NUMBER> --json id --jq .id`, then call `gh api graphql`
+   using the `requestReviewsByLogin` mutation for
    `copilot-pull-request-reviewer`, and treat
    `references/copilot-review-trigger.md` as the copy-safe source for the exact
    mutation and verification steps.
