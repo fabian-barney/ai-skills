@@ -18,6 +18,7 @@ review/check/thread state.
 For strict GitHub Copilot review loops, re-trigger review through the approved
 `gh pr view <PR_NUMBER> --json id --jq .id` plus `gh api graphql` flow using the
 `requestReviewsByLogin` mutation described in `copilot-review-trigger.md`
+under this skill's `references` directory
 after every fix push. Do not use PR comments or `@copilot` mentions as the
 trigger.
 
