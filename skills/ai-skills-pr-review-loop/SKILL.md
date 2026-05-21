@@ -37,13 +37,15 @@ after the latest push has been reviewed.
 - one or more active PRs with their latest head commits
 - session entry preferences when already answered:
   `RUN_REVIEW_LOOP`, `IMPLEMENT_AFTER_PLAN`, and `MERGE_AFTER_CLEAN_LOOP`
-- the latest push time, automated-review state, review threads, and required
-  checks for each PR
+- the latest push time, current head commit, automated-review state,
+  review-request timeline state, review threads, and required checks for each
+  PR
 - repository preferences about whether clean PRs should be merged
 - access to the PR platform APIs needed to request or inspect automated review
 - for strict GitHub Copilot review loops, access to
-  `gh pr view <PR_NUMBER> --json id --jq .id` and `gh api graphql` for the
-  approved review-request flow
+  `gh api graphql` to inspect current head review and timeline state plus
+  `gh pr view <PR_NUMBER> --json id --jq .id` for the approved manual
+  review-request flow
 - the main linked issue for each PR and whether the PR body contains an
   issue-closing link
 - the intended bounded scope for each PR, used to detect unrelated bundled
@@ -67,45 +69,65 @@ after the latest push has been reviewed.
 4. Process active items in round-robin order instead of waiting idly on a
    single PR.
 5. After each push, require fresh review state for that PR head: clear the
-   previous pass assumptions, inspect required checks, inspect unresolved
-   threads, and determine whether a post-push automated review already exists.
-6. If the latest push does not yet have a submitted automated review, request
-   one through the platform API or configured review mechanism, then move on to
-   the next item without blocking. For strict GitHub Copilot review loops,
-   first capture the PR node id with
-   `gh pr view <PR_NUMBER> --json id --jq .id`, then call `gh api graphql`
-   using the `requestReviewsByLogin` mutation for
+   previous pass assumptions, capture the current `headRefOid`, inspect
+   required checks, inspect unresolved threads, and inspect both submitted
+   automated reviews and review-request timeline evidence for that same head.
+6. If the current head already has a submitted automated review, treat that
+   head as `review-submitted` and continue with the latest review results.
+7. If the current head does not yet have a submitted automated review but a
+   visible automatic review request exists for that same head with no newer
+   removal event, treat that head as `review-request-pending` and continue with
+   the next item without re-triggering review.
+8. If the current head has neither a submitted automated review nor a pending
+   review request and fewer than 5 minutes have elapsed since `last-push-at`,
+   treat that head as `awaiting-automatic-review-signal` and continue with the
+   next item without blocking.
+9. If at least 5 minutes have elapsed since `last-push-at` and the current
+   head still has neither a submitted automated review nor a pending review
+   request, treat that head as `manual-review-request-eligible`, request
+   automated review once through the platform API or configured review
+   mechanism, record `last-review-requested-at` and
+   `last-review-requested-head-oid`, then move on to the next item without
+   blocking. For strict GitHub Copilot review loops, first capture the PR node
+   id with `gh pr view <PR_NUMBER> --json id --jq .id`, then call
+   `gh api graphql` using the `requestReviewsByLogin` mutation for
    `copilot-pull-request-reviewer`, and treat
    `references/copilot-review-trigger.md` as the copy-safe source for the exact
    mutation and verification steps.
-7. If checks are still running or a review is still in progress for the latest
-   push, keep the PR active and continue with the next item.
-8. When the latest push has completed review results, apply
+10. If checks are still running or a review is still in progress for the
+   latest push, keep the PR active and continue with the next item.
+11. When the latest push has completed review results, apply
    skill `ai-skills-pr-review` and skill `ai-skills-pr-review-respond` to classify
    handled findings as valid or invalid, reply to every handled thread, fix
    every valid finding, and resolve all handled threads before the round is
    complete.
-9. If fixes were pushed, restart the same post-push review cycle for that PR
-   instead of treating earlier review results as sufficient, and explicitly
-   re-trigger automated review for the new head commit. For strict GitHub
-   Copilot review loops, repeat the same approved `gh` CLI / GraphQL flow
-   instead of using PR comments or `@copilot` mentions.
-10. If no fixes were needed, verify the PR remains focused on the linked issue
+12. If fixes were pushed, restart the same post-push review cycle for that PR
+   instead of treating earlier review results as sufficient. Do not send a
+   second explicit manual review request for the same head unless the head
+   commit changed or review-request timeline evidence shows the pending request
+   was removed. For strict GitHub Copilot review loops, repeat the same
+   approved `gh` CLI / GraphQL flow instead of using PR comments or `@copilot`
+   mentions.
+13. If no fixes were needed, verify the PR remains focused on the linked issue
    and the PR body contains the issue-closing link, then evaluate the
    review-readiness gate from `references/review-loop-state.md`.
-11. When the review-readiness gate passes and
+14. When the review-readiness gate passes and
    `MERGE_AFTER_CLEAN_LOOP=true`, hand the PR to skill `ai-skills-pr-merge` for
    the remaining merge-policy checks and merge execution; otherwise report the
    blocking gate conditions or clean-but-unmerged status.
-12. Use `examples/review-loop-status.md` when communicating queue state,
+15. Use `examples/review-loop-status.md` when communicating queue state,
    remaining blockers, or clean completion.
 
 # Outputs
 
 - a per-PR status showing review state, remaining blockers, and merge
   readiness
-- explicit note when strict GitHub Copilot review was requested through the
-  approved `gh` / GraphQL flow for the latest head commit
+- explicit note when a current head is `awaiting-automatic-review-signal`,
+  `review-request-pending`, `review-submitted`, or
+  `manual-review-request-eligible`
+- explicit note when strict GitHub Copilot review was manually requested
+  through the approved `gh` / GraphQL flow for the latest head commit after
+  the 5-minute minimum from `last-push-at`
 - captured session preferences or explicit note that the loop was skipped
 - handled review threads with explicit valid or invalid classification,
   required replies, and final resolution
@@ -121,10 +143,16 @@ after the latest push has been reviewed.
 - do not treat a review that predates the latest push as sufficient for merge
 - do not wait idly on one PR when other active items can progress
 - do not use fixed wait timers as merge gates; use review/check/timeline state
+- do not manually request automated review before 5 minutes have elapsed since
+  `last-push-at`
+- do not send a second explicit manual review request for the same head while a
+  pending request for that head is still visible
 - do not merge while review is still running, checks are incomplete, or threads
   remain unresolved
 - do not trigger automated review through ad-hoc PR comments when the platform
   provides a proper API or workflow trigger
+- do not infer that no fresh review is pending from `latestReviews` alone when
+  richer timeline state is available
 - do not replace the approved `gh pr view` plus
   `gh api graphql` flow using the `requestReviewsByLogin` mutation with a
   weaker GitHub comment convention when strict GitHub Copilot review is
@@ -140,13 +168,16 @@ after the latest push has been reviewed.
 # Exit Checks
 
 - every active PR has an explicit current-state summary
+- every active PR state includes the current head commit and review-signal
+  state
 - session entry preferences were captured once or were already supplied by the
   user prompt
 - no PR is marked merge-ready without a completed post-push review for its
   latest head commit
 - when strict GitHub Copilot review is required, the latest head commit review
   came from the approved `gh` / GraphQL trigger flow or already-existing fresh
-  platform review state
+  platform review state, and any manual request honored the 5-minute minimum
+  from `last-push-at`
 - each merge-ready PR is focused on its linked issue and has an issue-closing
   link in the PR body
 - each completed review round classified handled findings as valid or invalid,
