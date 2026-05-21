@@ -18,7 +18,8 @@ For each child surface, record:
 3. final status
 4. handoff output for downstream bootstrap work, or `none` when the status did
    not yield one
-5. blocker, skip reason, or named gap when the status is not `completed`
+5. reason or rationale when the status is not `completed`, such as a blocker,
+   skip reason, out-of-scope rationale, or named gap
 
 Use these canonical surface names and record each exactly once:
 
