@@ -13,14 +13,16 @@ that same head, including `PullRequestCommit`, `ReviewRequestedEvent`, and
 `ReviewRequestRemovedEvent`. Do not rely on `latestReviews` alone as proof that
 no fresh review is pending.
 
+Treat `current-head-oid := headRefOid`.
+
 Decide the current head state in this order:
 
-1. If a submitted automated review is tied to the current `headRefOid`, treat
-   the head as `review-submitted`.
+1. If a submitted automated review is tied to the current `headRefOid` and was
+   submitted after `last-push-at`, treat the head as `review-submitted`.
 2. Otherwise, if a `ReviewRequestedEvent` is visible for the current
-   `headRefOid` after the latest push and no newer
-   `ReviewRequestRemovedEvent` cancels it, treat the head as
-   `review-request-pending`.
+   `headRefOid` after both `last-push-at` and the `PullRequestCommit` timeline
+   item for that head, and no newer `ReviewRequestRemovedEvent` cancels it,
+   treat the head as `review-request-pending`.
 3. Otherwise, if fewer than 5 minutes have elapsed since `last-push-at`, treat
    the head as `awaiting-automatic-review-signal`.
 4. Otherwise, treat the head as `manual-review-request-eligible`.

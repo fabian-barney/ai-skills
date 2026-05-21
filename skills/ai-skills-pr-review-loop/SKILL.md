@@ -72,12 +72,15 @@ after the latest push has been reviewed.
    previous pass assumptions, capture the current `headRefOid`, inspect
    required checks, inspect unresolved threads, and inspect both submitted
    automated reviews and review-request timeline evidence for that same head.
-6. If the current head already has a submitted automated review, treat that
-   head as `review-submitted` and continue with the latest review results.
+6. If the current head already has a submitted automated review tied to
+   `headRefOid` and submitted after `last-push-at`, treat that head as
+   `review-submitted` and continue with the latest review results.
 7. If the current head does not yet have a submitted automated review but a
-   visible automatic review request exists for that same head with no newer
-   removal event, treat that head as `review-request-pending` and continue with
-   the next item without re-triggering review.
+   visible automatic review request exists after both `last-push-at` and the
+   `PullRequestCommit` timeline item for `headRefOid`, with no newer
+   `ReviewRequestRemovedEvent` canceling that request, treat that head as
+   `review-request-pending` and continue with the next item without
+   re-triggering review.
 8. If the current head has neither a submitted automated review nor a pending
    review request and fewer than 5 minutes have elapsed since `last-push-at`,
    treat that head as `awaiting-automatic-review-signal` and continue with the

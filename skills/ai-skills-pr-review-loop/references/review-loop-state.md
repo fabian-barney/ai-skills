@@ -18,14 +18,17 @@ Track each active PR with at least these fields:
 
 Define `review-signal-state` as exactly one of:
 
+Treat `current-head-oid` as the current PR `headRefOid`.
+
 - `awaiting-automatic-review-signal`: fewer than 5 minutes have elapsed since
   `last-push-at`, no submitted automated review is visible for
   `current-head-oid`, and no pending review request is visible for that head
-- `review-request-pending`: a `ReviewRequestedEvent` is visible for
+- `review-request-pending`: a `ReviewRequestedEvent` is visible after both
+  `last-push-at` and the `PullRequestCommit` timeline item for
   `current-head-oid`, no newer `ReviewRequestRemovedEvent` cancels that
   request, and no submitted automated review is visible for that head yet
 - `review-submitted`: a submitted automated review is visible for
-  `current-head-oid`
+  `current-head-oid` and was submitted after `last-push-at`
 - `manual-review-request-eligible`: at least 5 minutes have elapsed since
   `last-push-at`, no submitted automated review is visible for
   `current-head-oid`, and no pending review request is visible for that head
@@ -33,7 +36,7 @@ Define `review-signal-state` as exactly one of:
 Use `last-review-requested-at` and `last-review-requested-head-oid` to record
 the most recent explicit manual review request issued by the loop so duplicate
 same-head triggers are prevented. A review request or review tied to an older
-head never satisfies `current-head-oid`.
+head, or predating `last-push-at`, never satisfies `current-head-oid`.
 
 The review-readiness gate passes only when all of these are true in the same
 evaluation round:
