@@ -5,10 +5,10 @@
 `ai-skills` is the canonical repository for reusable, tool-agnostic AI
 behavior.
 
-A skill is a reusable instruction bundle for a focused capability, convention,
-check, workflow, or review lens. Skills are lighter than full agents: they
-package portable behavior and optional supporting resources without prescribing
-a full runtime identity.
+A skill is a reusable instruction bundle for a focused capability, tooling
+default, convention, check, workflow, or review lens. Skills are lighter than
+full agents: they package portable behavior and optional supporting resources
+without prescribing a full runtime identity.
 
 This repository exists to:
 
@@ -68,13 +68,14 @@ Every canonical skill belongs to exactly one of these behavioral forms:
 
 ### Leaf Skills
 
-A leaf skill is a narrow reusable capability, convention, check, or review
-lens.
+A leaf skill is a narrow reusable capability, tooling default, convention,
+check, or review lens.
 
 Typical examples include:
 
 - `ai-skills-conventions-null`
 - `ai-skills-conventions-lombok`
+- `ai-skills-tooling-git-write`
 - `ai-skills-correctness-equals-hashcode`
 - `ai-skills-security-secrets`
 - `ai-skills-formatting-github-comment`
@@ -373,6 +374,7 @@ v1 deliberately does not add a separate metadata file such as `skill.yaml`.
 The current repository direction includes at least these families:
 
 - conventions
+- tooling
 - correctness
 - security
 - formatting

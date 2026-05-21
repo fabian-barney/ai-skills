@@ -35,6 +35,9 @@ not as rules to copy into downstream projects.
 - use skill `ai-skills-release-github` for the full GitHub-release workflow,
   including version selection, docs/changelog alignment, the release-prep
   commit and push, tag creation, and the GitHub Release itself
+- rely on skill `ai-skills-tooling-git-write` through
+  skill `ai-skills-release-github` so release-prep commits and known tag
+  messages do not depend on an interactive editor
 - use `references/release-preconditions.md` for the final verification and
   release input requirements
 - use `references/isolated-public-release.md` when public publication may need
@@ -144,6 +147,8 @@ not as rules to copy into downstream projects.
 - skill `ai-skills-release-github` was applied for the GitHub release portion
 - any isolated public-release branch contains only the scoped release change
   before tagging and publication
+- skill `ai-skills-tooling-git-write` was applied indirectly through
+  skill `ai-skills-release-github` when known release git-write messages existed
 - versioned examples and documentation references were updated to the new tag or
   explicitly ruled out
 - tag creation completed before GitHub Release creation, and GitHub Release
