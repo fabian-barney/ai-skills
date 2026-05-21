@@ -1,7 +1,7 @@
 # Support Policy Boundaries
 
 Use these categories explicitly instead of implying one broad compatibility
-claim.
+claim: officially supported, tested compatibility only, and unverified.
 
 ## Officially Supported
 

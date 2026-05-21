@@ -24,7 +24,7 @@ documentation, CI, and compatibility promises all align.
 - use before skill `ai-skills-release` when the release changes the official
   support matrix or deprecates a previously supported line
 - use `references/support-policy-boundaries.md` for the boundary between
-  official support, tested compatibility, and unverified versions
+  official support, tested compatibility only, and unverified versions
 
 # Inputs
 
@@ -47,8 +47,8 @@ documentation, CI, and compatibility promises all align.
 4. When maintained LTS releases exist, default official support to maintained
    LTS lines rather than non-LTS lines unless project policy requires broader
    support.
-5. Distinguish official support, tested compatibility, and unverified versions
-   instead of collapsing them into one claim. Use
+5. Distinguish official support, tested compatibility only, and unverified
+   versions instead of collapsing them into one claim. Use
    `references/support-policy-boundaries.md` for concrete boundary examples.
 6. If the project still needs framework, build-tool, or dependency version
    choices within the chosen support window, hand off to skill `ai-skills-version-dependency-selection`
@@ -84,8 +84,8 @@ documentation, CI, and compatibility promises all align.
 
 - supported versions are explicit and justified
 - EOL and LTS status were considered explicitly
-- the boundary between official support, tested compatibility, and unverified
-  versions is explicit
+- the boundary between official support, tested compatibility only, and
+  unverified versions is explicit
 - CI and documentation implications of the support policy are clear
 - any dependency-selection or release handoff triggered by the support policy is
   explicit
