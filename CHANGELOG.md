@@ -2,6 +2,28 @@
 
 # Changelog
 
+## 0.2.1 - 2026-05-22
+
+### Changed
+
+- Tightened `ai-skills-version-dependency-selection` to require each direct
+  dependency's published runtime-version metadata to be cross-checked, the
+  runtime-floor intersection to be verified against the project floor with
+  explicit remediation when empty, and a recorded blocking reason when any
+  dependency lags registry `latest`; broadened the exit checks to cover both.
+- Tightened the PR review response closure contract across
+  `ai-skills-pr-review`, `ai-skills-pr-review-respond`, and
+  `ai-skills-pr-review-loop` so handled findings end only as `valid` or
+  `invalid`, every handled review comment receives a reply, every valid
+  finding is fixed before completion, and handled threads are resolved at
+  the end of the response cycle.
+- Added head-aware pending-review signal states to
+  `ai-skills-pr-review-loop`, required at least 5 minutes after the last
+  push before any manual review request, and preserved round-robin parallel
+  progress while waiting for automatic review signals.
+- Added a file-local markdownlint configuration to `CHANGELOG.md` so
+  repeated release section headings (e.g. `### Added`) remain valid.
+
 ## 0.2.0 - 2026-05-21
 
 ### Added
