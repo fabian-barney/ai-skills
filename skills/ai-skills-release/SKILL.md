@@ -45,12 +45,12 @@ not as rules to copy into downstream projects.
 
 # Inputs
 
-- the repository default branch with release-bound changes already merged
-- the latest released tag and the exact scoped release change when a public
+- the repository default branch with release-bound changes already merged, the
+  latest released tag, and the exact scoped release change when a public
   release may need isolation from unrelated unreleased work
 - repository-specific release policy, versioning rules, and publication rules
 - the strongest available final build and test commands or CI evidence
-- the latest release tag and the delta since that release
+- the delta since the latest release
 - any dependency, framework, build-tool, or support-policy changes in the
   release scope that affect the published artifact or support claims
 - documentation, changelog, and versioned example locations that must be
