@@ -69,8 +69,9 @@ annotated tags, and GitHub release notes aligned.
 6. Stop if there are no meaningful release changes instead of creating an empty
    tag.
 7. Verify the chosen release source contains only the intended scoped release
-   change set. Stop until the source is narrowed if unrelated unreleased work
-   would be included.
+   change set by inspecting the commits or file diff from the latest released
+   tag to that source. Stop until the source is narrowed if unrelated
+   unreleased work would be included.
 8. Update the changelog or release-notes source with the selected version, the
    release date, and a concise summary of user-visible changes.
 9. Run `git grep -F "<previous-tag>"` before creating the release commit,

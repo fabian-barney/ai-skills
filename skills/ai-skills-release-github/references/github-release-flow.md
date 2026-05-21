@@ -15,7 +15,9 @@ Preferred sequence:
    scoped release change
 3. verify the chosen release source is current for its intended scope and no
    release-bound PRs remain open for that scope
-4. stop if unrelated unreleased default-branch work would be included
+4. inspect the commits or file diff from the latest released tag to the chosen
+   release source and stop if unrelated unreleased default-branch work would be
+   included
 5. update release-notes source
 6. run `git grep -F "<previous-tag>"`, replacing `<previous-tag>` with the
    actual latest released tag, for example `v1.2.3`
