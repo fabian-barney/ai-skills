@@ -23,11 +23,16 @@ Preferred sequence:
    actual latest released tag, for example `v1.2.3`
 7. update every relevant versioned example or documentation reference to the new
    tag
-8. commit the release-preparation change on the chosen release source
-9. create the annotated tag on that commit
-10. push branch and tag
-11. create the GitHub Release from the pushed tag
-12. verify the tag and release page point at the same commit
+8. apply skill `ai-skills-tooling-git-write` so known release messages use
+   non-interactive git write commands
+9. create the release-preparation commit with `git commit -m "..."` for a
+   single-line message or `git commit -F <temp-file>` for a multi-line message
+10. create the annotated tag on that commit with
+    `git tag -a <tag> -m "..."` for a single-line tag message or
+    `git tag -a <tag> -F <temp-file>` for a multi-line tag message
+11. push branch and tag
+12. create the GitHub Release from the pushed tag
+13. verify the tag and release page point at the same commit
 
 When repository policy defines a release-note heading or formatting template,
 honor that policy rather than inventing a new layout during release.

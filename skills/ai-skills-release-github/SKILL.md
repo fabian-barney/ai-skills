@@ -22,6 +22,8 @@ annotated tags, and GitHub release notes aligned.
   user-visible changes since the latest released tag
 - use when changelog content, tags, and GitHub release notes must describe the
   same release
+- use skill `ai-skills-tooling-git-write` when the release flow will create a
+  release-preparation commit or annotated tag whose message is already known
 - use skill `ai-skills-version-dependency-selection` when framework,
   build-tool, or dependency choices in the release scope still need explicit
   version selection
@@ -46,6 +48,7 @@ annotated tags, and GitHub release notes aligned.
   release scope that affect compatibility claims
 - the changelog or strongest release-notes source for the repository
 - GitHub access capable of pushing tags and creating releases
+- skill `ai-skills-tooling-git-write`
 - `references/version-selection.md`
 - `references/github-release-flow.md`
 
@@ -83,15 +86,19 @@ annotated tags, and GitHub release notes aligned.
    example `v1.2.3`. Update every versioned release example or documentation
    reference found so it points at the new tag.
 10. Stage the changelog or release-notes source and all versioned-example
-   updates together.
-11. Commit the release-preparation changes on the chosen release source,
-   create an annotated tag for the release commit, and push both branch and
-   tag.
-12. Create the GitHub Release from the pushed tag using notes that stay aligned
-   with the changelog or release-notes source. If both exist, treat the
-   changelog as authoritative unless repository policy explicitly says
-   otherwise.
-13. Verify that the tag and release page exist and point at the intended commit.
+    updates together.
+11. Apply skill `ai-skills-tooling-git-write` so the release-preparation
+    commit and annotated tag use non-interactive git write commands when their
+    messages are already known.
+12. Commit the release-preparation changes on the chosen release source,
+    create an annotated tag for the release commit, and push both branch and
+    tag.
+13. Create the GitHub Release from the pushed tag using notes that stay
+    aligned with the changelog or release-notes source. If both exist, treat
+    the changelog as authoritative unless repository policy explicitly says
+    otherwise.
+14. Verify that the tag and release page exist and point at the intended
+    commit.
 
 # Outputs
 
@@ -115,6 +122,8 @@ annotated tags, and GitHub release notes aligned.
   source
 - do not skip the previous-tag `git grep` scan before the release-preparation
   commit
+- do not let the release-preparation commit or known tag message depend on an
+  interactive editor
 - do not let GitHub release notes drift from the authoritative changelog or
   release-notes source
 
@@ -130,6 +139,8 @@ annotated tags, and GitHub release notes aligned.
 - `git grep -F "<previous-tag>"` was run with the actual latest released tag and
   every relevant versioned example or documentation reference was updated or
   explicitly ruled out
+- skill `ai-skills-tooling-git-write` was applied when the release-preparation
+  commit or annotated tag message was already known
 - all changelog/release-notes and versioned-example updates were staged in the
   release-preparation commit before tagging
 - the release was created from the intended default-branch commit or justified
