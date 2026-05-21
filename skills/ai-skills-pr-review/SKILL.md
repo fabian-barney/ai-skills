@@ -9,7 +9,8 @@ description: >-
 # Purpose
 
 Define the canonical PR review responsibility boundary for classifying findings,
-handling review conversations, and deciding whether a thread may be resolved.
+handling review conversations, and deciding whether a thread may be resolved or
+must remain blocked.
 
 # When to Use
 
@@ -42,35 +43,38 @@ handling review conversations, and deciding whether a thread may be resolved.
 1. Verify that the applicable review ruleset-read gate has been satisfied
    before classifying or resolving findings. If evidence is missing, read the
    applicable review rules before continuing or stop with an explicit
-   unresolved precondition.
+   blocked precondition.
 2. Read the review state, changed scope, and active conversations.
 3. Determine whether the current actor is responsible for handling or resolving
    each thread.
 4. If conversation-resolution rules are missing or unclear, ask the
    user or maintainer whether the current actor may resolve review
    conversations and keep the thread open until that authority is clarified.
-5. Classify each finding as valid, invalid, or unresolved.
-6. Inherit severity ranking from the active child review skill when findings
+5. If ownership, evidence, or closure authority is missing, surface an
+   explicit blocked precondition instead of treating the finding as handled.
+6. Classify each handled finding as valid or invalid.
+7. Inherit severity ranking from the active child review skill when findings
    include severity, and aggregate those severities without redefining them in
    this root skill.
-7. Ensure each resolved thread has a final explanatory reply describing how it
+8. Ensure each resolved thread has a final explanatory reply describing how it
    was handled or why it was not addressed.
-8. Delegate detailed finding-writing, response, loop, or merge behavior to the
+9. Delegate detailed finding-writing, response, loop, or merge behavior to the
    specialized child skills when those are available.
-9. Use `references/review-family-guardrails.md` and
+10. Use `references/review-family-guardrails.md` and
    `references/review-boundary.md` to keep the root skill scoped correctly.
-10. Use `references/pr-review-loop-source.md` only for closure semantics that
+11. Use `references/pr-review-loop-source.md` only for closure semantics that
    belong in the root skill.
-11. Reuse `examples/thread-resolution.md` and
+12. Reuse `examples/thread-resolution.md` and
    `examples/resolution-comment.md` when they fit the current thread shape.
 
 # Outputs
 
-- a classified review state for the active findings
+- a classified review state for the handled findings
 - inherited child-skill severity ranking when severity-bearing findings are
   present
 - concise thread responses or closure decisions
-- an explicit list of unresolved items when ownership or evidence is missing
+- explicit blocked-precondition reasons when ownership, evidence, or closure
+  authority is missing
 
 # Guardrails
 
@@ -78,6 +82,7 @@ handling review conversations, and deciding whether a thread may be resolved.
 - do not classify review findings before the applicable review ruleset-read gate
   is satisfied
 - do not resolve review conversations when closure authority is unknown
+- do not treat a blocker as a third handled-finding classification state
 - do not redefine the severity model when a child review skill already owns it
 - do not close a thread without a final comment explaining the outcome
 - do not broaden this skill into full merge-loop orchestration
@@ -86,11 +91,13 @@ handling review conversations, and deciding whether a thread may be resolved.
 
 # Exit Checks
 
-- every handled thread has a classification
+- every handled thread has a valid or invalid classification
 - the applicable review ruleset-read gate was satisfied before review
   classification
 - severity-bearing findings preserve the child skill's severity model
 - every resolved thread has a final rationale comment
-- unclear ownership or unresolved responsibility are surfaced explicitly
+- unclear ownership or unresolved responsibility are surfaced explicitly as
+  blockers
 - missing closure authority is surfaced explicitly and leaves the thread open
+- blocked preconditions remain separate from handled-finding classification
 - no merge-loop or implementation behavior was silently inlined here
