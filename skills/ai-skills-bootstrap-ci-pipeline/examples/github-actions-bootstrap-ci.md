@@ -3,7 +3,8 @@
 Use one stable workflow category such as `CI` and keep the first required-check
 set small and durable.
 
-Replace each `REPLACE_WITH_REAL_*_COMMAND` token before running the example.
+Replace each `REPLACE_WITH_REAL_*_COMMAND` token and the
+`<default-branch>` placeholder before running the example.
 
 ```yaml
 name: CI

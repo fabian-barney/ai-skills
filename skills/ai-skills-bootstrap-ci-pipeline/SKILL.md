@@ -64,12 +64,14 @@ vendor, framework, or deployment path.
    for registry or artifact publication; `tools` for manual helper jobs.
 7. If the target platform is GitHub Actions, group jobs under one workflow
    category such as `CI`, `Release`, or `Nightly`, use job `needs` for
-   ordering, and encode the stage family in job names such as `build`,
-   `test / unit`, `package`, `verify / integration`, `verify / owasp`,
-   `publish`, or `tools / ...`.
+   ordering, keep YAML job IDs valid and simple such as `test-unit` or
+   `verify-owasp`, and encode the stage family in job display names such as
+   `build`, `test / unit`, `package`, `verify / integration`,
+   `verify / owasp`, `publish`, or `tools / ...`.
 8. When GitHub required checks depend on Actions jobs, keep the combined check
    context, usually `<workflow name> / <job name>`, unique and stable so branch
-   protection stays unambiguous over time.
+   protection stays unambiguous over time. Treat `<job name>` as the job
+   display name from `jobs.<id>.name`, or the job ID when `name` is omitted.
 9. Prefer a stable required-check contract from the start, for example
    `CI / build`, `CI / test / unit`, `CI / package`, and
    `CI / verify / policy`, instead of renaming workflows or jobs casually after
@@ -105,7 +107,8 @@ vendor, framework, or deployment path.
   commands
 - the stage-family layout is explicit for the chosen CI platform
 - GitLab pipelines use the required stage order, or GitHub Actions workflows
-  encode the required analogue with `needs` and unique job names
+  encode the required analogue with `needs`, valid job IDs, and unique job
+  display names
 - required-check contexts are stable enough for branch protection or the
   blocker is surfaced explicitly
 - the supported runtime or platform matrix is explicit or an upstream blocker
