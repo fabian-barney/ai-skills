@@ -26,8 +26,10 @@ forward as safely possible.
   numbers alone
 - use skill `ai-skills-compliance-dependency` when dependency governance,
   license, or stewardship risk materially affects the choice
-- use skill `ai-skills-release` when the work also needs semantic release
-  version selection, release notes, tagging, or publication planning
+- use skill `ai-skills-release-github` when the work also needs GitHub release
+  version selection, release notes, or tagging
+- use skill `ai-skills-release` when the work also needs broader publication
+  planning beyond the GitHub release step
 - use `references/dependency-selection-boundaries.md` for positive examples and
   non-examples of what this skill owns
 
@@ -62,9 +64,11 @@ forward as safely possible.
    upgrades because they constrain the rest of the stack; treat runtime or
    platform versions as input constraints from support policy or repository
    policy rather than outputs owned by this skill.
-8. If the same change also needs semantic release-version selection, release
-   notes, tagging, or publication planning, hand off to skill `ai-skills-release`
-   instead of expanding this skill into release workflow ownership.
+8. If the same change also needs GitHub release version selection, GitHub
+   release notes, or tagging, hand off to skill `ai-skills-release-github`.
+   If broader publication planning is also in scope, hand off to
+   skill `ai-skills-release` instead of expanding this skill into release
+   workflow ownership.
 9. Apply skill `ai-skills-compliance-dependency` when governance, license, or
    stewardship risk matters to the decision.
 10. Record the selected versions, rejected candidates, and the concrete reason
