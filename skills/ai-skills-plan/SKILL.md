@@ -21,6 +21,8 @@ implicit.
   implementation path
 - use when repository or downstream rulesets must be read before implementation
   planning can be trusted
+- use skill `ai-skills-pr-review-loop` before finalizing any plan that includes
+  post-push review, review retriggering, or merge-loop work
 - use `references/decision-complete-plan.md` to make sure the plan is
   decision-complete
 - use `references/decision-complete-planning.md` for planning behavior and
@@ -57,20 +59,23 @@ implicit.
    important assumptions.
 4. Ask only the questions that materially change the plan or lock important
    tradeoffs.
-5. Produce a decision-complete plan covering approach, dependencies, edge
+5. If the plan includes post-push review, review retriggering, or merge-loop
+   work, consult skill `ai-skills-pr-review-loop` before finalizing the plan
+   and prohibit comment-based review triggers such as `@copilot review`.
+6. Produce a decision-complete plan covering approach, dependencies, edge
    cases, verification, and acceptance signals.
-6. If a user answer has significant impact on the plan, present the altered
+7. If a user answer has significant impact on the plan, present the altered
    plan before starting implementation instead of switching directly into
    coding.
-7. Use `references/decision-complete-plan.md` to confirm scope, decisions, and
+8. Use `references/decision-complete-plan.md` to confirm scope, decisions, and
    verification are explicit.
-8. Use `references/decision-complete-planning.md` and
+9. Use `references/decision-complete-planning.md` and
    `references/workflow-order.md` to refine planning behavior and sequencing.
-9. Use `examples/implementation-plan.md` when a concrete output shape or
+10. Use `examples/implementation-plan.md` when a concrete output shape or
    verification section is helpful.
-10. Re-read the complete applicable rulesets at the end and verify the plan
+11. Re-read the complete applicable rulesets at the end and verify the plan
     still conforms; if not, update the plan before presenting it as complete.
-11. Apply any target-specific note such as `targets/codex.md` only after the
+12. Apply any target-specific note such as `targets/codex.md` only after the
    canonical plan is stable.
 
 # Outputs
@@ -92,6 +97,8 @@ implicit.
   confirming conformance
 - do not ask questions that can be resolved by repository exploration
 - do not leave critical behavior, interfaces, or test strategy implicit
+- do not propose PR comments, `@copilot review`, or similar comment-based
+  review triggers in a plan; defer to skill `ai-skills-pr-review-loop`
 - do not treat a materially changed plan as unchanged after new answers arrive
 
 # Exit Checks
@@ -103,5 +110,7 @@ implicit.
   conformance
 - important assumptions are explicit
 - verification steps and acceptance signals are concrete
+- any plan with review-loop or merge-loop work consulted skill `ai-skills-pr-review-loop`
+  and avoided comment-based review triggers
 - any answer that materially changed the approach is reflected in the latest
   plan
