@@ -50,7 +50,16 @@ forward as safely possible.
    `references/dependency-selection-boundaries.md` when the boundary between
    version choice and adjacent work is unclear.
 2. Gather the hard compatibility constraints from runtimes, frameworks,
-   toolchains, peer dependencies, and repository policy.
+   toolchains, peer dependencies, each direct dependency's own published
+   runtime-version metadata, and repository policy. Read the direct
+   dependency metadata from the relevant ecosystem source, such as Node
+   `engines`, Python `requires-python`, Rust `rust-version`, JVM
+   enforcer/starter constraints, or the Go `go` directive. Compute the
+   intersection of those direct-dependency runtime constraints and verify that
+   the project's runtime floor satisfies it. If the intersection is empty or
+   excludes the current floor, raise the floor, replace or drop the offending
+   dependency, or record a deliberate exception with rationale before
+   continuing.
 3. If the supported runtime or platform matrix is still undecided, apply
    skill `ai-skills-version-support-policy` before locking incompatible
    choices.
@@ -58,8 +67,16 @@ forward as safely possible.
    undecided, hand off to skill `ai-skills-bootstrap-framework-setup` before
    finalizing detailed dependency versions.
 5. Prefer explicit project policy when it already constrains a version.
-6. Otherwise prefer the newest stable compatible version, favoring maintained
-   LTS lines when they materially improve runtime or toolchain stability.
+6. Otherwise prefer the newest stable compatible version for every direct
+   dependency, not only frameworks, runtimes, and build tools. When a direct
+   dependency trails the ecosystem's latest stable release, such as npm
+   `latest`, by a major version or by more than one minor in semver-style
+   ecosystems, or is otherwise materially behind in ecosystems without
+   comparable minor semantics, record the concrete blocking reason, such as
+   unmet peer constraints, breaking-change cost, or deliberate
+   sibling-repository coordination. Bare lag without a recorded reason is a
+   finding. Favor maintained LTS lines when they materially improve runtime or
+   toolchain stability.
 7. Sequence framework and build-tool choices before ordinary dependency
    upgrades because they constrain the rest of the stack; treat runtime or
    platform versions as input constraints from support policy or repository
@@ -71,8 +88,10 @@ forward as safely possible.
    workflow ownership.
 9. Apply skill `ai-skills-compliance-dependency` when governance, license, or
    stewardship risk matters to the decision.
-10. Record the selected versions, rejected candidates, and the concrete reason
-   each rejected candidate did not fit.
+10. Record the selected versions, rejected candidates, computed
+    direct-dependency runtime-constraint intersection, and the concrete reason
+    each rejected candidate, deferred latest stable release, or deliberate
+    exception did not fit.
 
 # Outputs
 
@@ -96,8 +115,12 @@ forward as safely possible.
 # Exit Checks
 
 - every selected version satisfies the known compatibility constraints
+- the direct-dependency runtime-constraint intersection was computed,
+  recorded, and satisfied by the project's runtime floor
 - the newest stable viable option was preferred unless project policy says
   otherwise
+- every direct dependency is either on the ecosystem's latest stable release
+  or has a recorded blocking reason for remaining behind
 - framework and build-tool constraints were resolved before ordinary
   dependency choices, and runtime or platform policy constraints were
   respected
