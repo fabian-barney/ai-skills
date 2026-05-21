@@ -4,6 +4,8 @@ Implementation work should follow a stable execution order:
 
 - read complete governing rulesets before any other planning task
 - plan first with dependency and blocker research
+- consult skill `ai-skills-pr-review-loop` before finalizing any plan that
+  includes post-push review, review retriggering, or merge-loop work
 - create a dedicated issue branch
 - implement the bounded change
 - open a PR or MR
@@ -14,3 +16,7 @@ Implementation work should follow a stable execution order:
 
 This keeps the scope aligned to one concern and prevents implementation from
 starting without an actionable plan.
+
+Plans that include PR review-loop work should name the approved review trigger
+workflow or defer to skill `ai-skills-pr-review-loop`; they should not propose
+PR comments such as `@copilot review`.
