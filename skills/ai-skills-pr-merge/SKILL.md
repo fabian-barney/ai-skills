@@ -61,9 +61,9 @@ merge authority is explicit.
    it.
 7. If the repository requires strict post-push automated review discipline,
    reject PR comments, `@copilot` mentions, or similar ad-hoc trigger evidence
-   as merge-readiness proof. Require evidence from skill `ai-skills-pr-review-loop`
-   or equivalent platform state showing that the latest head review came from
-   the approved trigger flow.
+   as merge-readiness proof. Require platform or API evidence showing that the
+   latest head review came from the approved trigger flow, using skill `ai-skills-pr-review-loop`
+   only as the verification procedure when needed.
 8. Verify that all required checks are green for the current head commit.
 9. Verify that no required review conversations remain unresolved.
 10. Verify that the merge method respects repository policy and never requires a
