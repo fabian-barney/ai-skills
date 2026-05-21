@@ -4,7 +4,8 @@ Use this reference when strict GitHub Copilot review is the configured
 automated review mechanism.
 
 After every fix push, explicitly request a fresh Copilot review for the PR head
-commit through the GitHub API. Do not use PR comments or `@copilot` mentions.
+commit through the approved `gh` CLI / GitHub GraphQL flow. Do not use PR
+comments or `@copilot` mentions.
 
 1. Capture the raw pull request node id:
 
@@ -29,3 +30,6 @@ commit through the GitHub API. Do not use PR comments or `@copilot` mentions.
 
 3. Verify a new review request or submitted review appears for the latest head
    commit before treating the PR as reviewed.
+
+Treat this flow as the authoritative trigger procedure whenever the main skill
+requires strict GitHub Copilot review re-triggering.
