@@ -81,8 +81,9 @@ not as rules to copy into downstream projects.
    path in `references/isolated-public-release.md` and create the release
    source from the latest released tag.
 7. On the isolated-release path, recreate or cherry-pick only the scoped
-   release change onto the isolated branch and stop until unrelated unreleased
-   work is excluded.
+   release change onto the isolated branch; stop if unrelated unreleased work
+   is still present and do not proceed until the isolated branch contains only
+   the scoped release change.
 8. Confirm versioned release examples and documentation references are known so
    the release can update them to the new tag.
 9. Apply skill `ai-skills-release-github` to perform the GitHub-release workflow,
