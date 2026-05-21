@@ -39,7 +39,7 @@ annotated tags, and GitHub release notes aligned.
   tag when skill `ai-skills-release` explicitly requires that narrower source
   as an input to this skill
 - confirmation that no open release-bound PRs remain
-- the latest reachable release tag and the merged changes since that tag
+- the latest released tag and the merged changes since that tag
 - any explicit target version provided by the user or repository policy
 - any framework, build-tool, dependency, or support-policy changes in the
   release scope that affect compatibility claims
@@ -129,6 +129,6 @@ annotated tags, and GitHub release notes aligned.
 - all changelog/release-notes and versioned-example updates were staged in the
   release-preparation commit before tagging
 - the release was created from the intended default-branch commit or justified
-  isolated release-branch commit
+  isolated release branch commit
 - unrelated unreleased work was excluded from the chosen release source
 - the published result is specific enough for downstream consumers to use

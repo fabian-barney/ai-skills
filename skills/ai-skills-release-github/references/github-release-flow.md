@@ -10,7 +10,7 @@ Keep these release artifacts aligned:
 Preferred sequence:
 
 1. treat the default branch as the normal release source
-2. if skill `ai-skills-release` explicitly passes an isolated release-branch
+2. if skill `ai-skills-release` explicitly passes an isolated release branch
    requirement into this flow, create that branch from the latest released tag
    and keep it limited to the scoped release change
 3. verify the chosen release source is current for its intended scope and no
