@@ -10,9 +10,9 @@ Keep these release artifacts aligned:
 Preferred sequence:
 
 1. treat the default branch as the normal release source
-2. if the parent release workflow explicitly requires an isolated release
-   branch, create it from the latest released tag and keep it limited to the
-   scoped release change
+2. if skill `ai-skills-release` explicitly passes an isolated release-branch
+   requirement into this flow, create that branch from the latest released tag
+   and keep it limited to the scoped release change
 3. verify the chosen release source is current for its intended scope and no
    release-bound PRs remain open for that scope
 4. inspect the commits or file diff from the latest released tag to the chosen
@@ -38,5 +38,5 @@ other one aligned or explicitly out of scope.
 
 An isolated release branch is an exception path for intentionally scoped
 releases. It is not a substitute for a dirty or lagging default branch and
-should only be used when the parent release workflow requires a release that
-excludes unrelated unreleased work.
+should only be used when skill `ai-skills-release` passes an explicit isolated
+source requirement into this flow so unrelated unreleased work stays out.

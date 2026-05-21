@@ -15,7 +15,7 @@ annotated tags, and GitHub release notes aligned.
 # When to Use
 
 - use when a repository needs a new GitHub release from its default branch
-- use when the parent release workflow intentionally requires an isolated
+- use when skill `ai-skills-release` intentionally requires an isolated
   release branch created from the latest released tag so unrelated unreleased
   default-branch work stays out of the release
 - use when a version must be chosen explicitly or inferred from merged
@@ -36,7 +36,8 @@ annotated tags, and GitHub release notes aligned.
 
 - the repository default branch with all release-bound changes already merged,
   or an intentionally isolated release branch created from the latest released
-  tag when the parent release workflow explicitly requires that narrower source
+  tag when skill `ai-skills-release` explicitly requires that narrower source
+  as an input to this skill
 - confirmation that no open release-bound PRs remain
 - the latest reachable release tag and the merged changes since that tag
 - any explicit target version provided by the user or repository policy
@@ -50,9 +51,9 @@ annotated tags, and GitHub release notes aligned.
 # Workflow
 
 1. Treat the default branch as the normal release source. Only use an isolated
-   release branch when the parent release workflow explicitly requires it;
-   create that branch from the latest released tag so unrelated unreleased
-   default-branch work is excluded.
+   release branch when skill `ai-skills-release` explicitly requires it and
+   passes that requirement into this skill; create that branch from the latest
+   released tag so unrelated unreleased default-branch work is excluded.
 2. Ensure the chosen release source is current for its intended scope, all
    release-bound PRs for that scope are merged or intentionally recreated on
    the isolated branch, and no open release-bound PRs remain; do not release
@@ -101,7 +102,7 @@ annotated tags, and GitHub release notes aligned.
 # Guardrails
 
 - do not release from a feature branch or dirty branch state
-- do not use an isolated release branch unless the parent release workflow
+- do not use an isolated release branch unless skill `ai-skills-release`
   explicitly requires it
 - do not release while open release-bound PRs remain
 - do not guess a version bump without checking the merged change set
@@ -117,7 +118,7 @@ annotated tags, and GitHub release notes aligned.
 
 - the target version is explicit and justified
 - the chosen release source is explicit and justified, and isolated-branch use
-  is backed by a parent release workflow requirement
+  is backed by an explicit skill `ai-skills-release` requirement
 - the default branch or isolated release source includes all release-bound work
   for the intended scope and no open release-bound PRs remain
 - changelog or release notes, tag, and GitHub Release all reference the same
