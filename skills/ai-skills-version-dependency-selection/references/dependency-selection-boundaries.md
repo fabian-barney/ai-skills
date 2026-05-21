@@ -5,8 +5,8 @@ inside known project constraints.
 
 ## Positive Examples
 
-- choose `Spring Boot 3.5.x` because it is the newest stable line compatible
-  with the project's supported Java version and plugin ecosystem
+- choose the latest stable `Spring Boot 3.x` minor compatible with the
+  project's supported Java version and plugin ecosystem
 - choose `pnpm 11.x` because the repository policy and toolchain support it,
   while `12.x` is not stable yet
 - choose `eslint 9.x` and compatible plugins because the current framework and

@@ -40,7 +40,6 @@ forward as safely possible.
 - security, compliance, or maintenance constraints that affect selection
 - whether the selection applies to bootstrap, routine maintenance, or a release
   scope
-- `references/dependency-selection-boundaries.md`
 
 # Workflow
 
