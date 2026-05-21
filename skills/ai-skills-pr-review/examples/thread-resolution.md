@@ -19,5 +19,5 @@ is already covered by the existing guard clause and regression test.
 Status: blocked precondition
 
 Final reply: Not resolving this conversation yet because the current review
-rules do not clearly assign ownership for closure. This does not count as
-completed handling until that authority is clarified.
+rules do not clearly grant closure authority to the current actor. This does
+not count as completed handling until that authority is clarified.

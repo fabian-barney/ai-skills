@@ -73,7 +73,7 @@ must remain blocked.
 - inherited child-skill severity ranking when severity-bearing findings are
   present
 - concise thread responses or closure decisions
-- explicit blocked-precondition reasons when ownership, evidence, or closure
+- explicit blocked precondition reasons when ownership, evidence, or closure
   authority is missing
 
 # Guardrails

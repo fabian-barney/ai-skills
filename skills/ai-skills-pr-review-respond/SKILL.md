@@ -84,7 +84,7 @@ that stops completion.
 - resolved handled review threads
 - checks run and explicit verification gaps for each addressed finding or
   response batch
-- explicit blocked-precondition reasons when evidence or closure authority is
+- explicit blocked precondition reasons when evidence or closure authority is
   missing
 
 # Guardrails
