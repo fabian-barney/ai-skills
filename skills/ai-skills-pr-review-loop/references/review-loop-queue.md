@@ -16,7 +16,7 @@ not merge because an arbitrary wait elapsed; merge only from explicit
 review/check/thread state.
 
 For strict GitHub Copilot review loops, re-trigger review through the approved
-`gh pr view --json id` plus `gh api graphql` flow using the
+`gh pr view <PR_NUMBER> --json id --jq .id` plus `gh api graphql` flow using the
 `requestReviewsByLogin` mutation described in `copilot-review-trigger.md`
 after every fix push. Do not use PR comments or `@copilot` mentions as the
 trigger.

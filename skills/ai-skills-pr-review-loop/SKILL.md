@@ -41,8 +41,9 @@ after the latest push has been reviewed.
   checks for each PR
 - repository preferences about whether clean PRs should be merged
 - access to the PR platform APIs needed to request or inspect automated review
-- for strict GitHub Copilot review loops, access to `gh pr view --json id`
-  and `gh api graphql` for the approved review-request flow
+- for strict GitHub Copilot review loops, access to
+  `gh pr view <PR_NUMBER> --json id --jq .id` and `gh api graphql` for the
+  approved review-request flow
 - the main linked issue for each PR and whether the PR body contains an
   issue-closing link
 - the intended bounded scope for each PR, used to detect unrelated bundled
