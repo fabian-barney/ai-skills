@@ -82,8 +82,9 @@ after the latest push has been reviewed.
    push, keep the PR active and continue with the next item.
 8. When the latest push has completed review results, apply
    skill `ai-skills-pr-review` and skill `ai-skills-pr-review-respond` to classify
-   findings, reply to each thread, fix valid issues, and resolve only the
-   threads that were actually handled.
+   handled findings as valid or invalid, reply to every handled thread, fix
+   every valid finding, and resolve all handled threads before the round is
+   complete.
 9. If fixes were pushed, restart the same post-push review cycle for that PR
    instead of treating earlier review results as sufficient, and explicitly
    re-trigger automated review for the new head commit. For strict GitHub
@@ -106,7 +107,8 @@ after the latest push has been reviewed.
 - explicit note when strict GitHub Copilot review was requested through the
   approved `gh` / GraphQL flow for the latest head commit
 - captured session preferences or explicit note that the loop was skipped
-- handled review threads with explicit valid, invalid, or unresolved treatment
+- handled review threads with explicit valid or invalid classification,
+  required replies, and final resolution
 - issue-link and focused-scope status for each PR
 - merged PRs only when post-push review readiness is satisfied and
   skill `ai-skills-pr-merge` allows merge execution
@@ -130,6 +132,8 @@ after the latest push has been reviewed.
 - do not mention `@copilot` in PR comments
 - do not delete review comments to make threads disappear; resolve handled
   threads and preserve the history
+- do not declare a review round complete while any handled thread lacks a
+  reply, any valid finding remains unfixed, or any handled thread remains open
 - do not resolve invalid findings without leaving a concise rationale first
 - do not merge a PR that lacks the required issue-closing link
 
@@ -145,6 +149,9 @@ after the latest push has been reviewed.
   platform review state
 - each merge-ready PR is focused on its linked issue and has an issue-closing
   link in the PR body
+- each completed review round classified handled findings as valid or invalid,
+  fixed all valid findings, replied to every handled thread, and resolved
+  handled threads
 - remaining blockers are concrete, not generic
 - merged PRs passed the review-readiness gate in the same evaluation round,
   and skill `ai-skills-pr-merge` then allowed merge execution

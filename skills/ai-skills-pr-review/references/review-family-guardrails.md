@@ -7,6 +7,9 @@ Distilled from the review, code review, and PR review loop guidance sources.
 - inherit severity ranking from the active child review skill when severity is
   present
 - keep evidence and rationale visible in the thread
+- reply to every handled review comment before considering the thread complete
 - resolve conversations only when ownership and closure conditions are met
-- keep unresolved or ambiguous findings visible
+- keep blockers such as missing evidence or missing closure authority visible
+- treat handled findings as `valid` or `invalid`, not as a third ambiguous
+  completion state
 - treat post-push review state and green checks as separate merge conditions
