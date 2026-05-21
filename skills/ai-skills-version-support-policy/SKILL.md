@@ -24,7 +24,7 @@ documentation, CI, and compatibility promises all align.
 - use before skill `ai-skills-release` when the release changes the official
   support matrix or deprecates a previously supported line
 - use `references/support-policy-boundaries.md` for the boundary between
-  official support, tested best-effort compatibility, and unverified versions
+  official support, tested compatibility, and unverified versions
 
 # Inputs
 
