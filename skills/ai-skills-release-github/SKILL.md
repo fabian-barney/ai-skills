@@ -106,7 +106,8 @@ annotated tags, and GitHub release notes aligned.
 - do not release from a feature branch or dirty branch state
 - do not use an isolated release branch unless skill `ai-skills-release`
   explicitly requires it
-- do not release while open release-bound PRs remain
+- do not release while open release-bound PRs remain for the chosen release
+  source and intended release scope
 - do not guess a version bump without checking the merged change set
 - do not create a release when there are no meaningful release changes
 - do not include unrelated unreleased default-branch work in the chosen release
