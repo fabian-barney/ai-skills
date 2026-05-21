@@ -69,12 +69,14 @@ forward as safely possible.
 5. Prefer explicit project policy when it already constrains a version.
 6. Otherwise prefer the newest stable compatible version for every direct
    dependency, not only frameworks, runtimes, and build tools. When a direct
-   dependency trails the registry `latest` release by a major version or by
-   more than one minor, record the concrete blocking reason, such as unmet
-   peer constraints, breaking-change cost, or deliberate sibling-repository
-   coordination. Bare lag without a recorded reason is a finding. Favor
-   maintained LTS lines when they materially improve runtime or toolchain
-   stability.
+   dependency trails the ecosystem's latest stable release, such as npm
+   `latest`, by a major version or by more than one minor in semver-style
+   ecosystems, or is otherwise materially behind in ecosystems without
+   comparable minor semantics, record the concrete blocking reason, such as
+   unmet peer constraints, breaking-change cost, or deliberate
+   sibling-repository coordination. Bare lag without a recorded reason is a
+   finding. Favor maintained LTS lines when they materially improve runtime or
+   toolchain stability.
 7. Sequence framework and build-tool choices before ordinary dependency
    upgrades because they constrain the rest of the stack; treat runtime or
    platform versions as input constraints from support policy or repository
@@ -88,7 +90,7 @@ forward as safely possible.
    stewardship risk matters to the decision.
 10. Record the selected versions, rejected candidates, computed
     direct-dependency runtime-constraint intersection, and the concrete reason
-    each rejected candidate, deferred `latest` version, or deliberate
+    each rejected candidate, deferred latest stable release, or deliberate
     exception did not fit.
 
 # Outputs
@@ -117,8 +119,8 @@ forward as safely possible.
   recorded, and satisfied by the project's runtime floor
 - the newest stable viable option was preferred unless project policy says
   otherwise
-- every direct dependency is either on the registry `latest` release or has a
-  recorded blocking reason for remaining behind
+- every direct dependency is either on the ecosystem's latest stable release
+  or has a recorded blocking reason for remaining behind
 - framework and build-tool constraints were resolved before ordinary
   dependency choices, and runtime or platform policy constraints were
   respected
