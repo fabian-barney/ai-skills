@@ -1,9 +1,9 @@
 ---
 name: ai-skills-tooling-git-write
 description: >-
-  Drive git write operations non-interactively when commit, tag, or generated
-  edit messages are already known, so automated workflows do not depend on an
-  editor staying open.
+  Drive git write operations non-interactively when commit, tag, or
+  Git-generated messages are already known, so automated workflows do not
+  depend on an editor staying open.
 ---
 <!-- markdownlint-disable MD025 -->
 
@@ -50,16 +50,19 @@ sessions.
 3. If a commit message is fully known and multi-line, write the message to a
    temp file and use `git commit -F <temp-file>` instead of opening an editor
    or embedding literal newline escapes.
-4. If an annotated tag message is fully known, use
+4. If an annotated tag message is fully known and single-line, use
    `git tag -a <tag> -m "..."` instead of bare `git tag -a <tag>`.
-5. If a merge, revert, or cherry-pick should keep Git's generated message
+5. If an annotated tag message is fully known and multi-line, write the
+   message to a temp file and use `git tag -a <tag> -F <temp-file>` instead of
+   opening an editor or forcing the message through repeated `-m` flags.
+6. If a merge, revert, or cherry-pick should keep Git's generated message
    without manual editing, add `--no-edit`.
-6. Reject bare editor-spawning git write commands when no manual editing is
+7. Reject bare editor-spawning git write commands when no manual editing is
    intended, such as bare `git commit`, bare `git tag -a <tag>`, or
    merge/revert/cherry-pick flows that rely on editor launch.
-7. Keep staging, branching, pushing, pull-request creation, and `gh` behavior
+8. Keep staging, branching, pushing, pull-request creation, and `gh` behavior
    outside this skill; let the caller own those concerns.
-8. Use `examples/release-git-write-sequence.md` when a parent workflow needs a
+9. Use `examples/release-git-write-sequence.md` when a parent workflow needs a
    concrete commit-and-tag illustration.
 
 # Outputs
@@ -67,6 +70,8 @@ sessions.
 - deterministic git write command shapes that do not depend on an interactive
   editor
 - temp-file-based multi-line commit creation when the commit message spans
+  multiple lines
+- temp-file-based multi-line annotated tag creation when the tag message spans
   multiple lines
 - explicit `--no-edit` usage when Git should keep its generated message
 - a review finding when a workflow still relies on bare editor-spawning git
@@ -79,6 +84,8 @@ sessions.
   preserved cleanly; use `-F <temp-file>`
 - do not use bare `git tag -a <tag>` when the annotated tag message is already
   known
+- do not force a multi-line annotated tag message through repeated `-m` flags;
+  use `-F <temp-file>`
 - do not widen this skill into staging strategy, branch naming, push policy, or
   GitHub CLI behavior
 - do not force `--no-edit` when the workflow explicitly requires manual message
@@ -90,8 +97,8 @@ sessions.
 
 - known commit messages use `-m` or `-F <temp-file>` instead of editor-driven
   commit creation
-- known annotated tag messages use `git tag -a <tag> -m "..."` instead of bare
-  annotated-tag creation
+- known annotated tag messages use `git tag -a <tag> -m "..."` or
+  `git tag -a <tag> -F <temp-file>` instead of bare annotated-tag creation
 - merge, revert, and cherry-pick flows use `--no-edit` when they should
   preserve Git's generated message
 - no unrelated git policy was pulled into the skill

@@ -7,8 +7,10 @@ manual editing.
 - `git commit -m "..."`: use for a fully known single-line commit message.
 - `git commit -F <temp-file>`: use for a fully known multi-line commit message
   with a subject and body already prepared.
-- `git tag -a <tag> -m "..."`: use for an annotated tag whose message is
-  already known.
+- `git tag -a <tag> -m "..."`: use for an annotated tag whose single-line
+  message is already known.
+- `git tag -a <tag> -F <temp-file>`: use for an annotated tag whose multi-line
+  message is already known.
 - `git merge --no-edit`, `git revert --no-edit`, and
   `git cherry-pick --no-edit`: use when Git's generated message should be kept
   without opening an editor.
