@@ -3,6 +3,9 @@
 Treat the PR as merge-ready only when all of the following are true:
 
 - a completed review exists after the latest push
+- when strict post-push automated review discipline is required, the latest
+  head review came from the approved platform or API trigger flow rather than
+  PR comments or `@copilot` mentions
 - no required review threads or conversations remain unresolved
 - all required checks are green on the current head commit
 - protected-branch discipline is satisfied by a feature branch and PR
