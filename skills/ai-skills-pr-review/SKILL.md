@@ -57,7 +57,7 @@ must remain blocked.
    include severity, and aggregate those severities without redefining them in
    this root skill.
 8. Ensure each resolved thread has a final explanatory reply describing how it
-   was handled or why it was not addressed.
+   was handled and why resolution is appropriate.
 9. Delegate detailed finding-writing, response, loop, or merge behavior to the
    specialized child skills when those are available.
 10. Use `references/review-family-guardrails.md` and
@@ -96,8 +96,7 @@ must remain blocked.
   classification
 - severity-bearing findings preserve the child skill's severity model
 - every resolved thread has a final rationale comment
-- unclear ownership or unresolved responsibility are surfaced explicitly as
-  blockers
+- unclear ownership or responsibility are surfaced explicitly as blockers
 - missing closure authority is surfaced explicitly and leaves the thread open
 - blocked preconditions remain separate from handled-finding classification
 - no merge-loop or implementation behavior was silently inlined here

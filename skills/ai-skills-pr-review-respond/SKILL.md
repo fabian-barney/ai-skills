@@ -51,21 +51,21 @@ that stops completion.
    before classifying findings or replying to threads, using parent workflow
    evidence or skill `ai-skills-plan`. If evidence is missing, stop with an
    explicit blocked precondition.
-2. Classify each handled finding as valid or invalid based on the current
+2. Confirm the available evidence is sufficient for a confident valid or
+   invalid classification. If not, stop with an explicit blocked precondition
+   instead of treating the finding as handled.
+3. Classify each handled finding as valid or invalid based on the current
    code, rules, and evidence, using this priority order when triaging:
    correctness, security, compliance, data integrity, architecture,
    performance, observability, then maintainability. Interpret this consistently
    with skill `ai-skills-pr-review-write`.
-3. For dependency-related findings, verify the dependency need, security risk,
+4. For dependency-related findings, verify the dependency need, security risk,
    license compatibility, and relevant transitive impact through
    skill `ai-skills-compliance-dependency` before classifying.
-4. For valid findings, apply a bounded fix before completion and prefer adding
+5. For valid findings, apply a bounded fix before completion and prefer adding
    a focused regression test or proof of behavior.
-5. For invalid findings, explain the concrete rationale instead of dismissing
+6. For invalid findings, explain the concrete rationale instead of dismissing
    the concern vaguely.
-6. If missing evidence, missing ruleset-read confirmation, or missing closure
-   authority prevents confident handling, stop with an explicit blocked
-   precondition instead of treating the finding as handled.
 7. Reply to every handled thread with the classification, concise outcome,
    checks run, and anything that remains unverified.
 8. Resolve every handled thread at the end of the response cycle. If
