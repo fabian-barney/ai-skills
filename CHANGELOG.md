@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.2.0 - 2026-05-21
+
+### Added
+
+- Added the `ai-skills-tooling-git-write` skill for non-interactive git
+  write commands across release and review flows.
+
+### Changed
+
+- Raised the minimum supported Node.js version to `>=22.12.0`
+  (Node 20 reached end of life on 2026-04-30).
+- Switched the release workflow to OIDC trusted publishing.
+- Refined guidance across bootstrap, release, PR review, PR merge,
+  plan, and version-policy skills (wording, guardrails, exit checks).
+
+### Removed
+
+- Dropped Node.js 20 support.
+
 ## 0.1.0 - 2026-05-19
 
 Initial public release of `@barney-media/ai-skills`.
