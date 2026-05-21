@@ -3,6 +3,8 @@
 Use one stable workflow category such as `CI` and keep the first required-check
 set small and durable.
 
+Replace each `REPLACE_WITH_REAL_*_COMMAND` token before running the example.
+
 ```yaml
 name: CI
 
@@ -18,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: <real build or install command>
+      - run: REPLACE_WITH_REAL_BUILD_OR_INSTALL_COMMAND
 
   test-unit:
     name: test / unit
@@ -27,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: <real unit-test command>
+      - run: REPLACE_WITH_REAL_UNIT_TEST_COMMAND
 
   package:
     name: package
@@ -36,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: <real package command>
+      - run: REPLACE_WITH_REAL_PACKAGE_COMMAND
 
   verify-policy:
     name: verify / policy
@@ -45,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: <real quality, security, or policy command>
+      - run: REPLACE_WITH_REAL_VERIFY_POLICY_COMMAND
 ```
 
 Treat `CI / build`, `CI / test / unit`, `CI / package`, and
