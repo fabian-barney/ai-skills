@@ -33,8 +33,8 @@ rules:
 - encode the stage family in job names such as `build`, `test / unit`,
   `package`, `verify / integration`, `verify / owasp`, `publish`, or
   `tools / ...`
-- keep the combined required-check context, usually `<workflow name> / <job
-  name>`, unique and stable when branch protection depends on it
+- keep the combined required-check context, usually `<workflow name> / <job name>`,
+  unique and stable when branch protection depends on it
 - pick the required-check contexts early and keep them stable once branch
   protection depends on them; avoid casual renames such as changing
   `CI / verify / policy` to `CI / checks`
