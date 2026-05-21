@@ -41,6 +41,9 @@ after the latest push has been reviewed.
   checks for each PR
 - repository preferences about whether clean PRs should be merged
 - access to the PR platform APIs needed to request or inspect automated review
+- for strict GitHub Copilot review loops, access to
+  `gh pr view <PR_NUMBER> --json id --jq .id` and `gh api graphql` for the
+  approved review-request flow
 - the main linked issue for each PR and whether the PR body contains an
   issue-closing link
 - the intended bounded scope for each PR, used to detect unrelated bundled
@@ -68,8 +71,13 @@ after the latest push has been reviewed.
    threads, and determine whether a post-push automated review already exists.
 6. If the latest push does not yet have a submitted automated review, request
    one through the platform API or configured review mechanism, then move on to
-   the next item without blocking. For strict GitHub Copilot review loops, use
-   `references/copilot-review-trigger.md`.
+   the next item without blocking. For strict GitHub Copilot review loops,
+   first capture the PR node id with
+   `gh pr view <PR_NUMBER> --json id --jq .id`, then call `gh api graphql`
+   using the `requestReviewsByLogin` mutation for
+   `copilot-pull-request-reviewer`, and treat
+   `references/copilot-review-trigger.md` as the copy-safe source for the exact
+   mutation and verification steps.
 7. If checks are still running or a review is still in progress for the latest
    push, keep the PR active and continue with the next item.
 8. When the latest push has completed review results, apply
@@ -78,7 +86,9 @@ after the latest push has been reviewed.
    threads that were actually handled.
 9. If fixes were pushed, restart the same post-push review cycle for that PR
    instead of treating earlier review results as sufficient, and explicitly
-   re-trigger automated review for the new head commit.
+   re-trigger automated review for the new head commit. For strict GitHub
+   Copilot review loops, repeat the same approved `gh` CLI / GraphQL flow
+   instead of using PR comments or `@copilot` mentions.
 10. If no fixes were needed, verify the PR remains focused on the linked issue
    and the PR body contains the issue-closing link, then evaluate the
    review-readiness gate from `references/review-loop-state.md`.
@@ -93,6 +103,8 @@ after the latest push has been reviewed.
 
 - a per-PR status showing review state, remaining blockers, and merge
   readiness
+- explicit note when strict GitHub Copilot review was requested through the
+  approved `gh` / GraphQL flow for the latest head commit
 - captured session preferences or explicit note that the loop was skipped
 - handled review threads with explicit valid, invalid, or unresolved treatment
 - issue-link and focused-scope status for each PR
@@ -111,6 +123,10 @@ after the latest push has been reviewed.
   remain unresolved
 - do not trigger automated review through ad-hoc PR comments when the platform
   provides a proper API or workflow trigger
+- do not replace the approved `gh pr view` plus
+  `gh api graphql` flow using the `requestReviewsByLogin` mutation with a
+  weaker GitHub comment convention when strict GitHub Copilot review is
+  required
 - do not mention `@copilot` in PR comments
 - do not delete review comments to make threads disappear; resolve handled
   threads and preserve the history
@@ -124,6 +140,9 @@ after the latest push has been reviewed.
   user prompt
 - no PR is marked merge-ready without a completed post-push review for its
   latest head commit
+- when strict GitHub Copilot review is required, the latest head commit review
+  came from the approved `gh` / GraphQL trigger flow or already-existing fresh
+  platform review state
 - each merge-ready PR is focused on its linked issue and has an issue-closing
   link in the PR body
 - remaining blockers are concrete, not generic
