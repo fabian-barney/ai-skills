@@ -15,8 +15,8 @@ For each child surface, record:
 1. surface name
 2. child skill used
 3. final status
-4. handoff output for downstream bootstrap work, or `none` / `not produced`
-   when the status did not yield one
+4. handoff output for downstream bootstrap work, or `none` when the status did
+   not yield one
 5. blocker, skip reason, or named gap when the status is not `completed`
 
 Composite classification:
