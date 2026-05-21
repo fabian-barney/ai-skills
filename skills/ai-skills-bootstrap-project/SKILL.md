@@ -109,9 +109,9 @@ This is a composite skill. It orchestrates these children in dependency order:
 
 - an ordered project-bootstrap decision record
 - all in-scope bootstrap surfaces delegated to the correct child skills
-- a per-child status record using only `completed`, `blocked`, `skipped`, or
+- a per-surface status record using only `completed`, `blocked`, `skipped`, or
   `out-of-scope`
-- explicit child handoff outputs and named remaining gaps when the bootstrap is
+- explicit surface handoff outputs and named remaining gaps when the bootstrap is
   partial
 - a coherent starting project baseline across repository, instructions,
   framework, CI, and documentation
@@ -122,8 +122,8 @@ This is a composite skill. It orchestrates these children in dependency order:
 - do not reorder the bootstrap sequence without an explicit dependency reason
 - do not broaden this skill into release, maintenance, or long-term governance
 - do not treat a skipped bootstrap surface as implicitly complete
-- do not report the composite bootstrap as complete without a per-child status
-  and handoff record
+- do not report the composite bootstrap as complete without a per-surface
+  status and handoff record
 - do not describe a partial bootstrap as a full bootstrap
 
 # Exit Checks
