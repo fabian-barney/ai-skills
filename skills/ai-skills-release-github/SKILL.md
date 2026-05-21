@@ -57,8 +57,9 @@ annotated tags, and GitHub release notes aligned.
    released tag so unrelated unreleased default-branch work is excluded.
 2. Ensure the chosen release source is current for its intended scope, all
    release-bound PRs for that scope are merged or intentionally recreated on
-   the isolated branch, and no open release-bound PRs remain; do not release
-   from a feature branch.
+   the isolated branch, and no open release-bound PRs remain for the chosen
+   release source and intended release scope; do not release from a feature
+   branch.
 3. If the release scope includes framework, build-tool, or dependency choices
    that are not fixed yet, apply skill `ai-skills-version-dependency-selection`
    before finalizing release timing or compatibility notes.
