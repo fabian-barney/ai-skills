@@ -57,30 +57,37 @@ This is a composite skill. It orchestrates these children in dependency order:
    must be `skipped` with an explicit reason. Then track final child results
    using only `completed`, `blocked`, `skipped`, or `out-of-scope` according
    to `references/bootstrap-surface-status.md`.
-3. Apply skill `ai-skills-bootstrap-repository` to establish the hosted
-   project home and repository-level policy decisions.
+3. If `repository` is in scope, apply skill `ai-skills-bootstrap-repository`
+   to establish the hosted project home and repository-level policy decisions.
+   Otherwise, do not run the child and record the surface as `out-of-scope`.
 4. Record the repository child result using the required per-surface fields
    from `references/bootstrap-surface-status.md`, including the final status,
    the child skill used, the handoff output or explicit `none`, and any
    blocker, skip reason, or named gap when the status is not `completed`.
-5. Apply skill `ai-skills-bootstrap-ai-instructions` so the downstream
-   instruction layer is wired before project-specific implementation patterns
-   spread.
+5. If `ai-instructions` is in scope, apply skill `ai-skills-bootstrap-ai-instructions`
+   so the downstream instruction layer is
+   wired before project-specific implementation patterns spread. Otherwise, do
+   not run the child and record the surface as `out-of-scope`.
 6. Record the ai-instructions child result using the same required
    per-surface fields, including the handoff output or explicit `none`, plus
    any blocker, skip reason, or named gap when applicable.
-7. Apply skill `ai-skills-bootstrap-framework-setup` to establish the working
-   framework, runtime, and toolchain baseline.
+7. If `framework` is in scope, apply skill `ai-skills-bootstrap-framework-setup`
+   to establish the working framework,
+   runtime, and toolchain baseline. Otherwise, do not run the child and record
+   the surface as `out-of-scope`.
 8. Record the framework child result using the same required per-surface
    fields, including the handoff output or explicit `none`, plus any blocker,
    skip reason, or named gap when applicable.
-9. Apply skill `ai-skills-bootstrap-ci-pipeline` so the project baseline is
-   checked continuously.
+9. If `ci` is in scope, apply skill `ai-skills-bootstrap-ci-pipeline` so the
+   project baseline is checked continuously. Otherwise, do not run the child
+   and record the surface as `out-of-scope`.
 10. Record the CI child result using the same required per-surface fields,
     including the handoff output or explicit `none`, plus any blocker, skip
     reason, or named gap when applicable.
-11. Apply skill `ai-skills-bootstrap-documentation` last so the initial docs
-   reflect the actual repository, framework, and CI decisions already made.
+11. If `documentation` is in scope, apply skill `ai-skills-bootstrap-documentation`
+   last so the initial docs reflect the
+   actual repository, framework, and CI decisions already made. Otherwise, do
+   not run the child and record the surface as `out-of-scope`.
 12. Record the documentation child result using the same required
     per-surface fields, including the handoff output or explicit `none`, plus
     any blocker, skip reason, or named gap when applicable.

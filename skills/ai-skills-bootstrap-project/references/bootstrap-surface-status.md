@@ -13,7 +13,8 @@ The composed bootstrap skill should report one status for each child surface:
 For each child surface, record:
 
 1. surface name
-2. child skill used
+2. child skill used, or the surface's assigned child skill when the child was
+   not run
 3. final status
 4. handoff output for downstream bootstrap work, or `none` when the status did
    not yield one
@@ -26,6 +27,15 @@ Use these canonical surface names and record each exactly once:
 - `framework`
 - `ci`
 - `documentation`
+
+Use these canonical child-skill assignments for the record, even when a
+surface is `out-of-scope` or `skipped` and the child did not run:
+
+- `repository` -> skill `ai-skills-bootstrap-repository`
+- `ai-instructions` -> skill `ai-skills-bootstrap-ai-instructions`
+- `framework` -> skill `ai-skills-bootstrap-framework-setup`
+- `ci` -> skill `ai-skills-bootstrap-ci-pipeline`
+- `documentation` -> skill `ai-skills-bootstrap-documentation`
 
 Composite classification:
 
