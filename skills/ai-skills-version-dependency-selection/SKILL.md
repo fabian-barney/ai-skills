@@ -52,7 +52,7 @@ forward as safely possible.
 2. Gather the hard compatibility constraints from runtimes, frameworks,
    toolchains, peer dependencies, each direct dependency's own published
    runtime-version metadata, and repository policy. Read the direct
-   dependency metadata from the relevant ecosystem field, such as Node
+   dependency metadata from the relevant ecosystem source, such as Node
    `engines`, Python `requires-python`, Rust `rust-version`, JVM
    enforcer/starter constraints, or the Go `go` directive. Compute the
    intersection of those direct-dependency runtime constraints and verify that
