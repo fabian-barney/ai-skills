@@ -12,6 +12,9 @@
 - create `SKILL.md` with required frontmatter and sections
 - add a small reference note and one example file
 - update only files required for the issue
+- if the workflow later includes post-push PR review or merge-loop work,
+  consult skill `ai-skills-pr-review-loop` and use the approved review trigger
+  flow instead of PR comments such as `@copilot review`
 - final task re-reads the applicable rulesets and verifies conformance
 
 ## Test Plan
