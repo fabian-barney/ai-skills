@@ -4,8 +4,8 @@ Relevant review-loop heuristics used by this skill:
 
 - handling each review item on its own branch and PR often works best
 - review state should generally be re-evaluated after each push
-- missing ownership or unclear state should usually block conversation
-  handling completion and conversation resolution
+- missing ownership or unclear state should usually block handling completion
+  and conversation resolution
 - a clean merge gate typically includes green checks, no remaining valid
   findings, and no open review threads
 

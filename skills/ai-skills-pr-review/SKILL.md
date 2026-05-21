@@ -91,7 +91,7 @@ must remain blocked.
 
 # Exit Checks
 
-- every handled thread has a valid or invalid classification
+- every handled finding has a valid or invalid classification
 - the applicable review ruleset-read gate was satisfied before review
   classification
 - severity-bearing findings preserve the child skill's severity model

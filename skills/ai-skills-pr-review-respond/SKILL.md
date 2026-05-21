@@ -105,7 +105,7 @@ that stops completion.
 # Exit Checks
 
 - the applicable review ruleset-read gate was satisfied before classification
-- every handled thread has an explicit valid or invalid classification
+- every handled finding has an explicit valid or invalid classification
 - higher-priority findings were triaged in the documented priority order
 - every valid finding has a fix with regression evidence or proof of behavior
 - invalid findings have a factual rationale
