@@ -118,8 +118,8 @@ annotated tags, and GitHub release notes aligned.
 # Exit Checks
 
 - the target version is explicit and justified
-- the chosen release source is explicit and justified, and isolated-branch use
-  is backed by an explicit skill `ai-skills-release` requirement
+- the chosen release source is explicit and justified, and isolated release
+  branch use is backed by an explicit skill `ai-skills-release` requirement
 - the default branch or isolated release source includes all release-bound work
   for the intended scope and no open release-bound PRs remain
 - changelog or release notes, tag, and GitHub Release all reference the same
