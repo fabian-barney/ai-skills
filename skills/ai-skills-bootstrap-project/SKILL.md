@@ -51,8 +51,9 @@ This is a composite skill. It orchestrates these children in dependency order:
 
 1. Confirm the project really needs a multi-surface bootstrap rather than a
    single leaf setup task.
-2. Before running child skills, classify each bootstrap surface as intended
-   `completed`, `blocked`, `skipped`, or `out-of-scope` according to
+2. Before running child skills, classify each bootstrap surface as in scope or
+   `out-of-scope`, then track final child results using only `completed`,
+   `blocked`, `skipped`, or `out-of-scope` according to
    `references/bootstrap-surface-status.md`.
 3. Apply skill `ai-skills-bootstrap-repository` to establish the hosted
    project home and repository-level policy decisions.
@@ -76,9 +77,10 @@ This is a composite skill. It orchestrates these children in dependency order:
 12. Record the documentation child result with its final status, the child
     skill used, and the handoff output for contributors.
 13. Distinguish a full bootstrap from a partial bootstrap. Full bootstrap
-    means every in-scope child finished as `completed`; partial bootstrap means
-    one or more children are `blocked`, `skipped`, or `out-of-scope`, and each
-    gap must be named explicitly.
+    means every in-scope child finished as `completed` and every excluded
+    surface is explicitly `out-of-scope`; partial bootstrap means one or more
+    in-scope children are `blocked` or `skipped`, and each gap must be named
+    explicitly.
 
 # Outputs
 

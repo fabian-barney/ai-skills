@@ -20,9 +20,10 @@ For each child surface, record:
 
 Composite classification:
 
-- full bootstrap: every in-scope child surface is `completed`
-- partial bootstrap: one or more child surfaces are `blocked`, `skipped`, or
-  `out-of-scope`
+- full bootstrap: every in-scope child surface is `completed` and every
+  excluded surface is explicitly `out-of-scope`
+- partial bootstrap: one or more in-scope child surfaces are `blocked` or
+  `skipped`
 
 Do not describe a bootstrap as complete unless the child-status record shows a
 full bootstrap.
