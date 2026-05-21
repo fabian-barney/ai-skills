@@ -33,11 +33,11 @@ rules:
 - encode the stage family in job names such as `build`, `test / unit`,
   `package`, `verify / integration`, `verify / owasp`, `publish`, or
   `tools / ...`
-- keep job names unique across workflows when required checks are used so
-  branch-protection rules stay stable
-- pick the required-check names early and keep them stable once branch
+- keep the combined required-check context, usually `<workflow name> / <job
+  name>`, unique and stable when branch protection depends on it
+- pick the required-check contexts early and keep them stable once branch
   protection depends on them; avoid casual renames such as changing
-  `verify / policy` to `checks`
+  `CI / verify / policy` to `CI / checks`
 
 ## Starter Skeleton Expectations
 
@@ -45,11 +45,12 @@ Concrete bootstrap layouts should keep the stage-family intent obvious even
 before the repository adds every optional job.
 
 - GitHub Actions starter skeleton: one workflow category such as `CI`, job
-  names like `build`, `test / unit`, `package`, and `verify / policy`, and
-  `needs` edges that reflect the stage-family order
+  names like `build`, `test / unit`, `package`, and `verify / policy`, check
+  contexts such as `CI / build`, and `needs` edges that reflect the
+  stage-family order
 - GitLab starter skeleton: explicit `stages:` in the required order, at least
   one job per used stage family, and manual-only helper jobs in `tools`
-- required-check names should map to the smallest stable review gate set the
+- required-check contexts should map to the smallest stable review gate set the
   repository actually wants to protect
 - expand from the starter skeleton by adding more jobs inside the same stage
   families rather than renaming the existing baseline jobs

@@ -48,6 +48,7 @@ jobs:
       - run: <real quality, security, or policy command>
 ```
 
-Treat `build`, `test / unit`, `package`, and `verify / policy` as candidate
-required-check names. Add more jobs later by staying inside the same stage
-families instead of renaming these baseline checks.
+Treat `CI / build`, `CI / test / unit`, `CI / package`, and
+`CI / verify / policy` as candidate required-check contexts. Add more jobs
+later by staying inside the same stage families instead of renaming the
+baseline workflow or job names.
