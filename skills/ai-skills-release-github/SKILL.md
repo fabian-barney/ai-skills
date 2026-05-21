@@ -19,7 +19,7 @@ annotated tags, and GitHub release notes aligned.
   release branch created from the latest released tag so unrelated unreleased
   default-branch work stays out of the release
 - use when a version must be chosen explicitly or inferred from merged
-  user-visible changes since the latest tag
+  user-visible changes since the latest released tag
 - use when changelog content, tags, and GitHub release notes must describe the
   same release
 - use skill `ai-skills-version-dependency-selection` when framework,
@@ -65,8 +65,9 @@ annotated tags, and GitHub release notes aligned.
    support policy is not explicit yet, apply skill `ai-skills-version-support-policy`
    before finalizing compatibility claims.
 5. Determine the target version: use an explicit version when provided;
-   otherwise classify the changes since the latest tag and select the smallest
-   valid semantic-version bump that fits the strongest user-visible change.
+   otherwise classify the changes since the latest released tag and select the
+   smallest valid semantic-version bump that fits the strongest user-visible
+   change.
 6. Stop if there are no meaningful release changes instead of creating an empty
    tag.
 7. Verify the chosen release source contains only the intended scoped release
