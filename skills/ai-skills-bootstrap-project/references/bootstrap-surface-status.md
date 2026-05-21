@@ -19,6 +19,14 @@ For each child surface, record:
    not yield one
 5. blocker, skip reason, or named gap when the status is not `completed`
 
+Use these canonical surface names and record each exactly once:
+
+- `repository`
+- `ai-instructions`
+- `framework`
+- `ci`
+- `documentation`
+
 Composite classification:
 
 - full bootstrap: every in-scope child surface is `completed` and every

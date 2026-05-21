@@ -116,8 +116,9 @@ This is a composite skill. It orchestrates these children in dependency order:
 - each in-scope bootstrap surface was handled by the correct child skill
 - the execution order preserved repository before framework and CI before final
   documentation
-- every child surface has one explicit status from `completed`, `blocked`,
-  `skipped`, or `out-of-scope`
+- every expected child surface (`repository`, `ai-instructions`,
+  `framework`, `ci`, `documentation`) has exactly one record with one
+  explicit status from `completed`, `blocked`, `skipped`, or `out-of-scope`
 - child handoff outputs and remaining blockers or gaps are explicit
 - skipped, blocked, or out-of-scope child surfaces are explicit
 - the result is labeled full or partial bootstrap correctly
