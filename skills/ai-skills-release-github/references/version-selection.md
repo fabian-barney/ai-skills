@@ -4,7 +4,7 @@ Select the target version in this order:
 
 1. use the explicit version if the user or repository policy already provides
    one
-2. otherwise inspect the changes since the latest reachable tag
+2. otherwise inspect the changes since the latest released tag
 
 Choose the semantic-version bump by strongest change type:
 

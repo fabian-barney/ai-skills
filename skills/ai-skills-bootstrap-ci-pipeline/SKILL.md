@@ -25,6 +25,8 @@ vendor, framework, or deployment path.
   platform matrix is still undecided and CI coverage depends on it
 - use `references/ci-layout-conventions.md` for the required GitLab stage order
   and the GitHub Actions naming and grouping analogue
+- use `examples/github-actions-bootstrap-ci.md` or
+  `examples/gitlab-bootstrap-ci.md` when a concrete starter skeleton helps
 
 # Inputs
 
@@ -35,8 +37,12 @@ vendor, framework, or deployment path.
   validation
 - branch, PR, and merge-gate expectations for CI execution
 - the target CI surface and any organization policy that constrains it
+- any branch-protection or required-check contexts that must stay stable
 - secret, token, cache, or artifact needs for the CI environment
 - `references/ci-layout-conventions.md`
+- `examples/github-actions-bootstrap-ci.md` or
+  `examples/gitlab-bootstrap-ci.md` when the output should include a concrete
+  starter layout
 
 # Workflow
 
@@ -58,16 +64,26 @@ vendor, framework, or deployment path.
    for registry or artifact publication; `tools` for manual helper jobs.
 7. If the target platform is GitHub Actions, group jobs under one workflow
    category such as `CI`, `Release`, or `Nightly`, use job `needs` for
-   ordering, and encode the stage family in job names such as `build`,
-   `test / unit`, `package`, `verify / integration`, `verify / owasp`,
-   `publish`, or `tools / ...`.
-8. When GitHub required checks depend on job names, keep those job names unique
-   across workflows so branch protection stays unambiguous.
-9. Define the initial triggers, jobs, and status expectations around the real
+   ordering, keep YAML job IDs valid and simple such as `test-unit` or
+   `verify-owasp`, and encode the stage family in job display names such as
+   `build`, `test / unit`, `package`, `verify / integration`,
+   `verify / owasp`, `publish`, or `tools / ...`.
+8. When GitHub required checks depend on Actions jobs, keep the combined check
+   context, usually `<workflow name> / <job name>`, unique and stable so branch
+   protection stays unambiguous over time. Treat `<job name>` as the job
+   display name from `jobs.<id>.name`, or the job ID when `name` is omitted.
+9. Prefer a stable required-check contract from the start, for example
+   `CI / build`, `CI / test / unit`, `CI / package`, and
+   `CI / verify / policy`, instead of renaming workflows or jobs casually after
+   branch protection is enabled.
+10. Use `examples/github-actions-bootstrap-ci.md` or
+    `examples/gitlab-bootstrap-ci.md` when a concrete starter skeleton makes
+    the bootstrap output easier to apply.
+11. Define the initial triggers, jobs, and status expectations around the real
    project commands rather than placeholder commands.
-10. Configure secrets, caches, and artifacts conservatively so CI can run
+12. Configure secrets, caches, and artifacts conservatively so CI can run
    safely without overscoping credentials.
-11. Record how CI status feeds later bootstrap, merge, or release workflows.
+13. Record how CI status feeds later bootstrap, merge, or release workflows.
 
 # Outputs
 
@@ -91,7 +107,10 @@ vendor, framework, or deployment path.
   commands
 - the stage-family layout is explicit for the chosen CI platform
 - GitLab pipelines use the required stage order, or GitHub Actions workflows
-  encode the required analogue with `needs` and unique job names
+  encode the required analogue with `needs`, valid job IDs, and unique job
+  display names
+- required-check contexts are stable enough for branch protection or the
+  blocker is surfaced explicitly
 - the supported runtime or platform matrix is explicit or an upstream blocker
   is surfaced
 - trigger behavior and merge-status expectations are explicit

@@ -9,17 +9,25 @@ Keep these release artifacts aligned:
 
 Preferred sequence:
 
-1. verify the default branch is current and no release-bound PRs remain open
-2. update release-notes source
-3. run `git grep -F "<previous-tag>"`, replacing `<previous-tag>` with the
+1. treat the default branch as the normal release source
+2. if skill `ai-skills-release` explicitly passes an isolated release branch
+   requirement into this flow, create that branch from the latest released tag
+   and keep it limited to the scoped release change
+3. verify the chosen release source is current for its intended scope and no
+   release-bound PRs remain open for that scope
+4. inspect the commits or file diff from the latest released tag to the chosen
+   release source and stop if unrelated unreleased default-branch work would be
+   included
+5. update release-notes source
+6. run `git grep -F "<previous-tag>"`, replacing `<previous-tag>` with the
    actual latest released tag, for example `v1.2.3`
-4. update every relevant versioned example or documentation reference to the new
+7. update every relevant versioned example or documentation reference to the new
    tag
-5. commit the release-preparation change
-6. create the annotated tag on that commit
-7. push branch and tag
-8. create the GitHub Release from the pushed tag
-9. verify the tag and release page point at the same commit
+8. commit the release-preparation change on the chosen release source
+9. create the annotated tag on that commit
+10. push branch and tag
+11. create the GitHub Release from the pushed tag
+12. verify the tag and release page point at the same commit
 
 When repository policy defines a release-note heading or formatting template,
 honor that policy rather than inventing a new layout during release.
@@ -27,3 +35,8 @@ honor that policy rather than inventing a new layout during release.
 If a repository has both a changelog and a separate release-notes source, decide
 which source is authoritative before creating the GitHub Release and keep the
 other one aligned or explicitly out of scope.
+
+An isolated release branch is an exception path for intentionally scoped
+releases. It is not a substitute for a dirty or lagging default branch and
+should only be used when skill `ai-skills-release` passes an explicit isolated
+source requirement into this flow so unrelated unreleased work stays out.
