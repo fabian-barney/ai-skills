@@ -9,8 +9,8 @@ Use this when the project commits to the version in docs, CI, and issue triage.
 
 Example:
 
-- `Node.js 24.x` is officially supported because it is a maintained LTS line
-  and the project runs CI on it
+- `Node.js <primary support line>` is officially supported because the project
+  documents it, runs CI on it, and triages issues against it
 
 ## Tested Compatibility Only
 
@@ -19,8 +19,9 @@ commit to full support obligations.
 
 Example:
 
-- `Node.js 22.x` is tested for compatibility in a smoke workflow, but the
-  project only triages official support bugs against `24.x`
+- `Node.js <compatibility-only line>` is tested for compatibility in a smoke
+  workflow, but the project only triages official support bugs against the
+  primary support line
 
 ## Unverified
 
@@ -28,8 +29,8 @@ Use this when the project has not committed to support or even limited testing.
 
 Example:
 
-- `Node.js 25.x` is unverified because the project has not added CI coverage or
-  documented support expectations yet
+- `Node.js <newly released line not yet in CI>` is unverified because the
+  project has not added CI coverage or documented support expectations yet
 
 ## Boundary Handoffs
 
