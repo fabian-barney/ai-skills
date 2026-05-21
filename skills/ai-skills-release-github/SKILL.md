@@ -38,7 +38,8 @@ annotated tags, and GitHub release notes aligned.
   or an intentionally isolated release branch created from the latest released
   tag when skill `ai-skills-release` explicitly requires that narrower source
   as an input to this skill
-- confirmation that no open release-bound PRs remain
+- confirmation that no open release-bound PRs remain for the chosen release
+  source and intended release scope
 - the latest released tag and the merged changes since that tag
 - any explicit target version provided by the user or repository policy
 - any framework, build-tool, dependency, or support-policy changes in the
@@ -95,7 +96,7 @@ annotated tags, and GitHub release notes aligned.
 
 - the selected release version and release commit
 - the release source used, including whether it was the default branch or an
-  intentionally isolated branch from the latest released tag
+  intentionally isolated release branch from the latest released tag
 - aligned changelog or release notes for that version
 - a pushed annotated tag and a published GitHub Release
 - a concise release summary or release URL for follow-up communication
