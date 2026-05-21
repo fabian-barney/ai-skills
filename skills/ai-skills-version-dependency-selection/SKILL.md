@@ -21,8 +21,15 @@ forward as safely possible.
   limits make version choice non-trivial
 - use skill `ai-skills-version-support-policy` when the supported runtime or
   platform matrix is still open and constrains viable versions
+- use skill `ai-skills-bootstrap-framework-setup` when the project still needs
+  the initial framework, runtime, or toolchain baseline chosen beyond version
+  numbers alone
 - use skill `ai-skills-compliance-dependency` when dependency governance,
   license, or stewardship risk materially affects the choice
+- use skill `ai-skills-release` when the work also needs semantic release
+  version selection, release notes, tagging, or publication planning
+- use `references/dependency-selection-boundaries.md` for positive examples and
+  non-examples of what this skill owns
 
 # Inputs
 
@@ -33,32 +40,43 @@ forward as safely possible.
 - security, compliance, or maintenance constraints that affect selection
 - whether the selection applies to bootstrap, routine maintenance, or a release
   scope
+- `references/dependency-selection-boundaries.md`
 
 # Workflow
 
 1. Identify the components whose versions must be selected and the dependency
-   surfaces they constrain.
+   surfaces they constrain. Use
+   `references/dependency-selection-boundaries.md` when the boundary between
+   version choice and adjacent work is unclear.
 2. Gather the hard compatibility constraints from runtimes, frameworks,
    toolchains, peer dependencies, and repository policy.
 3. If the supported runtime or platform matrix is still undecided, apply
    skill `ai-skills-version-support-policy` before locking incompatible
    choices.
-4. Prefer explicit project policy when it already constrains a version.
-5. Otherwise prefer the newest stable compatible version, favoring maintained
+4. If the initial framework, runtime, or toolchain baseline itself is still
+   undecided, hand off to skill `ai-skills-bootstrap-framework-setup` before
+   finalizing detailed dependency versions.
+5. Prefer explicit project policy when it already constrains a version.
+6. Otherwise prefer the newest stable compatible version, favoring maintained
    LTS lines when they materially improve runtime or toolchain stability.
-6. Sequence framework and build-tool choices before ordinary dependency
+7. Sequence framework and build-tool choices before ordinary dependency
    upgrades because they constrain the rest of the stack; treat runtime or
    platform versions as input constraints from support policy or repository
    policy rather than outputs owned by this skill.
-7. Apply skill `ai-skills-compliance-dependency` when governance, license, or
+8. If the same change also needs semantic release-version selection, release
+   notes, tagging, or publication planning, hand off to skill `ai-skills-release`
+   instead of expanding this skill into release workflow ownership.
+9. Apply skill `ai-skills-compliance-dependency` when governance, license, or
    stewardship risk matters to the decision.
-8. Record the selected versions, rejected candidates, and the concrete reason
+10. Record the selected versions, rejected candidates, and the concrete reason
    each rejected candidate did not fit.
 
 # Outputs
 
 - explicit version choices for the scoped frameworks, tools, or dependencies
 - a compatibility rationale for the selected versions
+- clear handoff notes when support-policy, framework-bootstrap, compliance, or
+  release workflows must consume the decision
 - surfaced blockers when no acceptable compatible version exists
 
 # Guardrails
@@ -69,6 +87,8 @@ forward as safely possible.
 - do not treat prerelease, unstable, or EOL versions as default choices
 - do not broaden this skill into semantic release-version bump selection or
   runtime or platform support-policy ownership
+- do not treat initial framework-stack selection as a pure dependency-version
+  choice when broader bootstrap setup is still open
 
 # Exit Checks
 
@@ -78,4 +98,6 @@ forward as safely possible.
 - framework and build-tool constraints were resolved before ordinary
   dependency choices, and runtime or platform policy constraints were
   respected
+- any support-policy, framework-bootstrap, or release-workflow handoff is
+  explicit
 - compliance or stewardship concerns were surfaced when they mattered
