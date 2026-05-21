@@ -15,7 +15,8 @@ For each child surface, record:
 1. surface name
 2. child skill used
 3. final status
-4. handoff output for downstream bootstrap work
+4. handoff output for downstream bootstrap work, or `none` / `not produced`
+   when the status did not yield one
 5. blocker, skip reason, or named gap when the status is not `completed`
 
 Composite classification:
@@ -24,6 +25,10 @@ Composite classification:
   excluded surface is explicitly `out-of-scope`
 - partial bootstrap: one or more in-scope child surfaces are `blocked` or
   `skipped`
+
+Do not use `out-of-scope` as a substitute for skipping an in-scope surface.
+When the broader bootstrap still includes a surface but the child was not run,
+record it as `skipped` with a reason.
 
 Do not describe a bootstrap as complete unless the child-status record shows a
 full bootstrap.
