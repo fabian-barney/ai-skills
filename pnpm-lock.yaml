@@ -8,9 +8,15 @@ importers:
 
   .:
     devDependencies:
+      '@barney-media/cognitive-typescript-core':
+        specifier: ^0.1.1
+        version: 0.1.1
       '@barney-media/cognitive-typescript-vitest':
         specifier: ^0.1.1
         version: 0.1.1(vitest@4.1.6)
+      '@barney-media/crap-typescript-core':
+        specifier: ^0.3.0
+        version: 0.3.0
       '@barney-media/crap-typescript-vitest':
         specifier: ^0.3.0
         version: 0.3.0(vitest@4.1.6)

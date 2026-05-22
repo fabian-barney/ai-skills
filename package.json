@@ -18,8 +18,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "vitest run --coverage.enabled true",
-    "quality:cognitive": "vitest run --config vitest.cognitive.config.ts",
-    "quality:crap": "vitest run --config vitest.crap.config.ts",
+    "quality:cognitive": "node ./scripts/run-cognitive-typescript-gate.mjs src",
+    "quality:crap": "node ./scripts/run-crap-typescript-gate.mjs src",
     "validate": "node tools/validate-catalog.mjs",
     "lint:md": "markdownlint-cli2 \"**/*.md\" \"!**/node_modules/**\" --config .markdownlint.json",
     "pack:dry-run": "npm pack --dry-run",
@@ -41,7 +41,9 @@
   },
   "homepage": "https://github.com/fabian-barney/ai-skills#readme",
   "devDependencies": {
+    "@barney-media/cognitive-typescript-core": "^0.1.1",
     "@barney-media/cognitive-typescript-vitest": "^0.1.1",
+    "@barney-media/crap-typescript-core": "^0.3.0",
     "@barney-media/crap-typescript-vitest": "^0.3.0",
     "@types/node": "^24.12.3",
     "@vitest/coverage-v8": "^4.1.6",
