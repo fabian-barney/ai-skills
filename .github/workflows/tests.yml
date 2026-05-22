@@ -33,21 +33,11 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
-      - name: Configure pnpm store
-        run: corepack pnpm config set store-dir .pnpm-store
-
       - name: Install dependencies
         run: corepack pnpm install --frozen-lockfile
 
       - name: Build
         run: corepack pnpm build
-
-      - name: Upload pnpm store
-        uses: actions/upload-artifact@v4
-        with:
-          name: pnpm-store-${{ matrix.os }}
-          path: .pnpm-store
-          if-no-files-found: error
 
       - name: Upload dependencies
         uses: actions/upload-artifact@v4
@@ -88,15 +78,6 @@ jobs:
 
       - name: Enable Corepack
         run: corepack enable
-
-      - name: Configure pnpm store
-        run: corepack pnpm config set store-dir .pnpm-store
-
-      - name: Download pnpm store
-        uses: actions/download-artifact@v4
-        with:
-          name: pnpm-store-${{ matrix.os }}
-          path: .pnpm-store
 
       - name: Download dependencies
         uses: actions/download-artifact@v4
@@ -147,15 +128,6 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
-      - name: Configure pnpm store
-        run: corepack pnpm config set store-dir .pnpm-store
-
-      - name: Download pnpm store
-        uses: actions/download-artifact@v4
-        with:
-          name: pnpm-store-${{ matrix.os }}
-          path: .pnpm-store
-
       - name: Download dependencies
         uses: actions/download-artifact@v4
         with:
@@ -190,15 +162,6 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
-      - name: Configure pnpm store
-        run: corepack pnpm config set store-dir .pnpm-store
-
-      - name: Download pnpm store
-        uses: actions/download-artifact@v4
-        with:
-          name: pnpm-store-ubuntu-latest
-          path: .pnpm-store
-
       - name: Download dependencies
         uses: actions/download-artifact@v4
         with:
@@ -232,15 +195,6 @@ jobs:
 
       - name: Enable Corepack
         run: corepack enable
-
-      - name: Configure pnpm store
-        run: corepack pnpm config set store-dir .pnpm-store
-
-      - name: Download pnpm store
-        uses: actions/download-artifact@v4
-        with:
-          name: pnpm-store-ubuntu-latest
-          path: .pnpm-store
 
       - name: Download dependencies
         uses: actions/download-artifact@v4
@@ -281,15 +235,6 @@ jobs:
 
       - name: Enable Corepack
         run: corepack enable
-
-      - name: Configure pnpm store
-        run: corepack pnpm config set store-dir .pnpm-store
-
-      - name: Download pnpm store
-        uses: actions/download-artifact@v4
-        with:
-          name: pnpm-store-ubuntu-latest
-          path: .pnpm-store
 
       - name: Download dependencies
         uses: actions/download-artifact@v4
