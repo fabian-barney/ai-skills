@@ -83,13 +83,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-modules-${{ matrix.os }}
-          path: .
+          path: node_modules
 
       - name: Download build outputs
         uses: actions/download-artifact@v4
         with:
           name: dist-${{ matrix.os }}
-          path: .
+          path: dist
 
       - name: Run unit tests
         run: corepack pnpm test
@@ -132,13 +132,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-modules-${{ matrix.os }}
-          path: .
+          path: node_modules
 
       - name: Download build outputs
         uses: actions/download-artifact@v4
         with:
           name: dist-${{ matrix.os }}
-          path: .
+          path: dist
 
       - name: Package dry run
         run: corepack pnpm pack:dry-run
@@ -166,13 +166,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-modules-ubuntu-latest
-          path: .
+          path: node_modules
 
       - name: Download build outputs
         uses: actions/download-artifact@v4
         with:
           name: dist-ubuntu-latest
-          path: .
+          path: dist
 
       - name: Run catalog validation
         run: corepack pnpm validate
@@ -200,19 +200,19 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-modules-ubuntu-latest
-          path: .
+          path: node_modules
 
       - name: Download build outputs
         uses: actions/download-artifact@v4
         with:
           name: dist-ubuntu-latest
-          path: .
+          path: dist
 
       - name: Download coverage
         uses: actions/download-artifact@v4
         with:
           name: coverage-ubuntu-latest
-          path: .
+          path: coverage
 
       - name: Run CRAP gate
         run: corepack pnpm quality:crap
@@ -240,13 +240,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-modules-ubuntu-latest
-          path: .
+          path: node_modules
 
       - name: Download build outputs
         uses: actions/download-artifact@v4
         with:
           name: dist-ubuntu-latest
-          path: .
+          path: dist
 
       - name: Run cognitive complexity gate
         run: corepack pnpm quality:cognitive
