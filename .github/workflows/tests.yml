@@ -9,8 +9,8 @@ permissions:
   contents: read
 
 jobs:
-  package-check:
-    name: Package Check (${{ matrix.os }})
+  build:
+    name: build (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -33,23 +33,149 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
+      - name: Configure pnpm store
+        run: corepack pnpm config set store-dir .pnpm-store
+
       - name: Install dependencies
         run: corepack pnpm install --frozen-lockfile
 
       - name: Build
         run: corepack pnpm build
 
-      - name: Test and quality gates
+      - name: Upload pnpm store
+        uses: actions/upload-artifact@v4
+        with:
+          name: pnpm-store-${{ matrix.os }}
+          path: .pnpm-store
+          if-no-files-found: error
+
+      - name: Upload dependencies
+        uses: actions/upload-artifact@v4
+        with:
+          name: node-modules-${{ matrix.os }}
+          path: node_modules
+          if-no-files-found: error
+
+      - name: Upload build outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.os }}
+          path: dist
+          if-no-files-found: error
+
+  test-unit:
+    name: test / unit (${{ matrix.os }})
+    needs:
+      - build
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
+        with:
+          node-version: "24"
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Configure pnpm store
+        run: corepack pnpm config set store-dir .pnpm-store
+
+      - name: Download pnpm store
+        uses: actions/download-artifact@v4
+        with:
+          name: pnpm-store-${{ matrix.os }}
+          path: .pnpm-store
+
+      - name: Download dependencies
+        uses: actions/download-artifact@v4
+        with:
+          name: node-modules-${{ matrix.os }}
+          path: node_modules
+
+      - name: Download build outputs
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-${{ matrix.os }}
+          path: dist
+
+      - name: Run unit tests
         run: corepack pnpm test
 
-      - name: Validate catalog
-        run: corepack pnpm validate
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.os }}
+          path: coverage
+          if-no-files-found: error
+
+  package:
+    name: package (${{ matrix.os }})
+    needs:
+      - build
+      - test-unit
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
+        with:
+          node-version: "24"
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Configure pnpm store
+        run: corepack pnpm config set store-dir .pnpm-store
+
+      - name: Download pnpm store
+        uses: actions/download-artifact@v4
+        with:
+          name: pnpm-store-${{ matrix.os }}
+          path: .pnpm-store
+
+      - name: Download dependencies
+        uses: actions/download-artifact@v4
+        with:
+          name: node-modules-${{ matrix.os }}
+          path: node_modules
+
+      - name: Download build outputs
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-${{ matrix.os }}
+          path: dist
 
       - name: Package dry run
         run: corepack pnpm pack:dry-run
 
-  quality-cognitive:
-    name: quality-cognitive
+  validate-catalog:
+    name: verify / validate-catalog
+    needs:
+      - build
+      - test-unit
     runs-on: ubuntu-latest
 
     steps:
@@ -64,14 +190,35 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
-      - name: Install dependencies
-        run: corepack pnpm install --frozen-lockfile
+      - name: Configure pnpm store
+        run: corepack pnpm config set store-dir .pnpm-store
 
-      - name: Cognitive Complexity Gate
-        run: corepack pnpm quality:cognitive
+      - name: Download pnpm store
+        uses: actions/download-artifact@v4
+        with:
+          name: pnpm-store-ubuntu-latest
+          path: .pnpm-store
 
-  quality-crap:
-    name: quality-crap
+      - name: Download dependencies
+        uses: actions/download-artifact@v4
+        with:
+          name: node-modules-ubuntu-latest
+          path: node_modules
+
+      - name: Download build outputs
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-ubuntu-latest
+          path: dist
+
+      - name: Run catalog validation
+        run: corepack pnpm validate
+
+  quality-crap-ai-skills:
+    name: verify / quality-crap-ai-skills
+    needs:
+      - build
+      - test-unit
     runs-on: ubuntu-latest
 
     steps:
@@ -86,8 +233,75 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
-      - name: Install dependencies
-        run: corepack pnpm install --frozen-lockfile
+      - name: Configure pnpm store
+        run: corepack pnpm config set store-dir .pnpm-store
 
-      - name: CRAP Gate
+      - name: Download pnpm store
+        uses: actions/download-artifact@v4
+        with:
+          name: pnpm-store-ubuntu-latest
+          path: .pnpm-store
+
+      - name: Download dependencies
+        uses: actions/download-artifact@v4
+        with:
+          name: node-modules-ubuntu-latest
+          path: node_modules
+
+      - name: Download build outputs
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-ubuntu-latest
+          path: dist
+
+      - name: Download coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-ubuntu-latest
+          path: coverage
+
+      - name: Run CRAP gate
         run: corepack pnpm quality:crap
+
+  quality-cognitive-ai-skills:
+    name: verify / quality-cognitive-ai-skills
+    needs:
+      - build
+      - test-unit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
+        with:
+          node-version: "24"
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Configure pnpm store
+        run: corepack pnpm config set store-dir .pnpm-store
+
+      - name: Download pnpm store
+        uses: actions/download-artifact@v4
+        with:
+          name: pnpm-store-ubuntu-latest
+          path: .pnpm-store
+
+      - name: Download dependencies
+        uses: actions/download-artifact@v4
+        with:
+          name: node-modules-ubuntu-latest
+          path: node_modules
+
+      - name: Download build outputs
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-ubuntu-latest
+          path: dist
+
+      - name: Run cognitive complexity gate
+        run: corepack pnpm quality:cognitive
