@@ -2,6 +2,17 @@
 
 # Changelog
 
+## 0.2.2 - 2026-05-23
+
+### Changed
+
+- Reworked the GitHub Actions CI workflow into staged build, unit-test,
+  markdownlint, link-check, package, catalog-validation, cognitive-complexity,
+  and CRAP-gate jobs with shared artifacts instead of a single mixed test job.
+- Switched the repository quality gates from the Vitest wrappers to the
+  `@barney-media/*-typescript-core` analyzers and made the standard test run
+  produce the coverage artifact consumed by the CRAP gate.
+
 ## 0.2.1 - 2026-05-22
 
 ### Changed
