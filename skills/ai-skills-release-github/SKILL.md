@@ -10,19 +10,19 @@ description: >-
 
 # Purpose
 
-Publish a clean GitHub release record that keeps version selection, changelog
-updates, annotated tags, and GitHub release notes aligned across draft and
+Publish a clean GitHub Release record that keeps version selection, changelog
+updates, annotated tags, and GitHub Release notes aligned across draft and
 final states.
 
 # When to Use
 
-- use when a repository needs a new GitHub release from its default branch
+- use when a repository needs a new GitHub Release from its default branch
 - use when skill `ai-skills-release` intentionally requires an isolated
   release branch created from the latest released tag so unrelated unreleased
   default-branch work stays out of the release
 - use when a version must be chosen explicitly or inferred from merged
   user-visible changes since the latest released tag
-- use when changelog content, tags, and GitHub release notes must describe the
+- use when changelog content, tags, and GitHub Release notes must describe the
   same release
 - use skill `ai-skills-pr-review-loop` when release work is intentionally
   delivered through PRs before the release-preparation commit can be created
@@ -114,8 +114,8 @@ final states.
     published, retain the draft or convert it into an explicitly labeled
     historical partial-release record per repository policy instead of
     pretending the release completed successfully.
-17. Verify that the tag and release page state exist and point at the intended
-    commit.
+17. Verify that the tag exists and that the GitHub Release page points at the
+    intended commit and is in the intended state.
 
 # Outputs
 
@@ -151,10 +151,10 @@ final states.
   interactive editor
 - do not publish the final GitHub Release before required public targets
   succeed when the release depends on non-GitHub public publication targets
-- do not discard GitHub release notes for a half-published public release;
+- do not discard GitHub Release notes for a half-published public release;
   retain them through a draft or explicitly labeled historical partial-release
   record
-- do not let GitHub release notes drift from the authoritative changelog or
+- do not let GitHub Release notes drift from the authoritative changelog or
   release-notes source
 
 # Exit Checks

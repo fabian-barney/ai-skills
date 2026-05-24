@@ -42,7 +42,7 @@ Preferred sequence:
     historical partial-release record
 15. after all required public targets succeed, publish or promote the GitHub
     Release from draft to final; if GitHub is the only required public target,
-    repository policy may allow immediate publication after draft verification
+    repository policy may allow immediate publication after draft creation
 16. verify the tag and release page state point at the same commit
 
 When repository policy defines a release-note heading or formatting template,

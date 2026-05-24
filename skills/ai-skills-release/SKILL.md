@@ -2,7 +2,7 @@
 name: ai-skills-release
 description: >-
   Execute the full repository release workflow from final verification through
-  GitHub release drafting/finalization and artifact publication. Use when a
+  GitHub Release drafting/finalization and artifact publication. Use when a
   repository needs the complete release sequence, not only the GitHub
   tag-and-release step. This is portable release orchestration;
   repository-specific release policy must be supplied as input rather than
@@ -13,7 +13,7 @@ description: >-
 # Purpose
 
 Run the full release workflow so the final build/test pass, version selection,
-documentation updates, changelog, GitHub release state, and registry
+documentation updates, changelog, GitHub Release state, and registry
 publications stay aligned.
 
 This skill is intentionally portable across repositories. Treat any
@@ -136,7 +136,7 @@ not as rules to copy into downstream projects.
   status
 - explicit release-bound PR review-loop status when pre-publish PRs were part
   of the release
-- aligned documentation, changelog, GitHub release state, and publication
+- aligned documentation, changelog, GitHub Release state, and publication
   artifacts
 - explicit publication status for each relevant release target
 - a concise release summary with follow-up blockers when publication was only
@@ -185,7 +185,7 @@ not as rules to copy into downstream projects.
   started from the latest released tag
 - any release-bound PRs required before publication were advanced through skill `ai-skills-pr-review-loop`
   and either merged cleanly or explicitly removed from the release scope
-- skill `ai-skills-release-github` was applied for the GitHub release portion
+- skill `ai-skills-release-github` was applied for the GitHub Release portion
 - any isolated public-release branch contains only the scoped release change
   before tagging and publication
 - skill `ai-skills-tooling-git-write` was applied indirectly through
