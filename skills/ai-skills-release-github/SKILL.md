@@ -179,7 +179,8 @@ final states.
   release-preparation commit before tagging
 - the release was created from the intended default-branch commit or justified
   isolated release branch commit
-- the GitHub Release was drafted after tag push and published only when the
-  broader release outcome or repository policy allowed it
+- the GitHub Release was drafted after tag push and published only after all
+  required public targets succeeded, or immediately when GitHub was the only
+  required public target
 - unrelated unreleased work was excluded from the chosen release source
 - the published result is specific enough for downstream consumers to use

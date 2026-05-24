@@ -102,8 +102,11 @@ not as rules to copy into downstream projects.
 10. Apply skill `ai-skills-release-github` to perform the GitHub Release workflow,
     including version selection, changelog/docs alignment, release-prep
     commit, versioned-example updates, tag creation, push, and GitHub Release
-    draft creation, using the default branch by default or the isolated
-    release branch when the isolated path was required.
+    draft creation, plus the deferred final GitHub Release publication that
+    happens after all required public targets succeed or immediately when
+    GitHub is the only required public target, using the default branch by
+    default or the isolated release branch when the isolated path was
+    required.
 11. Publish release artifacts only after tag creation and GitHub Release draft
     creation both succeed. Publish to each applicable target registry listed
     in `references/publication-targets.md`, such as Maven Central, the Gradle
