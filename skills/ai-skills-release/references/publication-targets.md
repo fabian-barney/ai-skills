@@ -8,8 +8,8 @@ Evaluate publication targets explicitly:
 
 Before iterating the individual targets:
 
-1. create the GitHub Release draft after the tag exists and before publishing
-   any target
+1. create the GitHub Release draft after the tag is created and pushed, and
+   before publishing any target
 2. after all required public targets succeed, publish or promote the GitHub
    Release from draft to final
 
@@ -22,8 +22,8 @@ For each target:
    general public, such as Maven Central or the Gradle Plugin Portal, and do
    not treat private or access-controlled registries as public enough unless
    repository policy says they should follow the same isolation rule
-3. if the target is applicable, publish to it only after the tag and GitHub
-   Release draft already exist
+3. if the target is applicable, publish to it only after the pushed tag and
+   GitHub Release draft already exist
 4. verify the published artifact version and availability after publication
 5. if the target is public enough and any artifact becomes public, treat that
    version as burned for retry purposes if later required public targets fail,
