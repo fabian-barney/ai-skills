@@ -35,7 +35,7 @@ not as rules to copy into downstream projects.
   framework, or build-tool choices are still open in the release scope
 - use skill `ai-skills-version-support-policy` when the release changes the
   officially supported runtime or platform policy
-- use skill `ai-skills-release-github` for the full GitHub-release workflow,
+- use skill `ai-skills-release-github` for the full GitHub Release workflow,
   including version selection, docs/changelog alignment, the release-prep
   commit and push, tag creation, and GitHub Release drafting/finalization
 - rely on skill `ai-skills-tooling-git-write` through
@@ -99,7 +99,7 @@ not as rules to copy into downstream projects.
    review loop and merged or was explicitly removed from the release scope.
 9. Confirm versioned release examples and documentation references are known so
    the release can update them to the new tag.
-10. Apply skill `ai-skills-release-github` to perform the GitHub-release workflow,
+10. Apply skill `ai-skills-release-github` to perform the GitHub Release workflow,
     including version selection, changelog/docs alignment, release-prep
     commit, versioned-example updates, tag creation, push, and GitHub Release
     draft creation, using the default branch by default or the isolated
@@ -114,7 +114,7 @@ not as rules to copy into downstream projects.
     automatically treating the version as burned. If any public artifact is
     successfully published and later publication fails, treat the version as
     burned, keep the tag as the historical source pointer, and retain GitHub
-    release notes through the draft or an explicitly labeled historical
+    Release notes through the draft or an explicitly labeled historical
     partial-release record.
 13. After all required public targets succeed, publish or promote the GitHub
     Release from draft to final, following repository policy for any non-public

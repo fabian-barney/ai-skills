@@ -43,7 +43,8 @@ Preferred sequence:
 15. after all required public targets succeed, publish or promote the GitHub
     Release from draft to final; if GitHub is the only required public target,
     repository policy may allow immediate publication after draft creation
-16. verify the tag and release page state point at the same commit
+16. verify the tag exists and that the GitHub Release page points at the same
+    commit and is in the intended draft or published state
 
 When repository policy defines a release-note heading or formatting template,
 honor that policy rather than inventing a new layout during release.

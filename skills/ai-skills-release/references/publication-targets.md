@@ -22,14 +22,16 @@ For each target:
    general public, such as Maven Central or the Gradle Plugin Portal, and do
    not treat private or access-controlled registries as public enough unless
    repository policy says they should follow the same isolation rule
-3. if the target is public enough and any artifact becomes public, treat that
+3. if the target is applicable, publish to it only after the tag and GitHub
+   Release draft already exist
+4. verify the published artifact version and availability after publication
+5. if the target is public enough and any artifact becomes public, treat that
    version as burned for retry purposes if later required public targets fail,
    and keep the tag as the historical source pointer
-4. verify the published artifact version and availability after publication
-5. if publication fails before any public artifact becomes public, defer
+6. if publication fails before any public artifact becomes public, defer
    same-version recovery to repository policy instead of automatically treating
    the version as burned
-6. record `not applicable` when the repository does not use that target
+7. record `not applicable` when the repository does not use that target
 
 Do not treat optional targets as mandatory, but do not silently skip required
 targets either.
