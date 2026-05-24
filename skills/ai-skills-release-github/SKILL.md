@@ -41,9 +41,10 @@ annotated tags, and GitHub release notes aligned.
 - the repository default branch, or an intentionally isolated release branch
   created from the latest released tag when skill `ai-skills-release`
   explicitly requires that narrower source as an input to this skill
-- confirmation that no open release-bound PRs remain for the chosen release
-  source and intended release scope, or the release-bound PR list that must
-  complete the shared review loop before this skill may continue
+- confirmation that all required release-bound PRs are merged or explicitly
+  removed from scope for the chosen release source and intended release scope,
+  or the release-bound PR list that must complete the shared review loop
+  before this skill may continue
 - the latest released tag and the merged changes since that tag
 - any explicit target version provided by the user or repository policy
 - any framework, build-tool, dependency, or support-policy changes in the
