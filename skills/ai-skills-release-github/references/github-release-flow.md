@@ -5,7 +5,7 @@ Keep these release artifacts aligned:
 - changelog or authoritative release-notes source
 - versioned release examples and documentation references
 - annotated Git tag
-- GitHub Release page
+- GitHub Release page state
 
 Preferred sequence:
 
@@ -34,15 +34,27 @@ Preferred sequence:
     `git tag -a <tag> -m "..."` for a single-line tag message or
     `git tag -a <tag> -F <temp-file>` for a multi-line tag message
 12. push branch and tag
-13. create the GitHub Release from the pushed tag
-14. verify the tag and release page point at the same commit
+13. create the GitHub Release draft from the pushed tag
+14. if the broader release workflow has additional required public targets,
+    publish those targets next; if any public artifact becomes public and a
+    later required public target fails, burn the version, keep the tag as the
+    historical source pointer, and retain the draft or an explicitly labeled
+    historical partial-release record
+15. after all required public targets succeed, publish or promote the GitHub
+    Release from draft to final; if GitHub is the only required public target,
+    repository policy may allow immediate publication after draft verification
+16. verify the tag and release page state point at the same commit
 
 When repository policy defines a release-note heading or formatting template,
 honor that policy rather than inventing a new layout during release.
 
 If a repository has both a changelog and a separate release-notes source, decide
-which source is authoritative before creating the GitHub Release and keep the
-other one aligned or explicitly out of scope.
+which source is authoritative before creating the GitHub Release draft and keep
+the other one aligned or explicitly out of scope.
+
+If publication fails before any public artifact is successfully published, do
+not automatically assume the version is burned; same-version recovery remains a
+repository-policy decision.
 
 Do not treat a merely closed or stale-reviewed release-bound PR as sufficient
 release evidence. When release preparation depends on PRs, the shared PR review

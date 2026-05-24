@@ -3,14 +3,16 @@ name: ai-skills-release-github
 description: >-
   Publish a repository release on GitHub using a consistent tagged-release
   flow. Use when a version must be selected, changelog or release notes aligned,
-  and a GitHub Release created from the release commit.
+  and a GitHub Release draft or final publication managed from the release
+  commit.
 ---
 <!-- markdownlint-disable MD025 -->
 
 # Purpose
 
-Publish a clean GitHub release that keeps version selection, changelog updates,
-annotated tags, and GitHub release notes aligned.
+Publish a clean GitHub release record that keeps version selection, changelog
+updates, annotated tags, and GitHub release notes aligned across draft and
+final states.
 
 # When to Use
 
@@ -99,11 +101,19 @@ annotated tags, and GitHub release notes aligned.
 13. Commit the release-preparation changes on the chosen release source,
     create an annotated tag for the release commit, and push both branch and
     tag.
-14. Create the GitHub Release from the pushed tag using notes that stay
+14. Create the GitHub Release draft from the pushed tag using notes that stay
     aligned with the changelog or release-notes source. If both exist, treat
     the changelog as authoritative unless repository policy explicitly says
     otherwise.
-15. Verify that the tag and release page exist and point at the intended
+15. If repository policy or skill `ai-skills-release` says GitHub is the only
+    required public target, publish the draft after verification. Otherwise
+    keep the draft in place until the broader release workflow confirms all
+    required public targets succeeded, then publish or promote it to final.
+16. If a public target later fails after any public artifact was already
+    published, retain the draft or convert it into an explicitly labeled
+    historical partial-release record per repository policy instead of
+    pretending the release completed successfully.
+17. Verify that the tag and release page state exist and point at the intended
     commit.
 
 # Outputs
@@ -114,7 +124,8 @@ annotated tags, and GitHub release notes aligned.
 - release-bound PR review-loop status when PR-based release preparation was
   required
 - aligned changelog or release notes for that version
-- a pushed annotated tag and a published GitHub Release
+- a pushed annotated tag and a GitHub Release draft, plus a published final
+  GitHub Release when target success or repository policy allows it
 - a concise release summary or release URL for follow-up communication
 
 # Guardrails
@@ -137,6 +148,11 @@ annotated tags, and GitHub release notes aligned.
   commit
 - do not let the release-preparation commit or known tag message depend on an
   interactive editor
+- do not publish the final GitHub Release before required public targets
+  succeed when the release depends on non-GitHub public publication targets
+- do not discard GitHub release notes for a half-published public release;
+  retain them through a draft or explicitly labeled historical partial-release
+  record
 - do not let GitHub release notes drift from the authoritative changelog or
   release-notes source
 
@@ -150,8 +166,8 @@ annotated tags, and GitHub release notes aligned.
   or was explicitly removed from scope before tagging
 - the default branch or isolated release branch includes all release-bound work
   for the intended scope and no open release-bound PRs remain
-- changelog or release notes, tag, and GitHub Release all reference the same
-  release
+- changelog or release notes, tag, and GitHub Release state all reference the
+  same release
 - `git grep -F "<previous-tag>"` was run with the actual latest released tag and
   every relevant versioned example or documentation reference was updated or
   explicitly ruled out
@@ -161,5 +177,7 @@ annotated tags, and GitHub release notes aligned.
   release-preparation commit before tagging
 - the release was created from the intended default-branch commit or justified
   isolated release branch commit
+- the GitHub Release was drafted after tag push and published only when the
+  broader release outcome or repository policy allowed it
 - unrelated unreleased work was excluded from the chosen release source
 - the published result is specific enough for downstream consumers to use

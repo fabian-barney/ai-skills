@@ -16,6 +16,9 @@ Before running the release:
   may be required
 - changelog, versioned documentation, and versioned example locations are
   identified
+- if preflight CI evidence is being used, it is clear whether that preflight
+  mirrors the tag-triggered release-only checks; otherwise treat preflight as
+  release-plumbing evidence rather than full publication-parity evidence
 
 If any of these are missing, stop and surface the missing release input instead
 of guessing.
