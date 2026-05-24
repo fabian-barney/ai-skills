@@ -13,26 +13,29 @@ Preferred sequence:
 2. if skill `ai-skills-release` explicitly passes an isolated release branch
    requirement into this flow, create that branch from the latest released tag
    and keep it limited to the scoped release change
-3. verify the chosen release source is current for its intended scope and no
-   release-bound PRs remain open for that scope
-4. inspect the commits or file diff from the latest released tag to the chosen
+3. verify the chosen release source is correct for its intended scope and
+   identify any release-bound PRs that still must land for that scope
+4. if release work still depends on release-bound PRs, advance them through
+   skill `ai-skills-pr-review-loop` until each required PR is freshly reviewed
+   and merged or explicitly removed from scope
+5. inspect the commits or file diff from the latest released tag to the chosen
    release source and stop if unrelated unreleased default-branch work would be
    included
-5. update release-notes source
-6. run `git grep -F "<previous-tag>"`, replacing `<previous-tag>` with the
+6. update release-notes source
+7. run `git grep -F "<previous-tag>"`, replacing `<previous-tag>` with the
    actual latest released tag, for example `v1.2.3`
-7. update every relevant versioned example or documentation reference to the new
+8. update every relevant versioned example or documentation reference to the new
    tag
-8. apply skill `ai-skills-tooling-git-write` so known release messages use
+9. apply skill `ai-skills-tooling-git-write` so known release messages use
    non-interactive git write commands
-9. create the release-preparation commit with `git commit -m "..."` for a
+10. create the release-preparation commit with `git commit -m "..."` for a
    single-line message or `git commit -F <temp-file>` for a multi-line message
-10. create the annotated tag on that commit with
+11. create the annotated tag on that commit with
     `git tag -a <tag> -m "..."` for a single-line tag message or
     `git tag -a <tag> -F <temp-file>` for a multi-line tag message
-11. push branch and tag
-12. create the GitHub Release from the pushed tag
-13. verify the tag and release page point at the same commit
+12. push branch and tag
+13. create the GitHub Release from the pushed tag
+14. verify the tag and release page point at the same commit
 
 When repository policy defines a release-note heading or formatting template,
 honor that policy rather than inventing a new layout during release.
@@ -40,6 +43,10 @@ honor that policy rather than inventing a new layout during release.
 If a repository has both a changelog and a separate release-notes source, decide
 which source is authoritative before creating the GitHub Release and keep the
 other one aligned or explicitly out of scope.
+
+Do not treat a merely closed or stale-reviewed release-bound PR as sufficient
+release evidence. When release preparation depends on PRs, the shared PR review
+loop must converge on the latest head before tagging proceeds.
 
 An isolated release branch is an exception path for intentionally scoped
 releases. It is not a substitute for a dirty or lagging default branch and

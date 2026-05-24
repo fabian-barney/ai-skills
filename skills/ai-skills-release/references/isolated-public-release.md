@@ -10,7 +10,8 @@ Sequence:
    current default-branch tip
 3. recreate or cherry-pick only the scoped release change onto that branch
 4. stop if unrelated unreleased work is still present
-5. run the normal release workflow on the isolated branch, including skill `ai-skills-release-github`
+5. run the normal release workflow on the isolated branch, including any
+   required release-bound PR review loop and skill `ai-skills-release-github`
 6. publish only to the repository-relevant targets
 7. verify the released version, tag, release notes, and target artifacts all
    match

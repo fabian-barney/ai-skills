@@ -6,6 +6,7 @@
 - semantic version: `1.8.0`
 - release tag: `v1.8.0`
 - release source: isolated branch from `v1.7.3`
+- release-bound PR review loop: not needed
 - docs/examples updated: yes
 - changelog updated: yes
 - GitHub release: published
