@@ -9,7 +9,7 @@ Evaluate publication targets explicitly:
 Before iterating the individual targets:
 
 1. create the GitHub Release draft after the tag exists and before publishing
-   public targets
+   any target
 2. after all required public targets succeed, publish or promote the GitHub
    Release from draft to final
 
