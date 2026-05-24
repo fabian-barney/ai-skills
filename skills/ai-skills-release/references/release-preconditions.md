@@ -3,7 +3,9 @@
 Before running the release:
 
 - default branch is current
-- release-bound PRs are merged
+- release-bound PRs are already merged, or any release-bound PRs that still
+  must land before publication are explicitly identified for the shared PR
+  review loop
 - repository-specific release policy is identified and treated as local input
 - final build is green
 - final test run is green
