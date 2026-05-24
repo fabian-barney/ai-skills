@@ -106,9 +106,10 @@ final states.
     the changelog as authoritative unless repository policy explicitly says
     otherwise.
 15. If repository policy or skill `ai-skills-release` says GitHub is the only
-    required public target, publish the draft after verification. Otherwise
-    keep the draft in place until the broader release workflow confirms all
-    required public targets succeeded, then publish or promote it to final.
+    required public target, publish the draft immediately after creation.
+    Otherwise keep the draft in place until the broader release workflow
+    confirms all required public targets succeeded, then publish or promote it
+    to final.
 16. If a public target later fails after any public artifact was already
     published, retain the draft or convert it into an explicitly labeled
     historical partial-release record per repository policy instead of
