@@ -126,7 +126,8 @@ final states.
   required
 - aligned changelog or release notes for that version
 - a pushed annotated tag and a GitHub Release draft, plus a published final
-  GitHub Release when target success or repository policy allows it
+  GitHub Release after all required public targets succeed, or immediately
+  when GitHub is the only required public target
 - a concise release summary or release URL for follow-up communication
 
 # Guardrails

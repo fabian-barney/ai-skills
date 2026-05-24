@@ -5,7 +5,7 @@ Keep these release artifacts aligned:
 - changelog or authoritative release-notes source
 - versioned release examples and documentation references
 - annotated Git tag
-- GitHub Release page state
+- GitHub Release state (draft vs published)
 
 Preferred sequence:
 
