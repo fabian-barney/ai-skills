@@ -166,7 +166,7 @@ not as rules to copy into downstream projects.
 - do not publish the final GitHub Release before all required public targets
   succeed
 - do not retry a half-published public release under the same version once any
-  public artifact exists
+  public artifact becomes public
 - do not move a failed release tag away from the true published source commit,
   except for a one-time correction that restores an already-moved tag to that
   true source pointer
