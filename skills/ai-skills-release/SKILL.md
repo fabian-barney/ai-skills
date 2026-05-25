@@ -102,11 +102,11 @@ not as rules to copy into downstream projects.
 10. Apply skill `ai-skills-release-github` to perform the GitHub Release workflow,
     including version selection, changelog/docs alignment, release-prep
     commit, versioned-example updates, tag creation, push, and GitHub Release
-    draft creation. Complete the deferred final GitHub Release publication
-    later in step 13, after all required public targets succeed or immediately
-    when GitHub is the only required public target, using the default branch
-    by default or the isolated release branch when the isolated path was
-    required.
+    draft creation. Stop this step at draft creation. Use step 13 to publish or
+    promote that draft after all required public targets succeed; when GitHub is
+    the only required public target, step 13 may follow immediately after this
+    step. Use the default branch by default or the isolated release branch when
+    the isolated path was required.
 11. Publish release artifacts only after the tag is created and pushed and the
     GitHub Release draft is created. Publish to each applicable target registry
     listed in `references/publication-targets.md`, such as Maven Central, the
@@ -161,8 +161,8 @@ not as rules to copy into downstream projects.
 - do not replace the shared PR review and merge skills with release-specific
   ad-hoc PR handling when pre-publish release-bound PRs exist
 - do not publish artifacts whose version, changelog, or tag is out of sync
-- do not publish registry artifacts before the tag and GitHub Release draft
-  exist
+- do not publish registry artifacts before the tag is created and pushed and
+  the GitHub Release draft exists
 - do not publish the final GitHub Release before all required public targets
   succeed
 - do not retry a half-published public release under the same version once any
@@ -194,10 +194,11 @@ not as rules to copy into downstream projects.
   skill `ai-skills-release-github` when known release git-write messages existed
 - versioned examples and documentation references were updated to the new tag or
   explicitly ruled out
-- tag creation and push completed before GitHub Release draft creation, GitHub
-  Release draft creation completed before artifact publication, and final
-  GitHub Release publication happened only after required public targets
-  succeeded
+- tag creation and push completed before GitHub Release draft creation, and
+  GitHub Release draft creation completed before artifact publication
+- if all required public targets succeeded, final GitHub Release publication
+  happened only after that success; otherwise any partial-publication outcome
+  retained the draft or an explicitly labeled historical partial-release record
 - each repository-relevant publication target is either published successfully
   or explicitly marked not applicable
 - if any required public target failed after a public artifact became public,

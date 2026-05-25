@@ -125,9 +125,11 @@ final states.
 - release-bound PR review-loop status when PR-based release preparation was
   required
 - aligned changelog or release notes for that version
-- a pushed annotated tag and a GitHub Release draft, plus a published final
-  GitHub Release after all required public targets succeed, or immediately
-  when GitHub is the only required public target
+- a pushed annotated tag and a GitHub Release record: published as final after
+  all required public targets succeed, or immediately when GitHub is the only
+  required public target, otherwise retained as a draft / explicitly labeled
+  historical partial-release record when a public target fails after any public
+  artifact becomes public
 - a concise release summary or release URL for follow-up communication
 
 # Guardrails
@@ -179,8 +181,10 @@ final states.
   release-preparation commit before tagging
 - the release was created from the intended default-branch commit or justified
   isolated release branch commit
-- the GitHub Release was drafted after tag push and published only after all
-  required public targets succeeded, or immediately when GitHub was the only
-  required public target
+- the GitHub Release was drafted after tag push and then either published only
+  after all required public targets succeeded, or immediately when GitHub was
+  the only required public target, otherwise retained as a draft / explicitly
+  labeled historical partial-release record when a public target failed after
+  any public artifact becomes public
 - unrelated unreleased work was excluded from the chosen release source
 - the published result is specific enough for downstream consumers to use
