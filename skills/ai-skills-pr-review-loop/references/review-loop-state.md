@@ -11,6 +11,7 @@ Track each active PR with at least these fields:
 - `review-in-progress-after-last-push`
 - `open-review-threads`
 - `new-valid-findings`
+- `suppressed-findings-audit-status`
 - `required-checks-green`
 - `issue-link-present`
 - `pr-scope-focused`
@@ -38,6 +39,16 @@ the most recent explicit manual review request issued by the loop so duplicate
 same-head triggers are prevented. A review request or review tied to an older
 head, or predating `last-push-at`, never satisfies `current-head-oid`.
 
+Define `suppressed-findings-audit-status` as exactly one of:
+
+- `completed`: the inspected platform surface exposed suppressed, hidden, or
+  low-confidence automated findings for `current-head-oid`, and each exposed
+  item was triaged before the PR was treated as clean
+- `not-applicable`: the inspected platform surface exposed no suppressed,
+  hidden, or low-confidence automated findings for `current-head-oid`
+- `unavailable`: the platform surface used by the loop does not expose that
+  class of finding for `current-head-oid`
+
 The review-readiness gate passes only when all of these are true in the same
 evaluation round:
 
@@ -47,6 +58,8 @@ evaluation round:
 - no review is still running for the latest push
 - no open review threads remain
 - no new valid findings remain
+- `suppressed-findings-audit-status` is `completed`, `not-applicable`, or
+  `unavailable`
 - required checks are green
 - the PR body links the main issue with an issue-closing link
 - the PR scope remains focused on the linked issue without unrelated bundled

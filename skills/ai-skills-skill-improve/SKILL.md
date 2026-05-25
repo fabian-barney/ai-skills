@@ -20,6 +20,9 @@ during unrelated daily work.
   reusable improvement to an existing skill
 - use when the target skill belongs to the public `ai-skills` catalog and the
   improvement should be proposed centrally for everyone
+- use when the gap was discovered while reading an installed local
+  `ai-skills-*` copy but the improvement still belongs in the upstream public
+  `ai-skills` catalog
 - use local-only capture when the improvement belongs to a downstream-project
   extension, private policy, or repo-specific skill rather than the central
   catalog
@@ -50,7 +53,9 @@ during unrelated daily work.
 - the rough improvement proposal or expected change in behavior
 - related skills, dependencies, or adjacent skill families
 - source context or notes from the originating task, including where the entry
-  should feed the later catalog update lifecycle when known
+  should feed the later catalog update lifecycle when known, and whether the
+  observation came from the upstream source repository or an installed local
+  skill copy
 - `references/improvement-triage.md` and
   `references/backlog-target-selection.md`
 
@@ -63,23 +68,27 @@ during unrelated daily work.
    examples, or references.
 3. Use `references/improvement-triage.md` to decide whether the proposal should
    be captured centrally or kept as a downstream-project/local extension.
-4. Normalize the improvement with skill `ai-skills-skill-template`, using
+4. If the observation came from an installed local `ai-skills-*` directory,
+   treat that installed copy as evidence only and keep the canonical
+   improvement target upstream in the public `ai-skills` backlog instead of
+   treating the installed bundle as the implementation target.
+5. Normalize the improvement with skill `ai-skills-skill-template`, using
    `change-type: improve` and recording the target skill, motivation,
    reusability rationale,
    trigger conditions, rough improvement shape, related skills, source
    context, and status.
-5. Choose the storage target with
+6. Choose the storage target with
    `references/backlog-target-selection.md`: GitHub issue when the improvement
    belongs in the public `ai-skills` backlog and access exists, otherwise local
    Markdown.
-6. In source context or notes, include how the entry should feed the catalog
+7. In source context or notes, include how the entry should feed the catalog
    update lifecycle, such as later triage, implementation PR,
    changelog/release-note entry, or explicit deferral.
-7. Render the canonical improvement entry for the chosen target without
+8. Render the canonical improvement entry for the chosen target without
    changing the underlying semantics.
-8. Hand GitHub-bound Markdown to skill `ai-skills-formatting-github-comment` when the rendered
+9. Hand GitHub-bound Markdown to skill `ai-skills-formatting-github-comment` when the rendered
    issue body still needs final normalization.
-9. Stop after the improvement proposal is captured and return any current
+10. Stop after the improvement proposal is captured and return any current
    implementation work to the normal agent workflow outside this skill.
 
 # Outputs
@@ -96,6 +105,8 @@ during unrelated daily work.
   exist; use skill `ai-skills-skill-new` instead
 - do not make GitHub the only supported storage target
 - do not let central backlog capture block the current task
+- do not treat an installed local `ai-skills-*` copy as the implementation
+  target for a public catalog improvement
 - do not silently change the canonical field set between renderings
 
 # Exit Checks
@@ -103,6 +114,8 @@ during unrelated daily work.
 - the proposal targets an existing skill and uses `change-type: improve`
 - the record explains whether the improvement belongs centrally in `ai-skills`
   or only in a downstream/local extension
+- when the observation came from an installed local copy, the record still
+  points the maintenance target upstream instead of at that installed bundle
 - the update-lifecycle handoff is explicit enough for later triage
 - the chosen storage target matches access and publication constraints
 - the rendered record stays aligned with the canonical template

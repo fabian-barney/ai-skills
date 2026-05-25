@@ -28,6 +28,9 @@ not as rules to copy into downstream projects.
 - use when a public release must ship a narrowly scoped dependency,
   framework, or build-tool change without also shipping unrelated unreleased
   default-branch work
+- use skill `ai-skills-release-recovery` when the intended version or tag
+  already has failed-release or partial-release state and the normal release
+  flow must stop for explicit recovery classification
 - use when skill `ai-skills-release-github` is necessary but not sufficient on its own
 - use skill `ai-skills-pr-review-loop` when the release creates, recreates, or
   depends on release-bound PRs before tagging or publication can continue
@@ -54,6 +57,8 @@ not as rules to copy into downstream projects.
 - the repository default branch, the latest released tag, and the exact scoped
   release change when a public release may need isolation from unrelated
   unreleased work
+- the remote default-branch head at release start, or the ability to verify it
+  before version selection and again immediately before tagging
 - any release-bound PRs that must be created, recreated, or advanced through
   review before tagging or publication can continue
 - repository-specific release policy, versioning rules, and publication rules
@@ -65,6 +70,7 @@ not as rules to copy into downstream projects.
   updated
 - the artifact publication targets actually used by the repository
 - skill `ai-skills-pr-review-loop`
+- skill `ai-skills-release-recovery`
 - skill `ai-skills-release-github`
 - `references/release-preconditions.md`
 - `references/isolated-public-release.md`
@@ -72,64 +78,72 @@ not as rules to copy into downstream projects.
 
 # Workflow
 
-1. Confirm the default branch is current, the release scope is identified, and
-   the repository is in releasable state.
+1. Verify the remote default-branch head before version selection, confirm the
+   local release source is not stale relative to that remote head, record the
+   checked head, and stop until the source is refreshed or clarified if the
+   remote or local state is ambiguous.
 2. Run or confirm the final build and test pass for the release candidate; do
    not continue if the final verification is red or missing.
 3. Apply the repository-specific release policy as an input, without copying
    policy text into downstream projects.
-4. If dependency, framework, or build-tool choices in the release scope are
+4. If the intended version or tag already has a failed-release, partial-release,
+   or other recovery-state artifact, such as an existing tag, GitHub Release,
+   or target-publication evidence from a prior attempt, stop the normal flow
+   and apply skill `ai-skills-release-recovery` before any retry or follow-up
+   publication decision.
+5. If dependency, framework, or build-tool choices in the release scope are
    still open, apply skill `ai-skills-version-dependency-selection` before
    finalizing the release candidate.
-5. If support-policy decisions in the release scope are still open, apply
+6. If support-policy decisions in the release scope are still open, apply
    skill `ai-skills-version-support-policy` before finalizing the release
    candidate.
-6. Detect the applicable publication targets from
+7. Detect the applicable publication targets from
    `references/publication-targets.md`. If a public registry release would ship
    unrelated unreleased default-branch work, switch to the isolated-release
    path in `references/isolated-public-release.md` and create the release
    source from the latest released tag.
-7. On the isolated-release path, recreate or cherry-pick only the scoped
+8. On the isolated-release path, recreate or cherry-pick only the scoped
    release change onto the isolated branch; stop if unrelated unreleased work
    is still present and do not proceed until the isolated branch contains only
    the scoped release change.
-8. If the chosen release path creates, recreates, or depends on release-bound
+9. If the chosen release path creates, recreates, or depends on release-bound
    PRs before publication can continue, apply skill `ai-skills-pr-review-loop`
    to those PRs and do not proceed until each PR either completed a clean
    review loop and merged or was explicitly removed from the release scope.
-9. Confirm versioned release examples and documentation references are known so
+10. Confirm versioned release examples and documentation references are known so
    the release can update them to the new tag.
-10. Apply skill `ai-skills-release-github` to perform the GitHub Release workflow,
+11. Apply skill `ai-skills-release-github` to perform the GitHub Release workflow,
     including version selection, changelog/docs alignment, release-prep
-    commit, versioned-example updates, tag creation, push, and GitHub Release
-    draft creation. Stop this step at draft creation. Use step 13 to publish or
-    promote that draft after all required public targets succeed; when GitHub is
-    the only required public target, step 13 may follow immediately after this
-    step. Use the default branch by default or the isolated release branch when
-    the isolated path was required.
-11. Publish release artifacts only after the tag is created and pushed and the
+    commit, versioned-example updates, a second remote default-branch head
+    verification immediately before tagging, tag creation, push, and GitHub
+    Release draft creation. Stop this step at draft creation. Use step 14 to
+    publish or promote that draft after all required public targets succeed;
+    when GitHub is the only required public target, step 14 may follow
+    immediately after this step. Use the default branch by default or the
+    isolated release branch when the isolated path was required.
+12. Publish release artifacts only after the tag is created and pushed and the
     GitHub Release draft is created. Publish to each applicable target registry
     listed in `references/publication-targets.md`, such as Maven Central, the
     Gradle Plugin Portal, or a private artifactory, and record any target that
     is intentionally not applicable.
-12. If publication fails before any public artifact becomes public, stop and
-    defer same-version recovery to repository policy instead of automatically
-    treating the version as burned. If any public artifact becomes public and
-    a later required public target fails, treat the version as burned, keep
-    the tag as the historical source pointer, and retain GitHub Release notes
-    through the draft or an explicitly labeled historical partial-release
-    record.
-13. After all required public targets succeed, publish or promote the GitHub
+13. If publication leaves the release incomplete, stop the normal flow with an
+    explicit recovery decision point. When no public artifact became public,
+    record that same-version recovery remains possible only after recovery
+    classification. When any public artifact became public and a later required
+    public target failed, record that the version is burned and the historical
+    tag and GitHub Release state must be preserved for a later new-version
+    follow-up.
+14. After all required public targets succeed, publish or promote the GitHub
     Release from draft to final, following repository policy for any non-public
     targets that remain out of scope.
-14. Verify the published artifacts and release metadata so version numbers,
+15. Verify the published artifacts and release metadata so version numbers,
     tags, changelog entries, published packages, and GitHub Release state all
     match. Record the released version, tag, chosen release source, each
     target result, and whether the outcome was complete or partial.
-15. If an isolated release branch was used, merge back the same scoped release
+16. If an isolated release branch was used, merge back the same scoped release
     change cleanly to the default branch or confirm the default branch already
     contains an equivalent change set.
-16. Use `examples/release-checklist.md` when communicating the completed
+17. Use `examples/release-checklist.md` when communicating the completed
     release steps or any blocked publication target.
 
 # Outputs
@@ -139,6 +153,8 @@ not as rules to copy into downstream projects.
   status
 - explicit release-bound PR review-loop status when pre-publish PRs were part
   of the release
+- recorded remote default-branch freshness evidence for the chosen release
+  source
 - aligned documentation, changelog, GitHub Release state, and publication
   artifacts
 - explicit publication status for each relevant release target
@@ -150,6 +166,12 @@ not as rules to copy into downstream projects.
 - do not skip the final build or test verification before release
 - do not copy repository-specific release rules into downstream projects; use
   local release policy as input
+- do not trust a local default branch or release source without checking the
+  remote default-branch head before version selection and again immediately
+  before tagging
+- do not continue a normal release attempt when the same intended version or
+  tag already has failed-release or partial-release state; classify recovery
+  first with skill `ai-skills-release-recovery`
 - do not release unrelated unreleased default-branch work to a public registry
 - do not create an isolated public-release branch from the default-branch tip;
   create it from the latest released tag
@@ -184,8 +206,14 @@ not as rules to copy into downstream projects.
 
 - final build and test evidence are green and explicit
 - the selected version matches the documented delta from the previous release
+- the remote default-branch head was recorded before version selection and was
+  rechecked immediately before tagging; if it moved, the release scope and
+  version were recomputed or the release stopped
 - the chosen release source is explicit, and any isolated public-release path
   started from the latest released tag
+- any already-failed or already-partial release state for the intended version
+  or tag was handed to skill `ai-skills-release-recovery` instead of being
+  retried implicitly
 - any release-bound PRs required before publication were advanced through skill `ai-skills-pr-review-loop`
   and either merged cleanly or explicitly removed from the release scope
 - skill `ai-skills-release-github` was applied for the GitHub Release portion

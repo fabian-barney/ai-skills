@@ -21,6 +21,9 @@ important context.
 - use when the candidate appears useful beyond the current repository or task
 - use when the idea should be recorded centrally in `ai-skills` instead of only
   in local notes
+- use when the reusable idea was discovered while inspecting an installed local
+  `ai-skills-*` copy but still belongs in the upstream public `ai-skills`
+  backlog
 - use when GitHub access is unavailable and the same canonical backlog entry
   must be preserved as local Markdown instead
 - use `references/public-skill-triage.md` to decide whether the candidate is
@@ -46,7 +49,8 @@ important context.
 - related skills, dependencies, or adjacent existing skills
 - source context or notes from the originating task, limited to observations
   rather than design decisions or implementation plans; include related lessons
-  learned here when known and relevant
+  learned here when known and relevant, and whether the idea was observed in
+  the upstream source repository or an installed local skill copy
 - `references/public-skill-triage.md` and
   `references/backlog-target-selection.md`
 
@@ -56,20 +60,24 @@ important context.
    convention or implementation detail.
 2. Decide whether the candidate belongs in the public `ai-skills` backlog by
    using `references/public-skill-triage.md`.
-3. Normalize the idea with skill `ai-skills-skill-template`, including title, change type,
+3. If the idea was discovered from an installed local `ai-skills-*` directory,
+   treat that installed copy as evidence only and keep the canonical backlog
+   target upstream in the public `ai-skills` catalog rather than treating the
+   installed bundle as the implementation target.
+4. Normalize the idea with skill `ai-skills-skill-template`, including title, change type,
    proposed skill id or name, motivation, reusability rationale, when to use,
    rough workflow, related skills, source context, and status.
-4. Choose the storage target with
+5. Choose the storage target with
    `references/backlog-target-selection.md`: GitHub issue when central
    publication is appropriate and access exists, otherwise local Markdown.
-5. Render the canonical backlog entry for the chosen target without changing
+6. Render the canonical backlog entry for the chosen target without changing
    the underlying semantics.
-6. Use `targets/github-issue.md` and `targets/local-backlog-entry.md` as
+7. Use `targets/github-issue.md` and `targets/local-backlog-entry.md` as
    target-specific renderings of the canonical record when a concrete artifact
    shape helps.
-7. Hand GitHub-bound Markdown to skill `ai-skills-formatting-github-comment` when the rendered
+8. Hand GitHub-bound Markdown to skill `ai-skills-formatting-github-comment` when the rendered
    issue body still needs final normalization.
-8. Stop after the canonical backlog entry is recorded or rendered.
+9. Stop after the canonical backlog entry is recorded or rendered.
 
 # Outputs
 
@@ -84,6 +92,8 @@ important context.
   plans, or claims that the proposed skill was implemented
 - do not create a central backlog item for a purely local, repo-specific need
 - do not make GitHub the only supported storage target
+- do not treat an installed local `ai-skills-*` copy as the implementation
+  target for a new public catalog skill
 - do not silently change the canonical field set between renderings
 - do not fail the workflow just because GitHub issue creation is unavailable
 
@@ -92,6 +102,8 @@ important context.
 - the candidate is captured with the full canonical backlog-entry field set
 - source context or notes are observational and do not contain implementation
   claims
+- when the idea came from an installed local copy, the record still points the
+  maintenance target upstream instead of at that installed bundle
 - the chosen storage target matches access and publication constraints
 - the rendered record stays aligned with the canonical template
 - the workflow stops after capture rather than drifting into implementation

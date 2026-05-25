@@ -31,6 +31,12 @@ current head state described in `copilot-review-trigger.md` under this skill's
 `manual-review-request-eligible`. Do not use PR comments or `@copilot`
 mentions as the trigger.
 
+Once a fresh submitted review exists for the current head, inspect any
+platform-exposed suppressed, hidden, or low-confidence automated findings
+before treating the round as clean. This is an audit obligation attached to the
+latest reviewed head, not a new queue state. Record the outcome as
+`completed`, `not-applicable`, or `unavailable`.
+
 Do not send a second explicit manual request for the same head while a pending
 request remains visible. If a `ReviewRequestRemovedEvent` appears for the
 current head before a submitted review arrives, the PR can become
