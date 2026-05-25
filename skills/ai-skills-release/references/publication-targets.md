@@ -25,12 +25,13 @@ For each target:
 3. if the target is applicable, publish to it only after the pushed tag and
    GitHub Release draft already exist
 4. verify the published artifact version and availability after publication
-5. if the target is public enough and any artifact becomes public, treat that
-   version as burned for retry purposes if later required public targets fail,
-   and keep the tag as the historical source pointer
-6. if publication fails before any public artifact becomes public, defer
-   same-version recovery to repository policy instead of automatically treating
-   the version as burned
+5. if the target is public enough and any artifact for that release version
+   becomes public in any target, treat the version as burned for retry
+   purposes if later required public targets fail, and keep the tag as the
+   historical source pointer
+6. if publication fails before any artifact for that release version becomes
+   public in any target, defer same-version recovery to repository policy
+   instead of automatically treating the version as burned
 7. record `not applicable` when the repository does not use that target
 
 Do not treat optional targets as mandatory, but do not silently skip required
