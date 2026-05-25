@@ -110,10 +110,10 @@ final states.
     Otherwise keep the draft in place until the broader release workflow
     confirms all required public targets succeeded, then publish or promote it
     to final.
-16. If a public target later fails after any public artifact becomes public,
-    retain the draft or convert it into an explicitly labeled historical
-    partial-release record per repository policy instead of pretending the
-    release completed successfully.
+16. If a required public target later fails after any public artifact becomes
+    public, retain the draft or convert it into an explicitly labeled
+    historical partial-release record per repository policy instead of
+    pretending the release completed successfully.
 17. Verify that the tag exists and that the GitHub Release page points at the
     intended commit and is in the intended state.
 
@@ -128,8 +128,8 @@ final states.
 - a pushed annotated tag and a GitHub Release record: published as final after
   all required public targets succeed, or immediately when GitHub is the only
   required public target, otherwise retained as a draft / explicitly labeled
-  historical partial-release record when a public target fails after any public
-  artifact becomes public
+  historical partial-release record when a required public target fails after
+  any public artifact becomes public
 - a concise release summary or release URL for follow-up communication
 
 # Guardrails
@@ -184,7 +184,7 @@ final states.
 - the GitHub Release was drafted after tag push and then either published only
   after all required public targets succeeded, or immediately when GitHub was
   the only required public target, otherwise retained as a draft / explicitly
-  labeled historical partial-release record when a public target failed after
-  any public artifact becomes public
+  labeled historical partial-release record when a required public target
+  failed after any public artifact becomes public
 - unrelated unreleased work was excluded from the chosen release source
 - the published result is specific enough for downstream consumers to use

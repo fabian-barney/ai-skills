@@ -115,9 +115,10 @@ not as rules to copy into downstream projects.
 12. If publication fails before any public artifact becomes public, stop and
     defer same-version recovery to repository policy instead of automatically
     treating the version as burned. If any public artifact becomes public and
-    later publication fails, treat the version as burned, keep the tag as the
-    historical source pointer, and retain GitHub Release notes through the
-    draft or an explicitly labeled historical partial-release record.
+    a later required public target fails, treat the version as burned, keep
+    the tag as the historical source pointer, and retain GitHub Release notes
+    through the draft or an explicitly labeled historical partial-release
+    record.
 13. After all required public targets succeed, publish or promote the GitHub
     Release from draft to final, following repository policy for any non-public
     targets that remain out of scope.
@@ -165,8 +166,8 @@ not as rules to copy into downstream projects.
   the GitHub Release draft exists
 - do not publish the final GitHub Release before all required public targets
   succeed
-- do not retry a half-published public release under the same version once any
-  public artifact becomes public
+- do not retry a half-published public release under the same version when any
+  public artifact becomes public and a required public target later fails
 - do not move a failed release tag away from the true published source commit,
   except for a one-time correction that restores an already-moved tag to that
   true source pointer
