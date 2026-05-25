@@ -2,6 +2,19 @@
 
 # Changelog
 
+## 0.2.3 - 2026-05-25
+
+### Changed
+
+- Tightened `ai-skills-release` and `ai-skills-release-github` so
+  release-bound PRs must complete the shared PR review loop before tagging or
+  publication continues, with aligned inputs, workflow steps, guardrails, and
+  exit checks across the release skill family.
+- Clarified partial public release handling across the release skill family,
+  including draft-first GitHub Release sequencing, burned-version guidance
+  after public publication, and updated release checklist and reference
+  wording for those outcomes.
+
 ## 0.2.2 - 2026-05-23
 
 ### Changed
