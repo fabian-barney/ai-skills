@@ -5,5 +5,5 @@
 - added new bounded-scope review skills and supporting references
 - improved the shared skill catalog with clearer composition and capture-skill
   guidance
-- aligned release metadata, changelog content, and GitHub release notes for the
+- aligned release metadata, changelog content, and GitHub Release notes for the
   published tag
