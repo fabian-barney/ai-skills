@@ -6,7 +6,7 @@ Evaluate publication targets explicitly:
 - Gradle Plugin Portal
 - private artifactory or repository-specific package registry
 
-Before iterating the individual targets:
+Overall sequence around the per-target loop:
 
 1. create the GitHub Release draft after the tag is created and pushed, and
    before publishing any target
