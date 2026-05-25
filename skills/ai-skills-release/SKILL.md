@@ -200,8 +200,8 @@ not as rules to copy into downstream projects.
 - if all required public targets succeeded, final GitHub Release publication
   happened only after that success; otherwise any partial-publication outcome
   retained the draft or an explicitly labeled historical partial-release record
-- each repository-relevant publication target is either published successfully
-  or explicitly marked not applicable
+- each repository-relevant publication target has an explicitly recorded
+  result, such as published successfully, failed, or not applicable
 - if any required public target failed after a public artifact became public,
   the result was treated as partial, the version was burned, and the tag
   remained the historical source pointer
