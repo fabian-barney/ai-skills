@@ -107,18 +107,17 @@ not as rules to copy into downstream projects.
     when GitHub is the only required public target, using the default branch
     by default or the isolated release branch when the isolated path was
     required.
-11. Publish release artifacts only after tag creation and GitHub Release draft
-    creation both succeed. Publish to each applicable target registry listed
-    in `references/publication-targets.md`, such as Maven Central, the Gradle
-    Plugin Portal, or a private artifactory, and record any target that is
-    intentionally not applicable.
-12. If publication fails before any public artifact is successfully published,
-    stop and defer same-version recovery to repository policy instead of
-    automatically treating the version as burned. If any public artifact is
-    successfully published and later publication fails, treat the version as
-    burned, keep the tag as the historical source pointer, and retain GitHub
-    Release notes through the draft or an explicitly labeled historical
-    partial-release record.
+11. Publish release artifacts only after the tag is created and pushed and the
+    GitHub Release draft is created. Publish to each applicable target registry
+    listed in `references/publication-targets.md`, such as Maven Central, the
+    Gradle Plugin Portal, or a private artifactory, and record any target that
+    is intentionally not applicable.
+12. If publication fails before any public artifact becomes public, stop and
+    defer same-version recovery to repository policy instead of automatically
+    treating the version as burned. If any public artifact becomes public and
+    later publication fails, treat the version as burned, keep the tag as the
+    historical source pointer, and retain GitHub Release notes through the
+    draft or an explicitly labeled historical partial-release record.
 13. After all required public targets succeed, publish or promote the GitHub
     Release from draft to final, following repository policy for any non-public
     targets that remain out of scope.
@@ -195,14 +194,15 @@ not as rules to copy into downstream projects.
   skill `ai-skills-release-github` when known release git-write messages existed
 - versioned examples and documentation references were updated to the new tag or
   explicitly ruled out
-- tag creation completed before GitHub Release draft creation, GitHub Release
-  draft creation completed before artifact publication, and final GitHub
-  Release publication happened only after required public targets succeeded
+- tag creation and push completed before GitHub Release draft creation, GitHub
+  Release draft creation completed before artifact publication, and final
+  GitHub Release publication happened only after required public targets
+  succeeded
 - each repository-relevant publication target is either published successfully
   or explicitly marked not applicable
-- if any required public target failed after a public artifact was already
-  published, the result was treated as partial, the version was burned, and
-  the tag remained the historical source pointer
+- if any required public target failed after a public artifact became public,
+  the result was treated as partial, the version was burned, and the tag
+  remained the historical source pointer
 - the final release report names the released version, tag, chosen release
   source, and each target outcome
 - the final release report names the release-bound PR review result or

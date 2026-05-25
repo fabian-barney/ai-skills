@@ -53,8 +53,8 @@ If a repository has both a changelog and a separate release-notes source, decide
 which source is authoritative before creating the GitHub Release draft and keep
 the other one aligned or explicitly out of scope.
 
-If publication fails before any public artifact is successfully published, do
-not automatically assume the version is burned; same-version recovery remains a
+If publication fails before any public artifact becomes public, do not
+automatically assume the version is burned; same-version recovery remains a
 repository-policy decision.
 
 Do not treat a merely closed or stale-reviewed release-bound PR as sufficient

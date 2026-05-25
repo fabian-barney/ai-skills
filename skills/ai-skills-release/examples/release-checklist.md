@@ -38,7 +38,7 @@ targets.
 - Maven Central: published
 - Gradle Plugin Portal: failed
 - private artifactory: not applicable
-- version burned: yes, because a public artifact was already published
+- version burned: yes, because a public artifact became public
 - release tag state: kept at the true published source commit
 - GitHub Release final state: retained as draft or historical partial-release
   record per repository policy

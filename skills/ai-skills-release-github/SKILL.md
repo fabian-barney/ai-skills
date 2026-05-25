@@ -110,10 +110,10 @@ final states.
     Otherwise keep the draft in place until the broader release workflow
     confirms all required public targets succeeded, then publish or promote it
     to final.
-16. If a public target later fails after any public artifact was already
-    published, retain the draft or convert it into an explicitly labeled
-    historical partial-release record per repository policy instead of
-    pretending the release completed successfully.
+16. If a public target later fails after any public artifact becomes public,
+    retain the draft or convert it into an explicitly labeled historical
+    partial-release record per repository policy instead of pretending the
+    release completed successfully.
 17. Verify that the tag exists and that the GitHub Release page points at the
     intended commit and is in the intended state.
 
