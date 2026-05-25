@@ -40,14 +40,14 @@ jobs:
         run: corepack pnpm build
 
       - name: Upload dependencies
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: node-modules-${{ matrix.os }}
           path: node_modules
           if-no-files-found: error
 
       - name: Upload build outputs
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: dist-${{ matrix.os }}
           path: dist
@@ -80,13 +80,13 @@ jobs:
         run: corepack enable
 
       - name: Download dependencies
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: node-modules-${{ matrix.os }}
           path: node_modules
 
       - name: Download build outputs
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: dist-${{ matrix.os }}
           path: dist
@@ -95,7 +95,7 @@ jobs:
         run: corepack pnpm test
 
       - name: Upload coverage
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: coverage-${{ matrix.os }}
           path: coverage
@@ -158,13 +158,13 @@ jobs:
         run: corepack enable
 
       - name: Download dependencies
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: node-modules-${{ matrix.os }}
           path: node_modules
 
       - name: Download build outputs
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: dist-${{ matrix.os }}
           path: dist
@@ -193,13 +193,13 @@ jobs:
         run: corepack enable
 
       - name: Download dependencies
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: node-modules-ubuntu-latest
           path: node_modules
 
       - name: Download build outputs
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: dist-ubuntu-latest
           path: dist
@@ -228,19 +228,19 @@ jobs:
         run: corepack enable
 
       - name: Download dependencies
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: node-modules-ubuntu-latest
           path: node_modules
 
       - name: Download build outputs
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: dist-ubuntu-latest
           path: dist
 
       - name: Download coverage
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: coverage-ubuntu-latest
           path: coverage
@@ -269,13 +269,13 @@ jobs:
         run: corepack enable
 
       - name: Download dependencies
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: node-modules-ubuntu-latest
           path: node_modules
 
       - name: Download build outputs
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: dist-ubuntu-latest
           path: dist
