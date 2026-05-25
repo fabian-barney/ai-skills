@@ -11,7 +11,9 @@ When to use / trigger: when a change adds or updates third-party dependencies
 Rough workflow or responsibilities: inspect dependency deltas, identify policy
 or license concerns, and produce review findings or a clean pass result
 Related skills or dependencies: skill `ai-skills-security-secrets`, skill `ai-skills-quality-sonar`
-Source context or notes: captured during a repository review on a locked-down
-company laptop without GitHub issue permissions; related lessons learned: none
-known
+Source context or notes: captured while inspecting an installed local
+`ai-skills-*` catalog copy during a repository review on a locked-down company
+laptop without GitHub issue permissions; the installed bundle is not the
+implementation target; transfer upstream to `ai-skills` issue triage when
+access returns; related lessons learned: none known
 Status: idea

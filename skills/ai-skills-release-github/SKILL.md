@@ -24,6 +24,9 @@ final states.
   user-visible changes since the latest released tag
 - use when changelog content, tags, and GitHub Release notes must describe the
   same release
+- use skill `ai-skills-release-recovery` when the intended version or tag
+  already has failed-release or partial-release state and this normal
+  GitHub-release flow must stop for recovery classification
 - use skill `ai-skills-pr-review-loop` when release work is intentionally
   delivered through PRs before the release-preparation commit can be created
 - use skill `ai-skills-tooling-git-write` when the release flow will create a
@@ -43,6 +46,8 @@ final states.
 - the repository default branch, or an intentionally isolated release branch
   created from the latest released tag when skill `ai-skills-release`
   explicitly requires that narrower source as an input to this skill
+- the remote default-branch head at release start, or the ability to verify it
+  before version selection and again immediately before tagging
 - confirmation that all required release-bound PRs are merged or explicitly
   removed from scope for the chosen release source and intended release scope,
   or the release-bound PR list that must complete the shared review loop
@@ -53,6 +58,7 @@ final states.
   release scope that affect compatibility claims
 - the changelog or strongest release-notes source for the repository
 - GitHub access capable of pushing tags and creating releases
+- skill `ai-skills-release-recovery`
 - skill `ai-skills-pr-review-loop`
 - skill `ai-skills-tooling-git-write`
 - `references/version-selection.md`
@@ -64,57 +70,69 @@ final states.
    release branch when skill `ai-skills-release` explicitly requires it and
    passes that requirement into this skill; create that branch from the latest
    released tag so unrelated unreleased default-branch work is excluded.
-2. Ensure the chosen release source is correct for its intended scope,
+2. Verify the remote default-branch head before version selection, confirm the
+   local release source is current relative to that remote head, record the
+   checked head, and stop until the source is refreshed or clarified if the
+   remote or local state is ambiguous.
+3. Ensure the chosen release source is correct for its intended scope,
    identify any release-bound PRs that still must land for that scope, and do
    not release from a feature branch.
-3. If the chosen release source still depends on release-bound PRs, apply
+4. If the intended version or tag already has failed-release, partial-release,
+   or other recovery-state evidence, such as an existing tag, GitHub Release,
+   or publication attempt from a prior run, stop this normal flow and apply
+   skill `ai-skills-release-recovery` before any retry or metadata change.
+5. If the chosen release source still depends on release-bound PRs, apply
    skill `ai-skills-pr-review-loop` to those PRs and do not continue until
    each one completed a clean review loop and merged, or was explicitly
    removed from the release scope.
-4. If the release scope includes framework, build-tool, or dependency choices
+6. If the release scope includes framework, build-tool, or dependency choices
    that are not fixed yet, apply skill `ai-skills-version-dependency-selection`
    before finalizing release timing or compatibility notes.
-5. If the release changes officially supported runtimes or platforms and the
+7. If the release changes officially supported runtimes or platforms and the
    support policy is not explicit yet, apply skill `ai-skills-version-support-policy`
    before finalizing compatibility claims.
-6. Determine the target version: use an explicit version when provided;
+8. Determine the target version: use an explicit version when provided;
    otherwise classify the changes since the latest released tag and select the
    smallest valid semantic-version bump that fits the strongest user-visible
    change.
-7. Stop if there are no meaningful release changes instead of creating an empty
+9. Stop if there are no meaningful release changes instead of creating an empty
    tag.
-8. Verify the chosen release source contains only the intended scoped release
+10. Verify the chosen release source contains only the intended scoped release
    change set by inspecting the commits or file diff from the latest released
    tag to that source. Stop until the source is narrowed if unrelated
    unreleased work would be included.
-9. Update the changelog or release-notes source with the selected version, the
+11. Update the changelog or release-notes source with the selected version, the
    release date, and a concise summary of user-visible changes.
-10. Run `git grep -F "<previous-tag>"` before creating the release commit,
+12. Run `git grep -F "<previous-tag>"` before creating the release commit,
    replacing `<previous-tag>` with the actual latest released version tag, for
    example `v1.2.3`. Update every versioned release example or documentation
    reference found so it points at the new tag.
-11. Stage the changelog or release-notes source and all versioned-example
+13. Stage the changelog or release-notes source and all versioned-example
     updates together.
-12. Apply skill `ai-skills-tooling-git-write` so the release-preparation
+14. Re-check the remote default-branch head immediately before tagging. If it
+    moved since the earlier verification, stop and recompute the intended
+    release scope and version before creating the release-preparation commit or
+    tag.
+15. Apply skill `ai-skills-tooling-git-write` so the release-preparation
     commit and annotated tag use non-interactive git write commands when their
     messages are already known.
-13. Commit the release-preparation changes on the chosen release source,
+16. Commit the release-preparation changes on the chosen release source,
     create an annotated tag for the release commit, and push both branch and
     tag.
-14. Create the GitHub Release draft from the pushed tag using notes that stay
+17. Create the GitHub Release draft from the pushed tag using notes that stay
     aligned with the changelog or release-notes source. If both exist, treat
     the changelog as authoritative unless repository policy explicitly says
     otherwise.
-15. If repository policy or skill `ai-skills-release` says GitHub is the only
+18. If repository policy or skill `ai-skills-release` says GitHub is the only
     required public target, publish the draft immediately after creation.
     Otherwise keep the draft in place until the broader release workflow
     confirms all required public targets succeeded, then publish or promote it
     to final.
-16. If a required public target later fails after any public artifact becomes
+19. If a required public target later fails after any public artifact becomes
     public, retain the draft or convert it into an explicitly labeled
     historical partial-release record per repository policy instead of
     pretending the release completed successfully.
-17. Verify that the tag exists and that the GitHub Release page points at the
+20. Verify that the tag exists and that the GitHub Release page points at the
     intended commit and is in the intended state.
 
 # Outputs
@@ -122,6 +140,7 @@ final states.
 - the selected release version and release commit
 - the release source used, including whether it was the default branch or an
   intentionally isolated release branch from the latest released tag
+- recorded remote default-branch freshness evidence for the release source
 - release-bound PR review-loop status when PR-based release preparation was
   required
 - aligned changelog or release notes for that version
@@ -137,6 +156,12 @@ final states.
 - do not release from a feature branch or dirty branch state
 - do not use an isolated release branch unless skill `ai-skills-release`
   explicitly requires it
+- do not trust a local default branch or release source without checking the
+  remote default-branch head before version selection and again immediately
+  before tagging
+- do not continue this normal GitHub-release flow when the same intended
+  version or tag already has failed-release or partial-release state; classify
+  recovery first with skill `ai-skills-release-recovery`
 - do not release while a required release-bound PR for the chosen release
   source and intended release scope lacks a completed shared review loop for
   its latest head or remains unmerged
@@ -163,8 +188,14 @@ final states.
 # Exit Checks
 
 - the target version is explicit and justified
+- the remote default-branch head was recorded before version selection and was
+  rechecked immediately before tagging; if it moved, the scope and version were
+  recomputed or the release stopped
 - the chosen release source is explicit and justified, and isolated release
   branch use is backed by an explicit skill `ai-skills-release` requirement
+- any already-failed or already-partial release state for the intended version
+  or tag was handed to skill `ai-skills-release-recovery` instead of being
+  retried implicitly
 - if release-bound PRs were needed for the intended scope, skill `ai-skills-pr-review-loop`
   was applied and each required PR completed the shared review loop and merged
   or was explicitly removed from scope before tagging

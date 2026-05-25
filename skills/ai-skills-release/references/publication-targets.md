@@ -12,6 +12,9 @@ Overall sequence around the per-target loop:
    before publishing any target
 2. after all required public targets succeed, publish or promote the GitHub
    Release from draft to final
+3. if the same version or tag already has failed-release or partial-release
+   state from an earlier attempt, stop this normal target loop and classify the
+   recovery path with skill `ai-skills-release-recovery` first
 
 For each target:
 
@@ -30,8 +33,9 @@ For each target:
    purposes if later required public targets fail, and keep the tag as the
    historical source pointer
 6. if publication fails before any artifact for that release version becomes
-   public in any target, defer same-version recovery to repository policy
-   instead of automatically treating the version as burned
+   public in any target, stop with an explicit same-version recovery decision
+   point and defer the exact retry path to repository policy instead of
+   automatically treating the version as burned
 7. record `not applicable` when the repository does not use that target
 
 Do not treat optional targets as mandatory, but do not silently skip required

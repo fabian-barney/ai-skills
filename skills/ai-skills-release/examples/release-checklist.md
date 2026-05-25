@@ -7,8 +7,11 @@
 - delta to previous release: reviewed
 - semantic version: `1.8.0`
 - release tag: `v1.8.0`
+- remote default-branch head before version selection: `abc1234`
+- remote default-branch head before tagging: unchanged at `abc1234`
 - release source: isolated branch from `v1.7.3`
 - release-bound PR review loop: not needed
+- recovery handoff: not needed
 - docs/examples updated: yes
 - changelog updated: yes
 - GitHub Release draft: created after tag push
@@ -29,8 +32,11 @@ targets.
 - delta to previous release: reviewed
 - semantic version: `1.8.1`
 - release tag: `v1.8.1`
+- remote default-branch head before version selection: `def5678`
+- remote default-branch head before tagging: unchanged at `def5678`
 - release source: default branch
 - release-bound PR review loop: not needed
+- recovery handoff after failure: skill `ai-skills-release-recovery`
 - docs/examples updated: yes
 - changelog updated: yes
 - GitHub Release draft: created after tag push

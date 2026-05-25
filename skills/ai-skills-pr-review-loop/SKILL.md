@@ -38,7 +38,8 @@ after the latest push has been reviewed.
 - session entry preferences when already answered:
   `RUN_REVIEW_LOOP`, `IMPLEMENT_AFTER_PLAN`, and `MERGE_AFTER_CLEAN_LOOP`
 - the latest push time, current head commit, automated-review state,
-  review-request timeline state, review threads, and required checks for each
+  review-request timeline state, review threads, any exposed suppressed,
+  hidden, or low-confidence automated findings, and required checks for each
   PR
 - repository preferences about whether clean PRs should be merged
 - access to the PR platform APIs needed to request or inspect automated review
@@ -99,26 +100,32 @@ after the latest push has been reviewed.
    mutation and verification steps.
 10. If checks are still running or a review is still in progress for the
    latest push, keep the PR active and continue with the next item.
-11. When the latest push has completed review results, apply
-   skill `ai-skills-pr-review` and skill `ai-skills-pr-review-respond` to classify
-   handled findings as valid or invalid, reply to every handled thread, fix
-   every valid finding, and resolve all handled threads before the round is
-   complete.
-12. If fixes were pushed, restart the same post-push review cycle for that PR
+11. When the latest push has completed review results, audit any suppressed,
+    hidden, or low-confidence automated findings that the current platform
+    surface exposes for that same `headRefOid`. Record whether the audit is
+    `completed`, `not-applicable`, or `unavailable`.
+12. For thread-backed findings, apply skill `ai-skills-pr-review` and skill `ai-skills-pr-review-respond`
+    to classify handled findings as valid or invalid, reply to every handled
+    thread, fix every valid finding, and resolve all handled threads before the
+    round is complete. For exposed non-thread findings, still classify them as
+    valid or invalid, fix or explain every valid finding, and record
+    explicitly when the platform gives no thread surface to reply on or
+    resolve.
+13. If fixes were pushed, restart the same post-push review cycle for that PR
    instead of treating earlier review results as sufficient. Do not send a
    second explicit manual review request for the same head unless the head
    commit changed or review-request timeline evidence shows the pending request
    was removed. For strict GitHub Copilot review loops, repeat the same
    approved `gh` CLI / GraphQL flow instead of using PR comments or `@copilot`
    mentions.
-13. If no fixes were needed, verify the PR remains focused on the linked issue
+14. If no fixes were needed, verify the PR remains focused on the linked issue
    and the PR body contains the issue-closing link, then evaluate the
    review-readiness gate from `references/review-loop-state.md`.
-14. When the review-readiness gate passes and
+15. When the review-readiness gate passes and
    `MERGE_AFTER_CLEAN_LOOP=true`, hand the PR to skill `ai-skills-pr-merge` for
    the remaining merge-policy checks and merge execution; otherwise report the
    blocking gate conditions or clean-but-unmerged status.
-15. Use `examples/review-loop-status.md` when communicating queue state,
+16. Use `examples/review-loop-status.md` when communicating queue state,
    remaining blockers, or clean completion.
 
 # Outputs
@@ -131,6 +138,8 @@ after the latest push has been reviewed.
 - explicit note when strict GitHub Copilot review was manually requested
   through the approved `gh` / GraphQL flow for the latest head commit after
   the 5-minute minimum from `last-push-at`
+- suppressed-finding audit status for the latest reviewed head: `completed`,
+  `not-applicable`, or `unavailable`
 - captured session preferences or explicit note that the loop was skipped
 - handled review threads with explicit valid or invalid classification,
   required replies, and final resolution
@@ -160,9 +169,15 @@ after the latest push has been reviewed.
   `gh api graphql` flow using the `requestReviewsByLogin` mutation with a
   weaker GitHub comment convention when strict GitHub Copilot review is
   required
+- do not declare a clean review round while platform-exposed suppressed,
+  hidden, or low-confidence findings for the latest reviewed head remain
+  untriaged
 - do not mention `@copilot` in PR comments
 - do not delete review comments to make threads disappear; resolve handled
   threads and preserve the history
+- do not pretend a non-thread finding was replied to or resolved in-thread when
+  the platform exposed no thread surface for it; record that limitation
+  explicitly instead
 - do not declare a review round complete while any handled thread lacks a
   reply, any valid finding remains unfixed, or any handled thread remains open
 - do not resolve invalid findings without leaving a concise rationale first
@@ -181,6 +196,10 @@ after the latest push has been reviewed.
   came from the approved `gh` / GraphQL trigger flow or already-existing fresh
   platform review state, and any manual request honored the 5-minute minimum
   from `last-push-at`
+- the latest reviewed head has a recorded suppressed-finding audit status of
+  `completed`, `not-applicable`, or `unavailable`, and any exposed suppressed,
+  hidden, or low-confidence findings were triaged before the PR was treated as
+  clean
 - each merge-ready PR is focused on its linked issue and has an issue-closing
   link in the PR body
 - each completed review round classified handled findings as valid or invalid,
