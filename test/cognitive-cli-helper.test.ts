@@ -166,6 +166,10 @@ test("installs TypeScript cognitive CLIs without lifecycle scripts and keeps cle
       {
         isDirectory: () => true,
         name: "0.2.0"
+      },
+      {
+        isDirectory: () => true,
+        name: "..evil"
       }
     ],
     rm: async () => {
@@ -189,8 +193,8 @@ test("installs TypeScript cognitive CLIs without lifecycle scripts and keeps cle
   assert.equal(tool.stale, false);
   assert.equal(runCalls.length, 1);
   assert.ok(runCalls[0]?.args.includes("--ignore-scripts"));
-  assert.equal(warnings.length, 1);
-  assert.match(warnings[0], /Could not remove outdated cognitive typescript CLI 0\.2\.0/u);
+  assert.match(warnings.join("\n"), /Ignoring unsafe outdated cognitive typescript CLI directory/u);
+  assert.match(warnings.join("\n"), /Could not remove outdated cognitive typescript CLI 0\.2\.0/u);
 });
 
 test("validates downloaded Java cognitive CLIs against Maven SHA-256 checksums", async () => {
@@ -376,6 +380,49 @@ test("discovers cached cognitive CLIs from disk when state is missing", async ()
   assert.equal(tool.stale, true);
   assert.match(warnings.join("\n"), /Ignoring unsafe cached cognitive typescript CLI directory/u);
   assert.match(warnings.join("\n"), /Using cached cognitive typescript CLI 0\.2\.1/u);
+});
+
+test("refreshes cognitive metadata when the fresh state version is missing", async () => {
+  const cacheRoot = await createTempDir();
+  const languageRoot = path.join(cacheRoot, "typescript");
+  const executablePath = path.join(
+    languageRoot,
+    "0.2.1",
+    "node_modules",
+    "@barney-media",
+    "cognitive-typescript",
+    "dist",
+    "bin.js"
+  );
+  const warnings: string[] = [];
+
+  await fs.mkdir(path.dirname(executablePath), { recursive: true });
+  await fs.writeFile(executablePath, "");
+  await fs.writeFile(
+    path.join(languageRoot, "state.json"),
+    JSON.stringify({
+      checkedAt: "2026-06-01T00:00:00.000Z",
+      version: "0.3.0"
+    })
+  );
+
+  const deps = {
+    ...createDefaultDeps(),
+    cacheRoot,
+    fetchJson: async () => {
+      throw new Error("offline");
+    },
+    now: () => Date.parse("2026-06-01T00:00:00.000Z"),
+    warn: (message: string) => {
+      warnings.push(message);
+    }
+  };
+
+  const tool = await resolveTool("typescript", deps);
+
+  assert.equal(tool.executablePath, executablePath);
+  assert.equal(tool.stale, true);
+  assert.match(warnings.join("\n"), /Using cached cognitive typescript CLI 0\.2\.1: offline/u);
 });
 
 async function createTempDir() {
