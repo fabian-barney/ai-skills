@@ -9,6 +9,8 @@ import {
   WEEK_MS,
   buildToolCommand,
   createDefaultDeps,
+  npmCommandSpec,
+  parseCliRequest,
   parseMavenLatestVersion,
   parseNpmLatestVersion,
   resolveTool,
@@ -37,13 +39,29 @@ test("parses latest CRAP CLI versions from npm and Maven metadata", () => {
   );
 });
 
+test("parses CRAP helper requests with an optional argument separator", () => {
+  assert.deepEqual(parseCliRequest(["typescript", "--", "--agent", "src"]), {
+    ok: true,
+    language: "typescript",
+    toolArgs: ["--agent", "src"]
+  });
+  assert.deepEqual(parseCliRequest(["java", "--agent", "src"]), {
+    ok: true,
+    language: "java",
+    toolArgs: ["--agent", "src"]
+  });
+  assert.match(parseCliRequest(["ruby"]).message, /\[--\]/u);
+});
+
 test("refreshes cached CRAP CLI metadata at most weekly", () => {
   const now = Date.parse("2026-06-01T12:00:00Z");
   const sixDaysAgo = new Date(now - WEEK_MS + 1).toISOString();
   const sevenDaysAgo = new Date(now - WEEK_MS).toISOString();
+  const future = new Date(now + 1).toISOString();
 
   assert.equal(shouldRefreshMetadata(sixDaysAgo, now), false);
   assert.equal(shouldRefreshMetadata(sevenDaysAgo, now), true);
+  assert.equal(shouldRefreshMetadata(future, now), true);
   assert.equal(shouldRefreshMetadata("not-a-date", now), true);
 });
 
@@ -67,6 +85,32 @@ test("builds CRAP CLI commands for TypeScript and Java tools", () => {
       args: ["-jar", "cache/crap-java-cli.jar", "--agent", "--threshold", "8"]
     }
   );
+});
+
+test("resolves npm through bundled CLI paths before falling back to PATH", async () => {
+  const npmCli = path.resolve(
+    path.dirname(process.execPath),
+    "..",
+    "lib",
+    "node_modules",
+    "npm",
+    "bin",
+    "npm-cli.js"
+  );
+  const deps = {
+    ...createDefaultDeps(),
+    exists: async (candidate: string) => candidate === npmCli
+  };
+
+  assert.deepEqual(await npmCommandSpec(deps, "linux"), {
+    command: process.execPath,
+    args: [npmCli]
+  });
+  assert.deepEqual(await npmCommandSpec({ ...deps, exists: async () => false }, "win32"), {
+    command: "npm.cmd",
+    args: [],
+    shell: true
+  });
 });
 
 test("falls back to a cached CRAP CLI when weekly metadata refresh is offline", async () => {

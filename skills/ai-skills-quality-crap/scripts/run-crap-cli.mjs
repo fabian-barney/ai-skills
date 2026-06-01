@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import { spawn } from "node:child_process";
 import fs from "node:fs/promises";
 import os from "node:os";
@@ -24,7 +22,7 @@ export function parseCliRequest(argv) {
   if (!SUPPORTED_LANGUAGES.has(language)) {
     return {
       ok: false,
-      message: "Usage: node scripts/run-crap-cli.mjs <typescript|java> -- <tool args...>"
+      message: "Usage: node scripts/run-crap-cli.mjs <typescript|java> [--] <tool args...>"
     };
   }
 
@@ -66,7 +64,7 @@ export function shouldRefreshMetadata(checkedAt, nowMs) {
 
   const checkedAtMs = Date.parse(checkedAt);
 
-  return Number.isNaN(checkedAtMs) || nowMs - checkedAtMs >= WEEK_MS;
+  return Number.isNaN(checkedAtMs) || checkedAtMs > nowMs || nowMs - checkedAtMs >= WEEK_MS;
 }
 
 export function buildToolCommand(language, executablePath, toolArgs) {
@@ -157,7 +155,7 @@ export async function resolveTool(language, deps = createDefaultDeps()) {
     };
   } catch (error) {
     if (cachedTool !== undefined) {
-      deps.warn(`Using cached CRAP ${language} CLI ${cachedTool.version}: ${error.message}`);
+      deps.warn(`Using cached CRAP ${language} CLI ${cachedTool.version}: ${toErrorMessage(error)}`);
       return {
         ...cachedTool,
         stale: true
@@ -165,7 +163,7 @@ export async function resolveTool(language, deps = createDefaultDeps()) {
     }
 
     throw new Error(
-      `Cannot resolve CRAP ${language} CLI and no cached tool is available: ${error.message}`
+      `Cannot resolve CRAP ${language} CLI and no cached tool is available: ${toErrorMessage(error)}`
     );
   }
 }
@@ -235,17 +233,21 @@ async function installTool(language, languageRoot, version, deps) {
   await deps.mkdir(versionRoot);
 
   if (language === "typescript") {
-    const npmCommand = npmCommandSpec();
-    const exitCode = await deps.runProcess(npmCommand.command, [
-      ...npmCommand.args,
-      "install",
-      "--prefix",
-      versionRoot,
-      "--no-save",
-      "--no-audit",
-      "--no-fund",
-      `${TOOL_CONFIG.npmPackage}@${version}`
-    ]);
+    const npmCommand = await npmCommandSpec(deps);
+    const exitCode = await deps.runProcess(
+      npmCommand.command,
+      [
+        ...npmCommand.args,
+        "install",
+        "--prefix",
+        versionRoot,
+        "--no-save",
+        "--no-audit",
+        "--no-fund",
+        `${TOOL_CONFIG.npmPackage}@${version}`
+      ],
+      { shell: npmCommand.shell === true }
+    );
 
     if (exitCode !== 0) {
       throw new Error(`npm install failed with exit code ${exitCode}`);
@@ -296,15 +298,29 @@ function mavenJarUrl(version) {
   return `https://repo.maven.apache.org/maven2/${TOOL_CONFIG.mavenGroupPath}/${TOOL_CONFIG.mavenArtifact}/${version}/${TOOL_CONFIG.mavenArtifact}-${version}.jar`;
 }
 
-function npmCommandSpec() {
-  return {
-    command: process.execPath,
-    args: [npmCliPath()]
-  };
+export async function npmCommandSpec(deps = createDefaultDeps(), platform = process.platform) {
+  for (const candidate of npmCliPathCandidates()) {
+    if (await deps.exists(candidate)) {
+      return {
+        command: process.execPath,
+        args: [candidate]
+      };
+    }
+  }
+
+  return platform === "win32"
+    ? { command: "npm.cmd", args: [], shell: true }
+    : { command: "npm", args: [] };
 }
 
-function npmCliPath() {
-  return path.join(path.dirname(process.execPath), "node_modules", "npm", "bin", "npm-cli.js");
+function npmCliPathCandidates() {
+  const nodeBinDir = path.dirname(process.execPath);
+
+  return [
+    path.resolve(nodeBinDir, "node_modules", "npm", "bin", "npm-cli.js"),
+    path.resolve(nodeBinDir, "..", "lib", "node_modules", "npm", "bin", "npm-cli.js"),
+    path.resolve(nodeBinDir, "..", "node_modules", "npm", "bin", "npm-cli.js")
+  ];
 }
 
 async function fetchJson(url) {
@@ -349,9 +365,10 @@ async function pathExists(filePath) {
   }
 }
 
-function runProcess(command, args) {
+function runProcess(command, args, options = {}) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
+      shell: options.shell === true,
       stdio: "inherit"
     });
 
@@ -369,7 +386,11 @@ if (isEntrypoint) {
   try {
     process.exitCode = await run(process.argv.slice(2));
   } catch (error) {
-    console.error(error.message);
+    console.error(toErrorMessage(error));
     process.exitCode = 1;
   }
+}
+
+function toErrorMessage(error) {
+  return error instanceof Error ? error.message : String(error);
 }
