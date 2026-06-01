@@ -17,6 +17,7 @@ import {
   parseNpmLatestVersion,
   parseSha256Checksum,
   resolveTool,
+  run,
   safeVersionPathSegment,
   shouldRefreshMetadata
 } from "../skills/ai-skills-quality-cognitive-complexity/scripts/run-cognitive-cli.mjs";
@@ -423,6 +424,50 @@ test("refreshes cognitive metadata when the fresh state version is missing", asy
   assert.equal(tool.executablePath, executablePath);
   assert.equal(tool.stale, true);
   assert.match(warnings.join("\n"), /Using cached cognitive typescript CLI 0\.2\.1: offline/u);
+});
+
+test("logs resolved cognitive CLI evidence before execution", async () => {
+  const cacheRoot = await createTempDir();
+  const languageRoot = path.join(cacheRoot, "typescript");
+  const executablePath = path.join(
+    languageRoot,
+    "0.2.1",
+    "node_modules",
+    "@barney-media",
+    "cognitive-typescript",
+    "dist",
+    "bin.js"
+  );
+  const infoMessages: string[] = [];
+  const runCalls: Array<{ args: string[]; command: string }> = [];
+
+  await fs.mkdir(path.dirname(executablePath), { recursive: true });
+  await fs.writeFile(executablePath, "");
+  await fs.writeFile(
+    path.join(languageRoot, "state.json"),
+    JSON.stringify({
+      checkedAt: "2026-06-01T00:00:00.000Z",
+      version: "0.2.1"
+    })
+  );
+
+  const exitCode = await run(["typescript", "--", "--help"], {
+    ...createDefaultDeps(),
+    cacheRoot,
+    info: (message: string) => {
+      infoMessages.push(message);
+    },
+    now: () => Date.parse("2026-06-01T00:00:00.000Z"),
+    runProcess: async (command: string, args: string[]) => {
+      runCalls.push({ args, command });
+      return 0;
+    }
+  });
+
+  assert.equal(exitCode, 0);
+  assert.match(infoMessages[0] ?? "", /Resolved cognitive typescript CLI 0\.2\.1 \(cache\)/u);
+  assert.equal(runCalls[0]?.command, process.execPath);
+  assert.deepEqual(runCalls[0]?.args, [executablePath, "--help"]);
 });
 
 async function createTempDir() {

@@ -12,9 +12,10 @@ node path/to/skills/ai-skills-quality-cognitive-complexity/scripts/run-cognitive
 node path/to/skills/ai-skills-quality-cognitive-complexity/scripts/run-cognitive-cli.mjs java -- --agent --threshold 15 src/main/java
 ```
 
-The helper forwards all arguments after `--` to the downloaded CLI. Pass only
-the relevant files or directories when the bounded change is narrower than the
-full repository.
+The helper forwards tool arguments after the language. Use `--` as an optional
+separator when the first tool argument also starts with a dash. Pass only the
+relevant files or directories when the bounded change is narrower than the full
+repository.
 
 ## Tool Resolution
 

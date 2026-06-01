@@ -119,6 +119,7 @@ export function createDefaultDeps() {
     exists: pathExists,
     fetchJson,
     fetchText,
+    info: (message) => console.error(message),
     mkdir: async (directory) => fs.mkdir(directory, { recursive: true }),
     now: () => Date.now(),
     readDir: async (directory) => fs.readdir(directory, { withFileTypes: true }),
@@ -195,7 +196,15 @@ export async function run(argv, deps = createDefaultDeps()) {
   const tool = await resolveTool(request.language, deps);
   const command = buildToolCommand(request.language, tool.executablePath, request.toolArgs);
 
+  deps.info?.(formatResolvedToolMessage(tool));
+
   return deps.runProcess(command.command, command.args);
+}
+
+export function formatResolvedToolMessage(tool) {
+  const cacheStatus = tool.stale ? "stale-cache" : "cache";
+
+  return `Resolved cognitive ${tool.language} CLI ${tool.version} (${cacheStatus}) at ${tool.executablePath}`;
 }
 
 async function readState(statePath, deps) {
