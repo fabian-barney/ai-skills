@@ -141,8 +141,8 @@ export async function resolveTool(language, deps = createDefaultDeps()) {
   const state = await readState(statePath, deps);
   const cachedTool = await getCachedTool(language, languageRoot, state, deps);
 
-  if (cachedTool !== undefined && !shouldRefreshMetadata(state.checkedAt, deps.now())) {
-    return cachedTool;
+  if (cachedTool?.fromState === true && !shouldRefreshMetadata(state.checkedAt, deps.now())) {
+    return toolResult(cachedTool);
   }
 
   try {
@@ -173,7 +173,7 @@ export async function resolveTool(language, deps = createDefaultDeps()) {
     if (cachedTool !== undefined) {
       deps.warn(`Using cached CRAP ${language} CLI ${cachedTool.version}: ${toErrorMessage(error)}`);
       return {
-        ...cachedTool,
+        ...toolResult(cachedTool),
         stale: true
       };
     }
@@ -226,7 +226,7 @@ async function getCachedToolFromState(language, languageRoot, state, deps) {
     return undefined;
   }
 
-  return getCachedToolForVersion(language, languageRoot, version, deps);
+  return getCachedToolForVersion(language, languageRoot, version, deps, true);
 }
 
 async function getCachedToolFromDisk(language, languageRoot, deps) {
@@ -248,7 +248,7 @@ async function getCachedToolFromDisk(language, languageRoot, deps) {
     }));
 
   for (const version of versions) {
-    const cachedTool = await getCachedToolForVersion(language, languageRoot, version, deps);
+    const cachedTool = await getCachedToolForVersion(language, languageRoot, version, deps, false);
 
     if (cachedTool !== undefined) {
       return cachedTool;
@@ -267,7 +267,7 @@ function safeVersionCandidate(version, source, deps) {
   }
 }
 
-async function getCachedToolForVersion(language, languageRoot, version, deps) {
+async function getCachedToolForVersion(language, languageRoot, version, deps, fromState) {
   const executablePath = executablePathFor(language, languageRoot, version);
 
   if (!await deps.exists(executablePath)) {
@@ -276,9 +276,19 @@ async function getCachedToolForVersion(language, languageRoot, version, deps) {
 
   return {
     executablePath,
+    fromState,
     language,
     stale: false,
     version
+  };
+}
+
+function toolResult(tool) {
+  return {
+    executablePath: tool.executablePath,
+    language: tool.language,
+    stale: tool.stale,
+    version: tool.version
   };
 }
 
@@ -380,13 +390,17 @@ async function removeOutdatedVersions(language, languageRoot, currentVersion, de
     return;
   }
 
-  await Promise.all(entries
-    .filter((entry) => entry.isDirectory() && entry.name !== currentVersion)
-    .map(async (entry) => {
+  const outdatedVersions = entries
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => safeVersionCandidate(entry.name, `outdated CRAP ${language} CLI directory`, deps))
+    .filter((version) => version !== undefined && version !== currentVersion);
+
+  await Promise.all(outdatedVersions
+    .map(async (version) => {
       try {
-        await deps.rm(path.join(languageRoot, entry.name));
+        await deps.rm(path.join(languageRoot, version));
       } catch (error) {
-        deps.warn(`Could not remove outdated CRAP ${language} CLI ${entry.name}: ${toErrorMessage(error)}`);
+        deps.warn(`Could not remove outdated CRAP ${language} CLI ${version}: ${toErrorMessage(error)}`);
       }
     }));
 }
