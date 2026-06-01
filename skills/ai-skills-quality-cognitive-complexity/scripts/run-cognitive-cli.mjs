@@ -87,8 +87,10 @@ export function buildToolCommand(language, executablePath, toolArgs) {
 }
 
 export function getCacheRoot(env = process.env, platform = process.platform) {
-  if (env.AI_SKILLS_TOOL_CACHE_DIR !== undefined && env.AI_SKILLS_TOOL_CACHE_DIR.trim() !== "") {
-    return path.resolve(env.AI_SKILLS_TOOL_CACHE_DIR, TOOL_CONFIG.skillId);
+  const configuredCacheDir = env.AI_SKILLS_TOOL_CACHE_DIR?.trim();
+
+  if (configuredCacheDir !== undefined && configuredCacheDir !== "") {
+    return path.resolve(configuredCacheDir, TOOL_CONFIG.skillId);
   }
 
   const baseCacheDir = env.XDG_CACHE_HOME
@@ -288,7 +290,12 @@ async function downloadVerifiedMavenJar(languageRoot, version, deps) {
   const actualChecksum = sha256(await deps.readFile(jarPath));
 
   if (actualChecksum !== expectedChecksum) {
-    await deps.rm(jarPath);
+    try {
+      await deps.rm(jarPath);
+    } catch (error) {
+      deps.warn(`Could not remove invalid cognitive java CLI ${version}: ${toErrorMessage(error)}`);
+    }
+
     throw new Error(`Maven JAR checksum mismatch for ${TOOL_CONFIG.mavenArtifact} ${version}`);
   }
 }

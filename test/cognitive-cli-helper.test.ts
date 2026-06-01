@@ -10,6 +10,7 @@ import {
   WEEK_MS,
   buildToolCommand,
   createDefaultDeps,
+  getCacheRoot,
   npmCommandSpec,
   parseCliRequest,
   parseMavenLatestVersion,
@@ -40,6 +41,15 @@ test("parses latest cognitive CLI versions from npm and Maven metadata", () => {
     "0.6.0"
   );
   assert.equal(parseSha256Checksum("ABCDEF".padEnd(64, "0")), "abcdef".padEnd(64, "0"));
+});
+
+test("trims cognitive helper cache root overrides", () => {
+  const cacheDir = path.join(os.tmpdir(), "ai-skills-cognitive-cache-root");
+
+  assert.equal(
+    getCacheRoot({ AI_SKILLS_TOOL_CACHE_DIR: ` ${cacheDir} ` }, process.platform),
+    path.resolve(cacheDir, "ai-skills-quality-cognitive-complexity")
+  );
 });
 
 test("parses cognitive helper requests with an optional argument separator", () => {
@@ -203,6 +213,60 @@ test("validates downloaded Java cognitive CLIs against Maven SHA-256 checksums",
 
   assert.equal(tool.executablePath, executablePath);
   assert.equal(tool.version, "0.6.0");
+});
+
+test("falls back to cached Java cognitive CLIs when checksum cleanup fails", async () => {
+  const cacheRoot = await createTempDir();
+  const languageRoot = path.join(cacheRoot, "java");
+  const cachedJar = path.join(languageRoot, "0.5.1", "cognitive-java-cli-0.5.1.jar");
+  const newestJar = path.join(languageRoot, "0.6.0", "cognitive-java-cli-0.6.0.jar");
+  const warnings: string[] = [];
+
+  await fs.mkdir(path.dirname(cachedJar), { recursive: true });
+  await fs.writeFile(cachedJar, "cached");
+  await fs.writeFile(
+    path.join(languageRoot, "state.json"),
+    JSON.stringify({
+      checkedAt: "2026-05-01T00:00:00.000Z",
+      version: "0.5.1"
+    })
+  );
+
+  const deps = {
+    ...createDefaultDeps(),
+    cacheRoot,
+    downloadFile: async (_url: string, filePath: string) => {
+      await fs.mkdir(path.dirname(filePath), { recursive: true });
+      await fs.writeFile(filePath, "bad");
+    },
+    fetchText: async (url: string) => url.endsWith(".sha256")
+      ? createHash("sha256").update("good").digest("hex")
+      : [
+        "<metadata>",
+        "  <versioning>",
+        "    <latest>0.6.0</latest>",
+        "  </versioning>",
+        "</metadata>"
+      ].join("\n"),
+    now: () => Date.parse("2026-06-01T00:00:00.000Z"),
+    rm: async (target: string) => {
+      if (target === newestJar) {
+        throw new Error("locked");
+      }
+
+      await fs.rm(target, { force: true, recursive: true });
+    },
+    warn: (message: string) => {
+      warnings.push(message);
+    }
+  };
+
+  const tool = await resolveTool("java", deps);
+
+  assert.equal(tool.executablePath, cachedJar);
+  assert.equal(tool.stale, true);
+  assert.match(warnings.join("\n"), /Could not remove invalid cognitive java CLI 0\.6\.0/u);
+  assert.match(warnings.join("\n"), /Maven JAR checksum mismatch/u);
 });
 
 test("falls back to a cached cognitive CLI when weekly metadata refresh is offline", async () => {
