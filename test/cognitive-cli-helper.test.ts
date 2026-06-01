@@ -17,6 +17,7 @@ import {
   parseNpmLatestVersion,
   parseSha256Checksum,
   resolveTool,
+  safeVersionPathSegment,
   shouldRefreshMetadata
 } from "../skills/ai-skills-quality-cognitive-complexity/scripts/run-cognitive-cli.mjs";
 
@@ -41,6 +42,15 @@ test("parses latest cognitive CLI versions from npm and Maven metadata", () => {
     "0.6.0"
   );
   assert.equal(parseSha256Checksum("ABCDEF".padEnd(64, "0")), "abcdef".padEnd(64, "0"));
+  assert.equal(safeVersionPathSegment("1.2.3-alpha+1", "test version"), "1.2.3-alpha+1");
+  assert.throws(
+    () => parseNpmLatestVersion({ "dist-tags": { latest: "../bin" } }),
+    /safe version path segment/u
+  );
+  assert.throws(
+    () => parseMavenLatestVersion("<metadata><versioning><latest>1/2</latest></versioning></metadata>"),
+    /safe version path segment/u
+  );
 });
 
 test("trims cognitive helper cache root overrides", () => {
@@ -328,6 +338,44 @@ test("normalizes non-Error thrown values while resolving cognitive CLIs", async 
     () => resolveTool("typescript", deps),
     /Cannot resolve cognitive typescript CLI and no cached tool is available: offline/u
   );
+});
+
+test("discovers cached cognitive CLIs from disk when state is missing", async () => {
+  const cacheRoot = await createTempDir();
+  const languageRoot = path.join(cacheRoot, "typescript");
+  const executablePath = path.join(
+    languageRoot,
+    "0.2.1",
+    "node_modules",
+    "@barney-media",
+    "cognitive-typescript",
+    "dist",
+    "bin.js"
+  );
+  const warnings: string[] = [];
+
+  await fs.mkdir(path.dirname(executablePath), { recursive: true });
+  await fs.writeFile(executablePath, "");
+  await fs.mkdir(path.join(languageRoot, "..evil"), { recursive: true });
+
+  const deps = {
+    ...createDefaultDeps(),
+    cacheRoot,
+    fetchJson: async () => {
+      throw new Error("offline");
+    },
+    now: () => Date.parse("2026-06-01T00:00:00.000Z"),
+    warn: (message: string) => {
+      warnings.push(message);
+    }
+  };
+
+  const tool = await resolveTool("typescript", deps);
+
+  assert.equal(tool.executablePath, executablePath);
+  assert.equal(tool.stale, true);
+  assert.match(warnings.join("\n"), /Ignoring unsafe cached cognitive typescript CLI directory/u);
+  assert.match(warnings.join("\n"), /Using cached cognitive typescript CLI 0\.2\.1/u);
 });
 
 async function createTempDir() {
