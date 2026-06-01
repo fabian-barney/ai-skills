@@ -1,4 +1,5 @@
 import { spawn } from "node:child_process";
+import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -22,7 +23,7 @@ export function parseCliRequest(argv) {
   if (!SUPPORTED_LANGUAGES.has(language)) {
     return {
       ok: false,
-      message: "Usage: node scripts/run-crap-cli.mjs <typescript|java> [--] <tool args...>"
+      message: "Usage: node <run-crap-cli.mjs> <typescript|java> [--] <tool args...>"
     };
   }
 
@@ -107,6 +108,7 @@ export function createDefaultDeps() {
     mkdir: async (directory) => fs.mkdir(directory, { recursive: true }),
     now: () => Date.now(),
     readDir: async (directory) => fs.readdir(directory, { withFileTypes: true }),
+    readFile: async (filePath) => fs.readFile(filePath),
     readJson: async (filePath) => JSON.parse(await fs.readFile(filePath, "utf8")),
     rm: async (target) => fs.rm(target, { force: true, recursive: true }),
     runProcess,
@@ -145,7 +147,7 @@ export async function resolveTool(language, deps = createDefaultDeps()) {
       checkedAt: new Date(deps.now()).toISOString(),
       version: latestVersion
     });
-    await removeOutdatedVersions(languageRoot, latestVersion, deps);
+    await removeOutdatedVersions(language, languageRoot, latestVersion, deps);
 
     return {
       executablePath,
@@ -244,6 +246,7 @@ async function installTool(language, languageRoot, version, deps) {
         "--no-save",
         "--no-audit",
         "--no-fund",
+        "--ignore-scripts",
         `${TOOL_CONFIG.npmPackage}@${version}`
       ],
       { shell: npmCommand.shell === true }
@@ -257,7 +260,7 @@ async function installTool(language, languageRoot, version, deps) {
   }
 
   if (language === "java") {
-    await deps.downloadFile(mavenJarUrl(version), executablePathFor(language, languageRoot, version));
+    await downloadVerifiedMavenJar(languageRoot, version, deps);
     return;
   }
 
@@ -276,7 +279,21 @@ function executablePathFor(language, languageRoot, version) {
   throw new Error(`Unsupported language: ${language}`);
 }
 
-async function removeOutdatedVersions(languageRoot, currentVersion, deps) {
+async function downloadVerifiedMavenJar(languageRoot, version, deps) {
+  const jarPath = executablePathFor("java", languageRoot, version);
+  const expectedChecksum = parseSha256Checksum(await deps.fetchText(mavenJarChecksumUrl(version)));
+
+  await deps.downloadFile(mavenJarUrl(version), jarPath);
+
+  const actualChecksum = sha256(await deps.readFile(jarPath));
+
+  if (actualChecksum !== expectedChecksum) {
+    await deps.rm(jarPath);
+    throw new Error(`Maven JAR checksum mismatch for ${TOOL_CONFIG.mavenArtifact} ${version}`);
+  }
+}
+
+async function removeOutdatedVersions(language, languageRoot, currentVersion, deps) {
   let entries;
 
   try {
@@ -287,7 +304,13 @@ async function removeOutdatedVersions(languageRoot, currentVersion, deps) {
 
   await Promise.all(entries
     .filter((entry) => entry.isDirectory() && entry.name !== currentVersion)
-    .map((entry) => deps.rm(path.join(languageRoot, entry.name))));
+    .map(async (entry) => {
+      try {
+        await deps.rm(path.join(languageRoot, entry.name));
+      } catch (error) {
+        deps.warn(`Could not remove outdated CRAP ${language} CLI ${entry.name}: ${toErrorMessage(error)}`);
+      }
+    }));
 }
 
 function mavenMetadataUrl() {
@@ -296,6 +319,24 @@ function mavenMetadataUrl() {
 
 function mavenJarUrl(version) {
   return `https://repo.maven.apache.org/maven2/${TOOL_CONFIG.mavenGroupPath}/${TOOL_CONFIG.mavenArtifact}/${version}/${TOOL_CONFIG.mavenArtifact}-${version}.jar`;
+}
+
+function mavenJarChecksumUrl(version) {
+  return `${mavenJarUrl(version)}.sha256`;
+}
+
+export function parseSha256Checksum(checksumText) {
+  const checksum = checksumText.trim().split(/\s+/u)[0]?.toLowerCase();
+
+  if (checksum === undefined || !/^[a-f0-9]{64}$/u.test(checksum)) {
+    throw new Error("Maven checksum response does not include a SHA-256 digest");
+  }
+
+  return checksum;
+}
+
+function sha256(bytes) {
+  return createHash("sha256").update(bytes).digest("hex");
 }
 
 export async function npmCommandSpec(deps = createDefaultDeps(), platform = process.platform) {

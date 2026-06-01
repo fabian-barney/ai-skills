@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -13,6 +14,7 @@ import {
   parseCliRequest,
   parseMavenLatestVersion,
   parseNpmLatestVersion,
+  parseSha256Checksum,
   resolveTool,
   shouldRefreshMetadata
 } from "../skills/ai-skills-quality-crap/scripts/run-crap-cli.mjs";
@@ -37,6 +39,7 @@ test("parses latest CRAP CLI versions from npm and Maven metadata", () => {
     ].join("\n")),
     "0.6.1"
   );
+  assert.equal(parseSha256Checksum("ABCDEF".padEnd(64, "0")), "abcdef".padEnd(64, "0"));
 });
 
 test("parses CRAP helper requests with an optional argument separator", () => {
@@ -111,6 +114,95 @@ test("resolves npm through bundled CLI paths before falling back to PATH", async
     args: [],
     shell: true
   });
+});
+
+test("installs TypeScript CRAP CLIs without lifecycle scripts and keeps cleanup best-effort", async () => {
+  const cacheRoot = await createTempDir();
+  const languageRoot = path.join(cacheRoot, "typescript");
+  const executablePath = path.join(
+    languageRoot,
+    "0.4.1",
+    "node_modules",
+    "@barney-media",
+    "crap-typescript",
+    "dist",
+    "bin.js"
+  );
+  const runCalls: Array<{ args: string[] }> = [];
+  const warnings: string[] = [];
+  let installed = false;
+
+  const deps = {
+    ...createDefaultDeps(),
+    cacheRoot,
+    exists: async (candidate: string) => installed && candidate === executablePath,
+    fetchJson: async () => ({
+      "dist-tags": {
+        latest: "0.4.1"
+      }
+    }),
+    now: () => Date.parse("2026-06-01T00:00:00.000Z"),
+    readDir: async () => [
+      {
+        isDirectory: () => true,
+        name: "0.4.0"
+      }
+    ],
+    rm: async () => {
+      throw new Error("locked");
+    },
+    runProcess: async (_command: string, args: string[]) => {
+      runCalls.push({ args });
+      await fs.mkdir(path.dirname(executablePath), { recursive: true });
+      await fs.writeFile(executablePath, "");
+      installed = true;
+      return 0;
+    },
+    warn: (message: string) => {
+      warnings.push(message);
+    }
+  };
+
+  const tool = await resolveTool("typescript", deps);
+
+  assert.equal(tool.executablePath, executablePath);
+  assert.equal(tool.stale, false);
+  assert.equal(runCalls.length, 1);
+  assert.ok(runCalls[0]?.args.includes("--ignore-scripts"));
+  assert.equal(warnings.length, 1);
+  assert.match(warnings[0], /Could not remove outdated CRAP typescript CLI 0\.4\.0/u);
+});
+
+test("validates downloaded Java CRAP CLIs against Maven SHA-256 checksums", async () => {
+  const cacheRoot = await createTempDir();
+  const languageRoot = path.join(cacheRoot, "java");
+  const jarBytes = Buffer.from("jar-bytes");
+  const checksum = createHash("sha256").update(jarBytes).digest("hex");
+  const executablePath = path.join(languageRoot, "0.6.1", "crap-java-cli-0.6.1.jar");
+
+  const deps = {
+    ...createDefaultDeps(),
+    cacheRoot,
+    downloadFile: async (_url: string, filePath: string) => {
+      await fs.mkdir(path.dirname(filePath), { recursive: true });
+      await fs.writeFile(filePath, jarBytes);
+    },
+    fetchText: async (url: string) => url.endsWith(".sha256")
+      ? checksum
+      : [
+        "<metadata>",
+        "  <versioning>",
+        "    <latest>0.6.1</latest>",
+        "  </versioning>",
+        "</metadata>"
+      ].join("\n"),
+    now: () => Date.parse("2026-06-01T00:00:00.000Z")
+  };
+
+  const tool = await resolveTool("java", deps);
+
+  assert.equal(tool.executablePath, executablePath);
+  assert.equal(tool.version, "0.6.1");
 });
 
 test("falls back to a cached CRAP CLI when weekly metadata refresh is offline", async () => {
