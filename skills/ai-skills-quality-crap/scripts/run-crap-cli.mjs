@@ -43,7 +43,7 @@ export function parseNpmLatestVersion(metadata) {
     throw new Error("npm metadata does not include dist-tags.latest");
   }
 
-  return latest;
+  return safeVersionPathSegment(latest, "npm metadata dist-tags.latest");
 }
 
 export function parseMavenLatestVersion(metadataXml) {
@@ -53,6 +53,18 @@ export function parseMavenLatestVersion(metadataXml) {
 
   if (version === undefined || version.length === 0) {
     throw new Error("Maven metadata does not include latest or release version");
+  }
+
+  return safeVersionPathSegment(version, "Maven metadata version");
+}
+
+export function safeVersionPathSegment(version, source) {
+  if (typeof version !== "string" || version.length === 0) {
+    throw new Error(`${source} is not a safe version path segment`);
+  }
+
+  if (!/^[A-Za-z0-9][A-Za-z0-9._+-]*$/u.test(version) || version.includes("..")) {
+    throw new Error(`${source} is not a safe version path segment`);
   }
 
   return version;
@@ -195,11 +207,68 @@ async function readState(statePath, deps) {
 }
 
 async function getCachedTool(language, languageRoot, state, deps) {
-  if (typeof state.version !== "string" || state.version.length === 0) {
+  const stateTool = await getCachedToolFromState(language, languageRoot, state, deps);
+
+  return stateTool ?? getCachedToolFromDisk(language, languageRoot, deps);
+}
+
+async function getCachedToolFromState(language, languageRoot, state, deps) {
+  if (typeof state.version !== "string") {
     return undefined;
   }
 
-  const executablePath = executablePathFor(language, languageRoot, state.version);
+  let version;
+
+  try {
+    version = safeVersionPathSegment(state.version, "cached CRAP CLI state version");
+  } catch (error) {
+    deps.warn(`Ignoring cached CRAP ${language} CLI state: ${toErrorMessage(error)}`);
+    return undefined;
+  }
+
+  return getCachedToolForVersion(language, languageRoot, version, deps);
+}
+
+async function getCachedToolFromDisk(language, languageRoot, deps) {
+  let entries;
+
+  try {
+    entries = await deps.readDir(languageRoot);
+  } catch {
+    return undefined;
+  }
+
+  const versions = entries
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => safeVersionCandidate(entry.name, `cached CRAP ${language} CLI directory`, deps))
+    .filter((version) => version !== undefined)
+    .sort((left, right) => right.localeCompare(left, undefined, {
+      numeric: true,
+      sensitivity: "base"
+    }));
+
+  for (const version of versions) {
+    const cachedTool = await getCachedToolForVersion(language, languageRoot, version, deps);
+
+    if (cachedTool !== undefined) {
+      return cachedTool;
+    }
+  }
+
+  return undefined;
+}
+
+function safeVersionCandidate(version, source, deps) {
+  try {
+    return safeVersionPathSegment(version, source);
+  } catch (error) {
+    deps.warn(`Ignoring unsafe ${source}: ${toErrorMessage(error)}`);
+    return undefined;
+  }
+}
+
+async function getCachedToolForVersion(language, languageRoot, version, deps) {
+  const executablePath = executablePathFor(language, languageRoot, version);
 
   if (!await deps.exists(executablePath)) {
     return undefined;
@@ -209,7 +278,7 @@ async function getCachedTool(language, languageRoot, state, deps) {
     executablePath,
     language,
     stale: false,
-    version: state.version
+    version
   };
 }
 
@@ -270,12 +339,14 @@ async function installTool(language, languageRoot, version, deps) {
 }
 
 function executablePathFor(language, languageRoot, version) {
+  const safeVersion = safeVersionPathSegment(version, "CRAP CLI version");
+
   if (language === "typescript") {
-    return path.join(languageRoot, version, ...TOOL_CONFIG.npmBinPath);
+    return path.join(languageRoot, safeVersion, ...TOOL_CONFIG.npmBinPath);
   }
 
   if (language === "java") {
-    return path.join(languageRoot, version, `${TOOL_CONFIG.mavenArtifact}-${version}.jar`);
+    return path.join(languageRoot, safeVersion, `${TOOL_CONFIG.mavenArtifact}-${safeVersion}.jar`);
   }
 
   throw new Error(`Unsupported language: ${language}`);
