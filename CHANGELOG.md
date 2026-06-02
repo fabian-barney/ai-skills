@@ -2,6 +2,26 @@
 
 # Changelog
 
+## 0.3.0 - 2026-06-02
+
+### Added
+
+- Added skill-owned cached CRAP and cognitive-complexity CLI helpers for
+  TypeScript and Java, including per-skill user caches, weekly metadata
+  refresh, offline cached fallback, resolved-tool evidence, and focused cache
+  behavior tests.
+- Added CLI tooling references for the CRAP and cognitive-complexity skills so
+  agents prefer the skill-owned helpers with `--agent`, scoped changed paths,
+  explicit thresholds, and recorded evidence.
+
+### Changed
+
+- Updated compatible dependency and CI tooling versions, including artifact
+  action alignment and package-manager/toolchain updates.
+- Tightened release, review-loop, review-response, release-recovery, and skill
+  backlog guidance so release-bound PRs, pending review signals, handled
+  findings, and partial publication outcomes are tracked explicitly.
+
 ## 0.2.3 - 2026-05-25
 
 ### Changed
