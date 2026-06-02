@@ -68,17 +68,36 @@ jobs:
             echo "already_published=false" >> "${GITHUB_OUTPUT}"
           fi
 
+      - name: Create or update GitHub release draft
+        env:
+          ALREADY_PUBLISHED: ${{ steps.published.outputs.already_published }}
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            is_draft="$(gh release view "${GITHUB_REF_NAME}" --json isDraft --jq .isDraft)"
+            if [ "${is_draft}" = "true" ]; then
+              gh release edit "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-file release-notes.md --draft
+            else
+              if [ "${ALREADY_PUBLISHED}" != "true" ]; then
+                echo "::error::GitHub Release ${GITHUB_REF_NAME} is already published, but the npm package version is not published."
+                exit 1
+              fi
+              gh release edit "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-file release-notes.md
+            fi
+          else
+            gh release create "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-file release-notes.md --draft
+          fi
+
       - name: Publish to npm
         if: steps.published.outputs.already_published == 'false'
+        id: npm_publish
         run: npm publish --access public
 
-      - name: Create or update GitHub release
+      - name: Publish GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
-          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
-            gh release edit "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-file release-notes.md
-          else
-            gh release create "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-file release-notes.md
-          fi
+          gh release edit "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-file release-notes.md --draft=false --latest
