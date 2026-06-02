@@ -142,9 +142,22 @@ export async function resolveTool(language, deps = createDefaultDeps()) {
   const statePath = path.join(languageRoot, "state.json");
   const state = await readState(statePath, deps);
   const cachedTool = await getCachedTool(language, languageRoot, state, deps);
+  const metadataIsFresh = !shouldRefreshMetadata(state.checkedAt, deps.now());
 
-  if (cachedTool?.fromState === true && !shouldRefreshMetadata(state.checkedAt, deps.now())) {
-    return toolResult(cachedTool);
+  if (metadataIsFresh) {
+    if (cachedTool?.fromState === true) {
+      return toolResult(cachedTool);
+    }
+
+    try {
+      const stateTool = await installFreshStateTool(language, languageRoot, state, deps);
+
+      if (stateTool !== undefined) {
+        return stateTool;
+      }
+    } catch (error) {
+      return cachedFallbackOrThrow(language, cachedTool, error, deps);
+    }
   }
 
   try {
@@ -172,17 +185,7 @@ export async function resolveTool(language, deps = createDefaultDeps()) {
       version: latestVersion
     };
   } catch (error) {
-    if (cachedTool !== undefined) {
-      deps.warn(`Using cached cognitive ${language} CLI ${cachedTool.version}: ${toErrorMessage(error)}`);
-      return {
-        ...toolResult(cachedTool),
-        stale: true
-      };
-    }
-
-    throw new Error(
-      `Cannot resolve cognitive ${language} CLI and no cached tool is available: ${toErrorMessage(error)}`
-    );
+    return cachedFallbackOrThrow(language, cachedTool, error, deps);
   }
 }
 
@@ -299,6 +302,51 @@ function toolResult(tool) {
     language: tool.language,
     stale: tool.stale,
     version: tool.version
+  };
+}
+
+function cachedFallbackOrThrow(language, cachedTool, error, deps) {
+  if (cachedTool !== undefined) {
+    deps.warn(`Using cached cognitive ${language} CLI ${cachedTool.version}: ${toErrorMessage(error)}`);
+    return {
+      ...toolResult(cachedTool),
+      stale: true
+    };
+  }
+
+  throw new Error(
+    `Cannot resolve cognitive ${language} CLI and no cached tool is available: ${toErrorMessage(error)}`
+  );
+}
+
+async function installFreshStateTool(language, languageRoot, state, deps) {
+  if (typeof state.version !== "string") {
+    return undefined;
+  }
+
+  const version = safeVersionCandidate(state.version, "cached cognitive CLI state version", deps);
+
+  if (version === undefined) {
+    return undefined;
+  }
+
+  const executablePath = executablePathFor(language, languageRoot, version);
+
+  if (!await deps.exists(executablePath)) {
+    await installTool(language, languageRoot, version, deps);
+  }
+
+  if (!await deps.exists(executablePath)) {
+    throw new Error(`installed cognitive ${language} CLI is missing at ${executablePath}`);
+  }
+
+  await removeOutdatedVersions(language, languageRoot, version, deps);
+
+  return {
+    executablePath,
+    language,
+    stale: false,
+    version
   };
 }
 
