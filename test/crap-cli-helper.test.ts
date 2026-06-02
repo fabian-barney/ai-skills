@@ -370,10 +370,10 @@ test("discovers cached CRAP CLIs from disk when state is missing", async () => {
   assert.match(warnings.join("\n"), /Using cached CRAP typescript CLI 0\.4\.1/u);
 });
 
-test("refreshes CRAP metadata when the fresh state version is missing", async () => {
+test("reinstalls the fresh CRAP state version without refreshing metadata", async () => {
   const cacheRoot = await createTempDir();
   const languageRoot = path.join(cacheRoot, "typescript");
-  const executablePath = path.join(
+  const staleExecutablePath = path.join(
     languageRoot,
     "0.4.1",
     "node_modules",
@@ -382,10 +382,19 @@ test("refreshes CRAP metadata when the fresh state version is missing", async ()
     "dist",
     "bin.js"
   );
-  const warnings: string[] = [];
+  const stateExecutablePath = path.join(
+    languageRoot,
+    "0.5.0",
+    "node_modules",
+    "@barney-media",
+    "crap-typescript",
+    "dist",
+    "bin.js"
+  );
+  const runCalls: Array<{ args: string[] }> = [];
 
-  await fs.mkdir(path.dirname(executablePath), { recursive: true });
-  await fs.writeFile(executablePath, "");
+  await fs.mkdir(path.dirname(staleExecutablePath), { recursive: true });
+  await fs.writeFile(staleExecutablePath, "");
   await fs.writeFile(
     path.join(languageRoot, "state.json"),
     JSON.stringify({
@@ -398,19 +407,24 @@ test("refreshes CRAP metadata when the fresh state version is missing", async ()
     ...createDefaultDeps(),
     cacheRoot,
     fetchJson: async () => {
-      throw new Error("offline");
+      throw new Error("metadata refresh should not run");
     },
     now: () => Date.parse("2026-06-01T00:00:00.000Z"),
-    warn: (message: string) => {
-      warnings.push(message);
+    runProcess: async (_command: string, args: string[]) => {
+      runCalls.push({ args });
+      await fs.mkdir(path.dirname(stateExecutablePath), { recursive: true });
+      await fs.writeFile(stateExecutablePath, "");
+      return 0;
     }
   };
 
   const tool = await resolveTool("typescript", deps);
 
-  assert.equal(tool.executablePath, executablePath);
-  assert.equal(tool.stale, true);
-  assert.match(warnings.join("\n"), /Using cached CRAP typescript CLI 0\.4\.1: offline/u);
+  assert.equal(tool.executablePath, stateExecutablePath);
+  assert.equal(tool.version, "0.5.0");
+  assert.equal(tool.stale, false);
+  assert.equal(runCalls.length, 1);
+  assert.ok(runCalls[0]?.args.includes("@barney-media/crap-typescript@0.5.0"));
 });
 
 test("logs resolved CRAP CLI evidence before execution", async () => {
