@@ -70,6 +70,7 @@ jobs:
 
       - name: Create or update GitHub release draft
         env:
+          ALREADY_PUBLISHED: ${{ steps.published.outputs.already_published }}
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
@@ -79,6 +80,10 @@ jobs:
             if [ "${is_draft}" = "true" ]; then
               gh release edit "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-file release-notes.md --draft
             else
+              if [ "${ALREADY_PUBLISHED}" != "true" ]; then
+                echo "::error::GitHub Release ${GITHUB_REF_NAME} is already published, but the npm package version is not published."
+                exit 1
+              fi
               gh release edit "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-file release-notes.md
             fi
           else
