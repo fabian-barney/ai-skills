@@ -10,6 +10,9 @@ import {
   WEEK_MS,
   buildToolCommand,
   createDefaultDeps,
+  downloadFile,
+  fetchJson,
+  fetchText,
   getCacheRoot,
   npmCommandSpec,
   parseCliRequest,
@@ -452,6 +455,34 @@ test("logs resolved CRAP CLI evidence before execution", async () => {
   assert.match(infoMessages[0] ?? "", /Resolved CRAP typescript CLI 0\.4\.1 \(cache\)/u);
   assert.equal(runCalls[0]?.command, process.execPath);
   assert.deepEqual(runCalls[0]?.args, [executablePath, "--help"]);
+});
+
+test("uses request timeouts for CRAP metadata and downloads", async () => {
+  const originalFetch = globalThis.fetch;
+  const signals: Array<AbortSignal | null | undefined> = [];
+  const downloadPath = path.join(await createTempDir(), "tool.jar");
+
+  globalThis.fetch = (async (_url: string | URL | Request, init?: RequestInit) => {
+    signals.push(init?.signal);
+
+    return new Response(JSON.stringify({ ok: true }), {
+      headers: {
+        "content-type": "application/json"
+      },
+      status: 200
+    });
+  }) as typeof fetch;
+
+  try {
+    assert.deepEqual(await fetchJson("https://example.test/metadata"), { ok: true });
+    assert.equal(await fetchText("https://example.test/text"), JSON.stringify({ ok: true }));
+    await downloadFile("https://example.test/tool.jar", downloadPath);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  assert.equal(signals.length, 3);
+  assert.ok(signals.every((signal) => signal instanceof AbortSignal));
 });
 
 async function createTempDir() {

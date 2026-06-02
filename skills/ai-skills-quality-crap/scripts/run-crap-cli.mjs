@@ -14,6 +14,7 @@ export const TOOL_CONFIG = {
 };
 
 export const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+export const FETCH_TIMEOUT_MS = 30_000;
 
 const SUPPORTED_LANGUAGES = new Set(["typescript", "java"]);
 
@@ -465,8 +466,8 @@ function npmCliPathCandidates() {
   ];
 }
 
-async function fetchJson(url) {
-  const response = await fetch(url);
+export async function fetchJson(url) {
+  const response = await fetch(url, fetchRequestInit());
 
   if (!response.ok) {
     throw new Error(`GET ${url} failed with ${response.status}`);
@@ -475,8 +476,8 @@ async function fetchJson(url) {
   return response.json();
 }
 
-async function fetchText(url) {
-  const response = await fetch(url);
+export async function fetchText(url) {
+  const response = await fetch(url, fetchRequestInit());
 
   if (!response.ok) {
     throw new Error(`GET ${url} failed with ${response.status}`);
@@ -485,8 +486,8 @@ async function fetchText(url) {
   return response.text();
 }
 
-async function downloadFile(url, filePath) {
-  const response = await fetch(url);
+export async function downloadFile(url, filePath) {
+  const response = await fetch(url, fetchRequestInit());
 
   if (!response.ok) {
     throw new Error(`GET ${url} failed with ${response.status}`);
@@ -496,6 +497,12 @@ async function downloadFile(url, filePath) {
 
   await fs.mkdir(path.dirname(filePath), { recursive: true });
   await fs.writeFile(filePath, bytes);
+}
+
+function fetchRequestInit() {
+  return {
+    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS)
+  };
 }
 
 async function pathExists(filePath) {
