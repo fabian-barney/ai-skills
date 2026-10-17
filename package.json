@@ -46,9 +46,9 @@
     "@barney-media/crap-typescript-core": "^0.3.0",
     "@barney-media/crap-typescript-vitest": "^0.3.0",
     "@types/node": "^24.19.2",
-    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/coverage-v8": "^4.1.12",
     "markdownlint-cli2": "^0.23.3",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.12"
   }
 }
