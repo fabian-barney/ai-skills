@@ -28,7 +28,7 @@
   "engines": {
     "node": ">=22.13.0"
   },
-  "packageManager": "pnpm@11.20.0",
+  "packageManager": "pnpm@11.28.8",
   "publishConfig": {
     "access": "public"
   },
@@ -47,7 +47,7 @@
     "@barney-media/crap-typescript-vitest": "^0.3.0",
     "@types/node": "^24.19.2",
     "@vitest/coverage-v8": "^4.1.12",
-    "markdownlint-cli2": "^0.23.3",
+    "markdownlint-cli2": "^0.24.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.12"
   }
