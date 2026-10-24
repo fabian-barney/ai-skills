@@ -109,7 +109,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
-      - uses: DavidAnson/markdownlint-cli2-action@fa0cd0f1a052f54da593c83860f2292982f5d142
+      - uses: DavidAnson/markdownlint-cli2-action@21c1be1b93ad9ed58fa840aacc3f279cde2a72ff
         with:
           globs: |
             **/*.md
